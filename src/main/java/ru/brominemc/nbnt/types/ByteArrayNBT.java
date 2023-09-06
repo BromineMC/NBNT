@@ -35,7 +35,7 @@ public final class ByteArrayNBT implements NBT {
     private byte[] value;
 
     /**
-     * Creates new byte array NBT.
+     * Creates a new byte array NBT.
      *
      * @param value NBT value
      */
@@ -93,7 +93,9 @@ public final class ByteArrayNBT implements NBT {
      * @param in      Target input
      * @param limiter Target limiter
      * @return Read NBT
-     * @throws IOException On I/O exception
+     * @throws IOException              On I/O exception
+     * @throws IllegalArgumentException If the provided length is smaller than zero
+     * @throws IllegalStateException    If read bytes has exceeded the maximum {@link NBTLimiter} length
      */
     @Contract("_, _ -> new")
     @CheckReturnValue

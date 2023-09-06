@@ -37,14 +37,14 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     private Map<String, NBT> value;
 
     /**
-     * Creates new empty compound NBT backed by {@link HashMap#HashMap()}.
+     * Creates a new empty compound NBT backed by {@link HashMap#HashMap()}.
      */
     public CompoundNBT() {
         this.value = new HashMap<>();
     }
 
     /**
-     * Creates new compound NBT.
+     * Creates a new compound NBT.
      *
      * @param value NBT value
      * @apiNote This will unwrap any compound NBT, i.e. this compound NBT won't be backed by another compound NBT
@@ -86,7 +86,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the boolean wrapper by the key.
      *
      * @param key Target key
-     * @return Boolean wrapper or <code>null</code> if no primitive tag exists by that key
+     * @return Boolean wrapper or {@code null} if no primitive tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -110,7 +110,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the byte wrapper by the key.
      *
      * @param key Target key
-     * @return Byte wrapper or <code>null</code> if no primitive tag exists by that key
+     * @return Byte wrapper or {@code null} if no primitive tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -134,7 +134,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the short wrapper by the key.
      *
      * @param key Target key
-     * @return Short wrapper or <code>null</code> if no primitive tag exists by that key
+     * @return Short wrapper or {@code null} if no primitive tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -158,7 +158,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the int wrapper by the key.
      *
      * @param key Target key
-     * @return Int wrapper or <code>null</code> if no primitive tag exists by that key
+     * @return Int wrapper or {@code null} if no primitive tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -182,7 +182,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the long wrapper by the key.
      *
      * @param key Target key
-     * @return Long wrapper or <code>null</code> if no primitive tag exists by that key
+     * @return Long wrapper or {@code null} if no primitive tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -206,7 +206,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the float wrapper by the key.
      *
      * @param key Target key
-     * @return Float wrapper or <code>null</code> if no primitive tag exists by that key
+     * @return Float wrapper or {@code null} if no primitive tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -231,7 +231,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the double wrapper by the key.
      *
      * @param key Target key
-     * @return Double wrapper or <code>null</code> if no primitive tag exists by that key
+     * @return Double wrapper or {@code null} if no primitive tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -255,7 +255,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the byte array by the key.
      *
      * @param key Target key
-     * @return Byte array or <code>null</code> if no byte array tag exists by that key
+     * @return Byte array or {@code null} if no byte array tag exists by that key
      */
     public byte @Nullable [] getByteArray(@NotNull String key) {
         return value.get(key) instanceof ByteArrayNBT nbt ? nbt.value() : null;
@@ -265,7 +265,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the string by the key.
      *
      * @param key Target key
-     * @return String or <code>null</code> if no string tag exists by that key
+     * @return String or {@code null} if no string tag exists by that key
      */
     @Nullable
     public String getString(@NotNull String key) {
@@ -276,7 +276,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the list by the key.
      *
      * @param key Target key
-     * @return List or <code>null</code> if no list tag exists by that key
+     * @return List or {@code null} if no list tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -290,7 +290,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * @param key         Target key
      * @param type        Target list type
      * @param emptyAsNull Whether empty lists should return null
-     * @return List or <code>null</code> if no list tag exists with the specified type exists by that key
+     * @return List or {@code null} if no list tag exists with the specified type exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -305,7 +305,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the compound by the key.
      *
      * @param key Target key
-     * @return Compound or <code>null</code> if no compound tag exists by that key
+     * @return Compound or {@code null} if no compound tag exists by that key
      */
     @Contract(pure = true)
     @Nullable
@@ -317,7 +317,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the int array by the key.
      *
      * @param key Target key
-     * @return Int array or <code>null</code> if no int array tag exists by that key
+     * @return Int array or {@code null} if no int array tag exists by that key
      */
     @Contract(pure = true)
     public int @Nullable [] getIntArray(@NotNull String key) {
@@ -328,7 +328,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Gets the long array by the key.
      *
      * @param key Target key
-     * @return Long array or <code>null</code> if no long array tag exists by that key
+     * @return Long array or {@code null} if no long array tag exists by that key
      */
     @Contract(pure = true)
     public long @Nullable [] getLongArray(@NotNull String key) {
@@ -340,7 +340,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target value
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -353,7 +353,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target value
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -366,7 +366,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target value
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -379,7 +379,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target value
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -392,7 +392,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target value
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -405,7 +405,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target value
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -418,7 +418,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target value
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -431,7 +431,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target array
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -444,7 +444,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target string
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -457,7 +457,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target list
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -470,7 +470,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target compound
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -483,7 +483,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target array
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -496,7 +496,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      *
      * @param key   Target key
      * @param value Target array
-     * @return Previous tag or <code>null</code> if none
+     * @return Previous tag or {@code null} if none
      */
     @CanIgnoreReturnValue
     @Nullable
@@ -603,7 +603,10 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * @param in      Target input
      * @param limiter Target limiter
      * @return Read NBT
-     * @throws IOException On I/O exception
+     * @throws IOException              On I/O exception
+     * @throws IllegalArgumentException By underlying readers
+     * @throws IllegalStateException    If read bytes has exceeded the maximum {@link NBTLimiter} length, the maximum depth has been reached or by underlying readers
+     * @throws NullPointerException     By underlying readers
      */
     @Contract("_, _ -> new")
     @CheckReturnValue

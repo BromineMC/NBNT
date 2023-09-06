@@ -62,8 +62,8 @@ public sealed class NBTLimiter {
      * <p>This method checks for negative amount of bytes. If checking is not required, use {@link #readUnsigned(long)}.
      *
      * @param bytes Read bytes
-     * @throws IllegalArgumentException If the amount of read bytes is lower than zero
-     * @throws IllegalStateException    If read bytes exceeded the maximum length
+     * @throws IllegalArgumentException If the amount of read bytes is smaller than zero
+     * @throws IllegalStateException    If read bytes has exceeded the maximum length
      */
     public void readSigned(long bytes) {
         if (bytes < 0) {
@@ -105,7 +105,7 @@ public sealed class NBTLimiter {
     /**
      * Pops the depth stack. (Decreases the depth by one)
      *
-     * @throws IllegalStateException If the current depth is lower than zero
+     * @throws IllegalStateException If the current depth is smaller than zero
      */
     public void pop(){
         depth--;
@@ -120,7 +120,8 @@ public sealed class NBTLimiter {
      * @param in      Target input
      * @param limiter Target limiter
      * @return Read string
-     * @throws IOException On I/O exception
+     * @throws IOException           On I/O exception
+     * @throws IllegalStateException If read bytes has exceeded the maximum {@link NBTLimiter} length
      * @see DataInputStream#readUTF(DataInput)
      */
     @Contract(value = "_, _ -> new")
@@ -130,6 +131,9 @@ public sealed class NBTLimiter {
         limiter.readUnsigned(2L);
         int length = in.readUnsignedShort();
         limiter.readUnsigned(length);
+        if (length == 0) {
+            return "";
+        }
         byte[] data = new byte[length + 2];
         data[0] = (byte) (0xff & (length >> 8));
         data[1] = (byte) (0xff & length);
@@ -159,6 +163,8 @@ public sealed class NBTLimiter {
      * Returns protocol limiter analogous to current vanilla protocol implementation.
      *
      * @return Limiter analogous to vanilla protocol implementation
+     * @see #vanillaLength()
+     * @see #vanillaDepth()
      */
     @Contract(value = "-> new", pure = true)
     @NotNull
@@ -170,44 +176,68 @@ public sealed class NBTLimiter {
      * Returns the maximum vanilla NBT length.
      *
      * @return Maximum vanilla NBT limiter length
-     * @implNote Current value: <code>2097152</code> (<code>0x200000</code>)
+     * @implNote Current value: {@code 2097152} ({@code 0x200000})
      */
     @Contract(pure = true)
-    public static int vanillaLength() {
-        return 0x200000;
+    public static long vanillaLength() {
+        return 0x200000L;
     }
 
     /**
      * Returns the maximum vanilla NBT depth.
      *
      * @return Maximum vanilla NBT limiter depth
-     * @implNote Current value: <code>512</code>
+     * @implNote Current value: {@code 512}
      */
     @Contract(pure = true)
     public static int vanillaDepth() {
         return 512;
     }
 
+    /**
+     * NBT limiter without limits.
+     *
+     * @author VidTu
+     */
     private static final class NBTUnlimiter extends NBTLimiter {
+        /**
+         * Creates a new NBT limiter without limits.
+         */
         private NBTUnlimiter() {
             super(Long.MAX_VALUE, Integer.MAX_VALUE);
         }
 
+        /**
+         * Does nothing.
+         *
+         * @param bytes Ignored
+         */
         @Override
         public void readSigned(long bytes) {
             // NO-OP
         }
 
+        /**
+         * Does nothing.
+         *
+         * @param bytes Ignored
+         */
         @Override
         public void readUnsigned(long bytes) {
             // NO-OP
         }
 
+        /**
+         * Does nothing.
+         */
         @Override
         public void push() {
             // NO-OP
         }
 
+        /**
+         * Does nothing.
+         */
         @Override
         public void pop() {
             // NO-OP

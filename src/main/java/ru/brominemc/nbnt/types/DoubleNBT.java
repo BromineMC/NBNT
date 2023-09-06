@@ -34,7 +34,7 @@ public final class DoubleNBT implements PrimitiveNBT {
     private double value;
 
     /**
-     * Creates new double NBT.
+     * Creates a new double NBT.
      *
      * @param value NBT value
      */
@@ -126,7 +126,8 @@ public final class DoubleNBT implements PrimitiveNBT {
      * @param in      Target input
      * @param limiter Target limiter
      * @return Read NBT
-     * @throws IOException On I/O exception
+     * @throws IOException           On I/O exception
+     * @throws IllegalStateException If read bytes has exceeded the maximum {@link NBTLimiter} length
      */
     @Contract("_, _ -> new")
     @CheckReturnValue

@@ -49,13 +49,16 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      *
      * @param in      Target input
      * @param limiter Target limiter
-     * @return Read name and NBT, <code>null</code> if read the "NBT End" type
-     * @throws IOException On I/O exception
+     * @return Read name and NBT, {@code null} if read the "NBT End" type
+     * @throws IOException              On I/O exception
+     * @throws IllegalArgumentException If the provided NBT type is unknown, read bytes exceeded the maximum {@link NBTLimiter} length or by underlying reader
+     * @throws IllegalStateException    By underlying reader
+     * @throws NullPointerException     By underlying reader
      */
     @CheckReturnValue
     @Nullable
     static Map.Entry<String, NBT> readNamed(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(1);
+        limiter.readUnsigned(1L);
         byte type = in.readByte();
         if (type == 0) return null;
         String name = NBTLimiter.readLimitedUTF(in, limiter);
@@ -70,20 +73,26 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      *
      * @param in      Target input
      * @param limiter Target limiter
-     * @return Read NBT, <code>null</code> if read the "NBT End" type
-     * @throws IOException On I/O exception
+     * @return Read NBT, {@code null} if read the "NBT End" type
+     * @throws IOException              On I/O exception
+     * @throws IllegalArgumentException If the provided NBT type is unknown, read bytes exceeded the maximum {@link NBTLimiter} length or by underlying reader
+     * @throws IllegalStateException    By underlying reader
+     * @throws NullPointerException     By underlying reader
      */
     @CheckReturnValue
     @Nullable
     static NBT readUnnamed(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(1 + 2);
+        limiter.readUnsigned(1L);
         byte type = in.readByte();
         if (type == 0) return null;
+        limiter.readUnsigned(2L);
         int skip = in.readUnsignedShort();
         limiter.readUnsigned(skip);
         in.skipBytes(skip);
         NBTReader reader = reader(type);
-        return reader.read(in, limiter);
+        NBT nbt = reader.read(in, limiter);
+        Objects.requireNonNull(nbt, "NBT of non-zero type is null");
+        return nbt;
     }
 
     /**
@@ -91,7 +100,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      *
      * @param out  Target output
      * @param name Target name
-     * @param nbt  Target NBT, <code>null</code> for the "NBT End" type
+     * @param nbt  Target NBT, {@code null} for the "NBT End" type
      * @throws IOException On I/O exception
      */
     static void writeNamed(@NotNull DataOutput out, @NotNull String name, @Nullable NBT nbt) throws IOException {
@@ -105,7 +114,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      * Writes the unnamed NBT to the output.
      *
      * @param out Target output
-     * @param nbt Target NBT, <code>null</code> for the "NBT End" type
+     * @param nbt Target NBT, {@code null} for the "NBT End" type
      * @throws IOException On I/O exception
      */
     static void writeUnnamed(@NotNull DataOutput out, @Nullable NBT nbt) throws IOException {
@@ -147,7 +156,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      * Gets the NBT type from the NBT instance.
      *
      * @param nbt Target NBT
-     * @return Target NBT type, <code>0</code> for <code>null</code>
+     * @return Target NBT type, {@code 0} for {@code null}
      * @throws IllegalArgumentException If the NBT type is unknown
      */
     @Contract(pure = true)

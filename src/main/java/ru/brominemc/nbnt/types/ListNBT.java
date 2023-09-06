@@ -37,14 +37,14 @@ public final class ListNBT implements NBT, List<NBT> {
     private List<NBT> value;
 
     /**
-     * Creates new empty list NBT backed by {@link ArrayList#ArrayList()}.
+     * Creates a new empty list NBT backed by {@link ArrayList#ArrayList()}.
      */
     public ListNBT() {
         this.value = new ArrayList<>();
     }
 
     /**
-     * Creates new list NBT.
+     * Creates a new list NBT.
      *
      * @param value NBT value
      * @apiNote This will unwrap any list NBT, i.e. this list NBT won't be backed by another list NBT
@@ -86,7 +86,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Gets the list type.
      *
-     * @return List type, <code>null</code> if list is empty
+     * @return List type, {@code null} if list is empty
      */
     @Contract(pure = true)
     @Nullable
@@ -276,18 +276,22 @@ public final class ListNBT implements NBT, List<NBT> {
      * @param in      Target input
      * @param limiter Target limiter
      * @return Read NBT
-     * @throws IOException On I/O exception
+     * @throws IOException              On I/O exception
+     * @throws IllegalArgumentException If the provided length is negative, non-zero for {@code null} ("NBT End") type or by underlying readers
+     * @throws IllegalStateException    If read bytes has exceeded the maximum {@link NBTLimiter} length, the maximum depth has been reached or by underlying readers
+     * @throws NullPointerException     If there's {@code null} ("NBT End") tag in the list or by underlying readers
      */
     @Contract("_, _ -> new")
     @CheckReturnValue
     @NotNull
     public static ListNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(1L + 4L);
+        limiter.readUnsigned(1L);
         byte type = in.readByte();
+        limiter.readUnsigned(4L);
         int length = in.readInt();
         if (type == 0) {
             if (length != 0) {
-                throw new IllegalStateException("Invalid length (null-type): " + length);
+                throw new IllegalArgumentException("Invalid length (null-type): " + length);
             }
             return new ListNBT();
         }
@@ -295,7 +299,7 @@ public final class ListNBT implements NBT, List<NBT> {
             return new ListNBT();
         }
         if (length < 0) {
-            throw new IllegalStateException("Invalid length: " + length);
+            throw new IllegalArgumentException("Invalid length: " + length);
         }
         NBTReader reader = NBT.reader(type);
         List<NBT> list = new ArrayList<>(length);

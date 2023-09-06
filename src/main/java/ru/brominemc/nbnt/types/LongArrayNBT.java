@@ -35,7 +35,7 @@ public final class LongArrayNBT implements NBT {
     private long[] value;
 
     /**
-     * Creates new long array NBT.
+     * Creates a new long array NBT.
      *
      * @param value NBT value
      */
@@ -95,7 +95,9 @@ public final class LongArrayNBT implements NBT {
      * @param in      Target input
      * @param limiter Target limiter
      * @return Read NBT
-     * @throws IOException On I/O exception
+     * @throws IOException              On I/O exception
+     * @throws IllegalArgumentException If the provided length is smaller than zero
+     * @throws IllegalStateException    If read bytes has exceeded the maximum {@link NBTLimiter} length
      */
     @Contract("_, _ -> new")
     @CheckReturnValue

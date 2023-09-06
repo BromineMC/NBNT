@@ -34,7 +34,7 @@ public final class IntNBT implements PrimitiveNBT {
     private int value;
 
     /**
-     * Creates new int NBT.
+     * Creates a new int NBT.
      *
      * @param value NBT value
      */
@@ -126,7 +126,8 @@ public final class IntNBT implements PrimitiveNBT {
      * @param in      Target input
      * @param limiter Target limiter
      * @return Read NBT
-     * @throws IOException On I/O exception
+     * @throws IOException           On I/O exception
+     * @throws IllegalStateException If read bytes has exceeded the maximum {@link NBTLimiter} length
      */
     @Contract("_, _ -> new")
     @CheckReturnValue
