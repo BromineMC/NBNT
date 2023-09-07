@@ -79,7 +79,7 @@ public final class Constants {
      */
     public static final Map<Class<? extends NBT>, Object> CONSTRUCTOR_PARAMETER_VALUE = Map.ofEntries(
             Map.entry(ByteArrayNBT.class, randomByteArray()),
-            Map.entry(ByteNBT.class, (byte) RANDOM.nextInt(Byte.MAX_VALUE + 1)),
+            Map.entry(ByteNBT.class, (byte) RANDOM.nextInt()),
             Map.entry(CompoundNBT.class, Map.ofEntries(
                     Map.entry("key", new StringNBT("value")),
                     Map.entry("another_key", new StringNBT("another_value")),
