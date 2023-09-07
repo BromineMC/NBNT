@@ -83,7 +83,7 @@ public final class Constants {
             Map.entry(CompoundNBT.class, Map.ofEntries(
                     Map.entry("key", new StringNBT("value")),
                     Map.entry("another_key", new StringNBT("another_value")),
-                    Map.entry("final_key", new ByteNBT((byte) RANDOM.nextInt(Byte.MAX_VALUE + 1)))
+                    Map.entry("final_key", new ByteNBT((byte) RANDOM.nextInt()))
             )),
             Map.entry(DoubleNBT.class, RANDOM.nextDouble()),
             Map.entry(FloatNBT.class, RANDOM.nextFloat()),
