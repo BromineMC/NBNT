@@ -33,6 +33,8 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
+            groupId = "ru.brominemc"
+            artifactId = "nbnt"
         }
     }
     repositories {
