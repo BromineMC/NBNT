@@ -99,6 +99,7 @@ public final class Constants {
             Map.entry(ShortNBT.class, (short) RANDOM.nextInt()),
             Map.entry(StringNBT.class, "Constant StringNBT parameter.")
     );
+
     /**
      * Returns a random byte array.
      *
@@ -114,6 +115,7 @@ public final class Constants {
 
     /**
      * Returns a list of NBT object instances from the {@code TARGETS} classes list.
+     *
      * @return A list of NBT object instances.
      */
     public static List<? extends NBT> createNbtObjects() {

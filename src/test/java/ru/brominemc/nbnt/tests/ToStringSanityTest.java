@@ -58,9 +58,10 @@ public class ToStringSanityTest {
 
     /**
      * Returns a string representation of a field, works fine on arrays and other strings.
-     * @param thisReceiver            The {@code this} pointer that the field will be received from.
-     * @param field                   The field to receive from {@code thisReceiver}
-     * @return                        A stringified representation of the field.
+     *
+     * @param thisReceiver The {@code this} pointer that the field will be received from.
+     * @param field        The field to receive from {@code thisReceiver}
+     * @return A stringified representation of the field.
      * @throws IllegalAccessException If the field couldn't be received due to privacy issues.
      */
     private String stringify(NBT thisReceiver, Field field) throws IllegalAccessException {
