@@ -46,7 +46,7 @@ public class TestingConstantsSanityTest {
     public void matchingConstructorParameterTypes() {
         CONSTRUCTOR_PARAMETER_TYPE.forEach((nbt, type) -> {
             // Do not test primitives.
-            if (Arrays.stream(nbt.getInterfaces()).anyMatch(x -> x == PrimitiveNBT.class)) return;
+            if (PrimitiveNBT.class.isAssignableFrom(nbt)) return;
             Object value = CONSTRUCTOR_PARAMETER_VALUE.get(nbt);
             assertTrue(type.isInstance(value),
                     "Value %s for %s does not match the declared type %s!".formatted(value, nbt, type));
