@@ -34,7 +34,7 @@ public final class ByteNBT implements PrimitiveNBT {
     private byte value;
 
     /**
-     * Creates new byte NBT.
+     * Creates a new byte NBT.
      *
      * @param value NBT value. {@code true} is {@code 1}, {@code false} is {@code 0}
      */
@@ -43,7 +43,7 @@ public final class ByteNBT implements PrimitiveNBT {
     }
 
     /**
-     * Creates new byte NBT.
+     * Creates a new byte NBT.
      *
      * @param value NBT value
      */

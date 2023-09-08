@@ -35,7 +35,7 @@ public final class IntArrayNBT implements NBT {
     private int[] value;
 
     /**
-     * Creates new int array NBT.
+     * Creates a new int array NBT.
      *
      * @param value NBT value
      */

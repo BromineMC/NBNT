@@ -34,7 +34,7 @@ public final class LongNBT implements PrimitiveNBT {
     private long value;
 
     /**
-     * Creates new long NBT.
+     * Creates a new long NBT.
      *
      * @param value NBT value
      */
