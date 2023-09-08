@@ -36,7 +36,7 @@ public final class ByteNBT implements PrimitiveNBT {
     /**
      * Creates new byte NBT.
      *
-     * @param value NBT value. <code>true</code> is <code>1</code>, <code>false</code> is <code>0</code>
+     * @param value NBT value. {@code true} is {@code 1}, {@code false} is {@code 0}
      */
     public ByteNBT(boolean value) {
         this.value = (byte) (value ? 1 : 0);
