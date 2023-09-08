@@ -29,6 +29,10 @@ tasks.named<Test>("test") {
     }
 }
 
+java {
+    withSourcesJar()
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
