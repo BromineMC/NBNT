@@ -285,9 +285,10 @@ public final class ListNBT implements NBT, List<NBT> {
     @CheckReturnValue
     @NotNull
     public static ListNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(1L);
+        limiter.push();
+        limiter.readUnsigned(Byte.BYTES); // Type
         byte type = in.readByte();
-        limiter.readUnsigned(4L);
+        limiter.readUnsigned(Integer.BYTES); // Length
         int length = in.readInt();
         if (type == 0) {
             if (length != 0) {
@@ -303,7 +304,6 @@ public final class ListNBT implements NBT, List<NBT> {
         }
         NBTReader reader = NBT.reader(type);
         List<NBT> list = new ArrayList<>(length);
-        limiter.push();
         for (int i = 0; i < length; i++) {
             NBT nbt = reader.read(in, limiter);
             Objects.requireNonNull(nbt, "Null NBT at: " + i);

@@ -133,7 +133,7 @@ public final class ShortNBT implements PrimitiveNBT {
     @CheckReturnValue
     @NotNull
     public static ShortNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(2L);
+        limiter.readUnsigned(Short.BYTES); // Data
         return new ShortNBT(in.readShort());
     }
 }

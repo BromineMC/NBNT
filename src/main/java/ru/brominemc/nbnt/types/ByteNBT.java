@@ -142,7 +142,7 @@ public final class ByteNBT implements PrimitiveNBT {
     @CheckReturnValue
     @NotNull
     public static ByteNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(1L);
+        limiter.readUnsigned(Byte.BYTES); // Data
         return new ByteNBT(in.readByte());
     }
 }

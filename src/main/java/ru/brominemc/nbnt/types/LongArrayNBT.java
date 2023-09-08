@@ -103,9 +103,9 @@ public final class LongArrayNBT implements NBT {
     @CheckReturnValue
     @NotNull
     public static LongArrayNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(4L);
+        limiter.readUnsigned(Integer.BYTES); // Length
         int length = in.readInt();
-        limiter.readSigned(length * 8L);
+        limiter.readSigned((long) length * Long.BYTES); // Data
         long[] data = new long[length];
         for (int i = 0; i < length; i++) {
             data[i] = in.readLong();

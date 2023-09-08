@@ -133,7 +133,7 @@ public final class LongNBT implements PrimitiveNBT {
     @CheckReturnValue
     @NotNull
     public static LongNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(8L);
+        limiter.readUnsigned(Long.BYTES); // Data
         return new LongNBT(in.readLong());
     }
 }

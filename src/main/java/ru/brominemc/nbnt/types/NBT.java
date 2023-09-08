@@ -58,9 +58,9 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     @CheckReturnValue
     @Nullable
     static Map.Entry<String, NBT> readNamed(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(1L);
+        limiter.readUnsigned(Byte.BYTES); // Type
         byte type = in.readByte();
-        if (type == 0) return null;
+        if (type == 0) return null; // NBT End
         String name = NBTLimiter.readLimitedUTF(in, limiter);
         NBTReader reader = reader(type);
         NBT nbt = reader.read(in, limiter);
@@ -82,12 +82,12 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     @CheckReturnValue
     @Nullable
     static NBT readUnnamed(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(1L);
+        limiter.readUnsigned(Byte.BYTES); // Type
         byte type = in.readByte();
-        if (type == 0) return null;
-        limiter.readUnsigned(2L);
+        if (type == 0) return null; // NBT End
+        limiter.readUnsigned(Short.BYTES); // Name (Length)
         int skip = in.readUnsignedShort();
-        limiter.readUnsigned(skip);
+        limiter.readUnsigned(skip); // Name
         in.skipBytes(skip);
         NBTReader reader = reader(type);
         NBT nbt = reader.read(in, limiter);
@@ -120,7 +120,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     static void writeUnnamed(@NotNull DataOutput out, @Nullable NBT nbt) throws IOException {
         out.write(type(nbt));
         if (nbt == null) return;
-        out.writeShort(0);
+        out.writeShort(0); // Name (Length)
         nbt.write(out);
     }
 

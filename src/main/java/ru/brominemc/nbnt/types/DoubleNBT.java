@@ -133,7 +133,7 @@ public final class DoubleNBT implements PrimitiveNBT {
     @CheckReturnValue
     @NotNull
     public static DoubleNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(8L);
+        limiter.readUnsigned(Double.BYTES); // Data
         return new DoubleNBT(in.readDouble());
     }
 }

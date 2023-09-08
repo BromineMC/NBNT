@@ -133,7 +133,7 @@ public final class FloatNBT implements PrimitiveNBT {
     @CheckReturnValue
     @NotNull
     public static FloatNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(4L);
+        limiter.readUnsigned(Float.BYTES); // Data
         return new FloatNBT(in.readFloat());
     }
 }

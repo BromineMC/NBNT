@@ -103,9 +103,9 @@ public final class IntArrayNBT implements NBT {
     @CheckReturnValue
     @NotNull
     public static IntArrayNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(4L);
+        limiter.readUnsigned(Integer.BYTES); // Length
         int length = in.readInt();
-        limiter.readSigned(length * 4L);
+        limiter.readSigned((long) length * Integer.BYTES); // Data
         int[] data = new int[length];
         for (int i = 0; i < length; i++) {
             data[i] = in.readInt();

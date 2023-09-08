@@ -133,7 +133,7 @@ public final class IntNBT implements PrimitiveNBT {
     @CheckReturnValue
     @NotNull
     public static IntNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(4L);
+        limiter.readUnsigned(Integer.BYTES); // Data
         return new IntNBT(in.readInt());
     }
 }

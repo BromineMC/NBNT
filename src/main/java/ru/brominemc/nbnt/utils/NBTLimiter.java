@@ -128,12 +128,12 @@ public sealed class NBTLimiter {
     @CheckReturnValue
     @NotNull
     public static String readLimitedUTF(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(2L);
+        limiter.readUnsigned(Short.BYTES); // Length
         int length = in.readUnsignedShort();
-        limiter.readUnsigned(length);
         if (length == 0) {
             return "";
         }
+        limiter.readUnsigned(length); // Data
         byte[] data = new byte[length + 2];
         data[0] = (byte) (0xff & (length >> 8));
         data[1] = (byte) (0xff & length);

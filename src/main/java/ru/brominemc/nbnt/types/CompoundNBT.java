@@ -612,8 +612,8 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CheckReturnValue
     @NotNull
     public static CompoundNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        Map<String, NBT> map = new HashMap<>();
         limiter.push();
+        Map<String, NBT> map = new HashMap<>();
         while (true) {
             Map.Entry<String, NBT> pair = NBT.readNamed(in, limiter);
             if (pair == null) break;
