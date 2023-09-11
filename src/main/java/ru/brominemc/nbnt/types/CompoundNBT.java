@@ -34,6 +34,14 @@ import java.util.*;
  * @author VidTu
  */
 public final class CompoundNBT implements NBT, Map<String, NBT> {
+    /**
+     * NBT serialization type for {@link CompoundNBT} tags.
+     */
+    public static final byte COMPOUND_NBT_TYPE = 10;
+
+    /**
+     * Hold NBT value.
+     */
     private Map<String, NBT> value;
 
     /**

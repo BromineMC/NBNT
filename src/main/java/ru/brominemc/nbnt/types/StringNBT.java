@@ -31,6 +31,14 @@ import java.io.IOException;
  * @author VidTu
  */
 public final class StringNBT implements NBT {
+    /**
+     * NBT serialization type for {@link StringNBT} tags.
+     */
+    public static final byte STRING_NBT_TYPE = 8;
+
+    /**
+     * Hold NBT value.
+     */
     private String value;
 
     /**

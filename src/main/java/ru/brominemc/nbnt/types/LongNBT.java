@@ -31,6 +31,14 @@ import java.io.IOException;
  * @author VidTu
  */
 public final class LongNBT implements PrimitiveNBT {
+    /**
+     * NBT serialization type for {@link LongNBT} tags.
+     */
+    public static final byte LONG_NBT_TYPE = 4;
+
+    /**
+     * Hold NBT value.
+     */
     private long value;
 
     /**

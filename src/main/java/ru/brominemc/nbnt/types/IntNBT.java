@@ -31,6 +31,14 @@ import java.io.IOException;
  * @author VidTu
  */
 public final class IntNBT implements PrimitiveNBT {
+    /**
+     * NBT serialization type for {@link IntNBT} tags.
+     */
+    public static final byte INT_NBT_TYPE = 3;
+
+    /**
+     * Hold NBT value.
+     */
     private int value;
 
     /**

@@ -31,6 +31,14 @@ import java.io.IOException;
  * @author VidTu
  */
 public final class DoubleNBT implements PrimitiveNBT {
+    /**
+     * NBT serialization type for {@link DoubleNBT} tags.
+     */
+    public static final byte DOUBLE_NBT_TYPE = 6;
+
+    /**
+     * Hold NBT value.
+     */
     private double value;
 
     /**

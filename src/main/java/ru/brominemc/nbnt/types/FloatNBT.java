@@ -31,6 +31,14 @@ import java.io.IOException;
  * @author VidTu
  */
 public final class FloatNBT implements PrimitiveNBT {
+    /**
+     * NBT serialization type for {@link FloatNBT} tags.
+     */
+    public static final byte FLOAT_NBT_TYPE = 5;
+
+    /**
+     * Hold NBT value.
+     */
     private float value;
 
     /**

@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import ru.brominemc.nbnt.types.NBT;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,7 +46,7 @@ public class ToStringSanityTest {
      */
     private String expectedToString(NBT nbt) {
         return nbt.getClass().getSimpleName() + '{' +
-                String.join(",", Arrays.stream(nbt.getClass().getDeclaredFields()).map(field -> {
+                String.join(",", Arrays.stream(nbt.getClass().getDeclaredFields()).filter(field -> !Modifier.isStatic(field.getModifiers())).map(field -> {
                     try {
                         field.setAccessible(true);
                         return field.getName() + "=" + stringify(nbt, field);

@@ -37,6 +37,11 @@ import java.util.Objects;
  */
 public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListNBT, CompoundNBT, IntArrayNBT, LongArrayNBT {
     /**
+     * NBT serialization type for {@code null} ("End") NBT tags.
+     */
+    byte NULL_NBT_TYPE = 0;
+
+    /**
      * Writes the NBT to the output.
      *
      * @param out Target output
@@ -60,7 +65,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     static Map.Entry<String, NBT> readNamed(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
         limiter.readUnsigned(Byte.BYTES); // Type
         byte type = in.readByte();
-        if (type == 0) return null; // NBT End
+        if (type == NULL_NBT_TYPE) return null; // NBT End
         String name = NBTLimiter.readLimitedUTF(in, limiter);
         NBTReader reader = reader(type);
         NBT nbt = reader.read(in, limiter);
@@ -84,7 +89,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     static NBT readUnnamed(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
         limiter.readUnsigned(Byte.BYTES); // Type
         byte type = in.readByte();
-        if (type == 0) return null; // NBT End
+        if (type == NULL_NBT_TYPE) return null; // NBT End
         limiter.readUnsigned(Short.BYTES); // Name (Length)
         int skip = in.readUnsignedShort();
         limiter.readUnsigned(skip); // Name
@@ -135,19 +140,19 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     @NotNull
     static NBTReader reader(byte type) {
         return switch (type) {
-            case 0 -> NBTReader.NULL_READER;
-            case 1 -> ByteNBT::read;
-            case 2 -> ShortNBT::read;
-            case 3 -> IntNBT::read;
-            case 4 -> LongNBT::read;
-            case 5 -> FloatNBT::read;
-            case 6 -> DoubleNBT::read;
-            case 7 -> ByteArrayNBT::read;
-            case 8 -> StringNBT::read;
-            case 9 -> ListNBT::read;
-            case 10 -> CompoundNBT::read;
-            case 11 -> IntArrayNBT::read;
-            case 12 -> LongArrayNBT::read;
+            case NULL_NBT_TYPE -> NBTReader.NULL_READER;
+            case ByteNBT.BYTE_NBT_TYPE -> ByteNBT::read;
+            case ShortNBT.SHORT_NBT_TYPE -> ShortNBT::read;
+            case IntNBT.INT_NBT_TYPE -> IntNBT::read;
+            case LongNBT.LONG_NBT_TYPE -> LongNBT::read;
+            case FloatNBT.FLOAT_NBT_TYPE -> FloatNBT::read;
+            case DoubleNBT.DOUBLE_NBT_TYPE -> DoubleNBT::read;
+            case ByteArrayNBT.BYTE_ARRAY_NBT_TYPE -> ByteArrayNBT::read;
+            case StringNBT.STRING_NBT_TYPE -> StringNBT::read;
+            case ListNBT.LIST_NBT_TYPE -> ListNBT::read;
+            case CompoundNBT.COMPOUND_NBT_TYPE -> CompoundNBT::read;
+            case IntArrayNBT.INT_ARRAY_NBT_TYPE -> IntArrayNBT::read;
+            case LongArrayNBT.LONG_ARRAY_NBT_TYPE -> LongArrayNBT::read;
             default -> throw new IllegalArgumentException("Unknown NBT: " + type);
         };
     }
@@ -162,19 +167,19 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     @Contract(pure = true)
     static byte type(@Nullable NBT nbt) {
         // TODO(VidTu): Java 21 - Pattern matching
-        if (nbt == null) return 0;
-        if (nbt instanceof ByteNBT) return 1;
-        if (nbt instanceof ShortNBT) return 2;
-        if (nbt instanceof IntNBT) return 3;
-        if (nbt instanceof LongNBT) return 4;
-        if (nbt instanceof FloatNBT) return 5;
-        if (nbt instanceof DoubleNBT) return 6;
-        if (nbt instanceof ByteArrayNBT) return 7;
-        if (nbt instanceof StringNBT) return 8;
-        if (nbt instanceof ListNBT) return 9;
-        if (nbt instanceof CompoundNBT) return 10;
-        if (nbt instanceof IntArrayNBT) return 11;
-        if (nbt instanceof LongArrayNBT) return 12;
+        if (nbt == null) return NULL_NBT_TYPE;
+        if (nbt instanceof ByteNBT) return ByteNBT.BYTE_NBT_TYPE;
+        if (nbt instanceof ShortNBT) return ShortNBT.SHORT_NBT_TYPE;
+        if (nbt instanceof IntNBT) return IntNBT.INT_NBT_TYPE;
+        if (nbt instanceof LongNBT) return LongNBT.LONG_NBT_TYPE;
+        if (nbt instanceof FloatNBT) return FloatNBT.FLOAT_NBT_TYPE;
+        if (nbt instanceof DoubleNBT) return DoubleNBT.DOUBLE_NBT_TYPE;
+        if (nbt instanceof ByteArrayNBT) return ByteArrayNBT.BYTE_ARRAY_NBT_TYPE;
+        if (nbt instanceof StringNBT) return StringNBT.STRING_NBT_TYPE;
+        if (nbt instanceof ListNBT) return ListNBT.LIST_NBT_TYPE;
+        if (nbt instanceof CompoundNBT) return CompoundNBT.COMPOUND_NBT_TYPE;
+        if (nbt instanceof IntArrayNBT) return IntArrayNBT.INT_ARRAY_NBT_TYPE;
+        if (nbt instanceof LongArrayNBT) return LongArrayNBT.LONG_ARRAY_NBT_TYPE;
         throw new IllegalArgumentException("Unknown NBT type: " + nbt);
     }
 }

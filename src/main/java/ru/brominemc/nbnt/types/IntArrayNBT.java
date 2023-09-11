@@ -32,6 +32,14 @@ import java.util.Arrays;
  * @author VidTu
  */
 public final class IntArrayNBT implements NBT {
+    /**
+     * NBT serialization type for {@link IntArrayNBT} tags.
+     */
+    public static final byte INT_ARRAY_NBT_TYPE = 11;
+
+    /**
+     * Hold NBT value.
+     */
     private int[] value;
 
     /**
