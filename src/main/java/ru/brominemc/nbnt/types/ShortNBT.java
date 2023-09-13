@@ -33,6 +33,8 @@ import java.io.IOException;
 public final class ShortNBT implements PrimitiveNBT {
     /**
      * NBT serialization type for {@link ShortNBT} tags.
+     *
+     * @since 1.1.0
      */
     public static final byte SHORT_NBT_TYPE = 2;
 

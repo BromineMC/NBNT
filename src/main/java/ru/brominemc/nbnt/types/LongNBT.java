@@ -33,6 +33,8 @@ import java.io.IOException;
 public final class LongNBT implements PrimitiveNBT {
     /**
      * NBT serialization type for {@link LongNBT} tags.
+     *
+     * @since 1.1.0
      */
     public static final byte LONG_NBT_TYPE = 4;
 

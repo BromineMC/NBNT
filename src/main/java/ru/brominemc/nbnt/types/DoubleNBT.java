@@ -33,6 +33,8 @@ import java.io.IOException;
 public final class DoubleNBT implements PrimitiveNBT {
     /**
      * NBT serialization type for {@link DoubleNBT} tags.
+     *
+     * @since 1.1.0
      */
     public static final byte DOUBLE_NBT_TYPE = 6;
 

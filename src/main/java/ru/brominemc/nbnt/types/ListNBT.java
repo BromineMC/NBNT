@@ -36,6 +36,8 @@ import java.util.*;
 public final class ListNBT implements NBT, List<NBT> {
     /**
      * NBT serialization type for {@link ListNBT} tags.
+     *
+     * @since 1.1.0
      */
     public static final byte LIST_NBT_TYPE = 9;
 

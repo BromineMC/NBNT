@@ -34,6 +34,8 @@ import java.util.Arrays;
 public final class ByteArrayNBT implements NBT {
     /**
      * NBT serialization type for {@link ByteArrayNBT} tags.
+     *
+     * @since 1.1.0
      */
     public static final byte BYTE_ARRAY_NBT_TYPE = 7;
 

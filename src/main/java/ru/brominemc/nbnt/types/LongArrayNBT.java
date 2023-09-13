@@ -34,6 +34,8 @@ import java.util.Arrays;
 public final class LongArrayNBT implements NBT {
     /**
      * NBT serialization type for {@link LongArrayNBT} tags.
+     *
+     * @since 1.1.0
      */
     public static final byte LONG_ARRAY_NBT_TYPE = 12;
 

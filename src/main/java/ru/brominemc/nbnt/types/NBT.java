@@ -38,6 +38,8 @@ import java.util.Objects;
 public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListNBT, CompoundNBT, IntArrayNBT, LongArrayNBT {
     /**
      * NBT serialization type for {@code null} ("End") NBT tags.
+     *
+     * @since 1.1.0
      */
     byte NULL_NBT_TYPE = 0;
 

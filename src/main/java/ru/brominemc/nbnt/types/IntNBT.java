@@ -33,6 +33,8 @@ import java.io.IOException;
 public final class IntNBT implements PrimitiveNBT {
     /**
      * NBT serialization type for {@link IntNBT} tags.
+     *
+     * @since 1.1.0
      */
     public static final byte INT_NBT_TYPE = 3;
 
