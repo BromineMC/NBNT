@@ -103,7 +103,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     }
 
     /**
-     * Reads the unnamed NBT from the input.
+     * Reads the NBT from the input.
      *
      * @param in      Target input
      * @param limiter Target limiter
