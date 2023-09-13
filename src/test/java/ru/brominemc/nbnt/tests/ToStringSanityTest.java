@@ -17,6 +17,7 @@
 package ru.brominemc.nbnt.tests;
 
 import org.junit.jupiter.api.Test;
+import ru.brominemc.nbnt.TestConstants;
 import ru.brominemc.nbnt.types.NBT;
 
 import java.lang.reflect.Field;
@@ -24,65 +25,75 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.brominemc.nbnt.Constants.createNbtObjects;
 
 /**
  * Test for the sanity of the {@code toString()} method.
  *
  * @author VirtualFreeEx
+ * @author VidTu
  */
 public class ToStringSanityTest {
     @Test
     public void toStringTest() {
-        createNbtObjects().forEach(v -> assertEquals(v.toString(), expectedToString(v),
-                "toString() method for %s is not sane!".formatted(v.getClass().getSimpleName())));
+        for (NBT nbt : TestConstants.nbtObjects()) {
+            assertEquals(expectedToString(nbt), nbt.toString(), () -> "Invalid toString() representation of: " + nbt.getClass());
+        }
     }
 
     /**
-     * Generates an expected toString message based on the {@code NBT} instance.
+     * Generates an expected {@link #toString()} message based on the {@link NBT} instance.
      *
-     * @param nbt An instance of {@code NBT}.
-     * @return The expected toString() method result.
+     * @param nbt An instance of {@link NBT}
+     * @return The expected {@link #toString()} method result
      */
     private String expectedToString(NBT nbt) {
-        return nbt.getClass().getSimpleName() + '{' +
-                String.join(",", Arrays.stream(nbt.getClass().getDeclaredFields()).filter(field -> !Modifier.isStatic(field.getModifiers())).map(field -> {
-                    try {
-                        field.setAccessible(true);
-                        return field.getName() + "=" + stringify(nbt, field);
-                    } catch (Throwable throwable) {
-                        throw new RuntimeException("Failed to predict toString() for %s".formatted(nbt), throwable);
-                    }
-                }).toList()) +
-                "}";
+        try {
+            StringBuilder builder = new StringBuilder();
+            builder.append(nbt.getClass().getSimpleName());
+            builder.append('{');
+            boolean comma = false;
+            for (Field field : nbt.getClass().getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers())) continue;
+                if (comma) {
+                    builder.append(',');
+                }
+                comma = true;
+                field.setAccessible(true);
+                builder.append(field.getName());
+                builder.append('=');
+                builder.append(expectedToStringField(nbt, field));
+            }
+            builder.append('}');
+            return builder.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to make toString() representation of (" + nbt.getClass() + "): " + nbt, e);
+        }
     }
 
     /**
-     * Returns a string representation of a field, works fine on arrays and other strings.
+     * Returns a string representation of a field as expected in the {@link #toString()}.
      *
-     * @param thisReceiver The {@code this} pointer that the field will be received from.
-     * @param field        The field to receive from {@code thisReceiver}
-     * @return A stringified representation of the field.
-     * @throws IllegalAccessException If the field couldn't be received due to privacy issues.
+     * @param nbt   The NBT instance to read from
+     * @param field Target field
+     * @return A value of the string as expected in {@link #toString()} method
      */
-    private String stringify(NBT thisReceiver, Field field) throws IllegalAccessException {
-        Object instance = field.get(thisReceiver);
-        if (instance.getClass().isArray()) {
-            return switch (instance.getClass().componentType().getSimpleName()) {
-                case "int" -> Arrays.toString((int[]) instance);
-                case "char" -> Arrays.toString((char[]) instance);
-                case "short" -> Arrays.toString((short[]) instance);
-                case "byte" -> Arrays.toString((byte[]) instance);
-                case "long" -> Arrays.toString((long[]) instance);
-                case "float" -> Arrays.toString((float[]) instance);
-                case "double" -> Arrays.toString((double[]) instance);
-                case "boolean" -> Arrays.toString((boolean[]) instance);
-                default -> Arrays.toString((Object[]) instance);
-            };
+    private String expectedToStringField(NBT nbt, Field field) {
+        try {
+            Object value = field.get(nbt);
+            // TODO(VidTu): Java 21 - Pattern matching
+            if (value instanceof boolean[] arr) return Arrays.toString(arr);
+            if (value instanceof byte[] arr) return Arrays.toString(arr);
+            if (value instanceof short[] arr) return Arrays.toString(arr);
+            if (value instanceof char[] arr) return Arrays.toString(arr);
+            if (value instanceof int[] arr) return Arrays.toString(arr);
+            if (value instanceof long[] arr) return Arrays.toString(arr);
+            if (value instanceof float[] arr) return Arrays.toString(arr);
+            if (value instanceof double[] arr) return Arrays.toString(arr);
+            if (value instanceof Object[] arr) return Arrays.toString(arr);
+            if (value instanceof CharSequence) return "'" + value + "'";
+            return value.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to read field " + field + " from (" + nbt.getClass() + "): " + nbt, e);
         }
-        if (instance.getClass().equals(String.class)) {
-            return "'" + instance + "'";
-        }
-        return instance.toString();
     }
 }

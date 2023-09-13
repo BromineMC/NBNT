@@ -17,37 +17,39 @@
 package ru.brominemc.nbnt.tests;
 
 import org.junit.jupiter.api.Test;
+import ru.brominemc.nbnt.TestConstants;
 import ru.brominemc.nbnt.types.ListNBT;
 import ru.brominemc.nbnt.types.PrimitiveNBT;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static ru.brominemc.nbnt.Constants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for whether the {@code Constants} class NBT values/types/targets
  * are valid NBT entries, as specified in the NBT specification.
  *
  * @author VirtualFreeEx
+ * @author VidTu
  * @see <a href="https://wiki.vg/NBT#Specification">https://wiki.vg/NBT#Specification</a>
  */
-public class TestingConstantsSanityTest {
+public class TestConstantsSanityTest {
     @Test
     public void matchingLength() {
-        final int NBT_TAGS_TOTAL = 12;
-        assertEquals(NBT_TAGS_TOTAL, CONSTRUCTOR_PARAMETER_VALUE.size());
-        assertEquals(NBT_TAGS_TOTAL, CONSTRUCTOR_PARAMETER_TYPE.size());
-        assertEquals(NBT_TAGS_TOTAL, TARGETS.size());
+        int tags = 12;
+        assertEquals(tags, TestConstants.TYPE_EXAMPLES.size());
+        assertEquals(tags, TestConstants.TYPE_VALUES.size());
+        assertEquals(tags, TestConstants.TYPES.size());
+        assertEquals(tags, TestConstants.nbtObjects().size());
     }
 
     @Test
     public void matchingConstructorParameterTypes() {
-        CONSTRUCTOR_PARAMETER_TYPE.forEach((nbt, type) -> {
+        TestConstants.TYPE_VALUES.forEach((nbt, type) -> {
             // Do not test primitives.
             if (PrimitiveNBT.class.isAssignableFrom(nbt)) return;
-            Object value = CONSTRUCTOR_PARAMETER_VALUE.get(nbt);
+            Object value = TestConstants.TYPE_EXAMPLES.get(nbt);
             assertTrue(type.isInstance(value),
                     "Value %s for %s does not match the declared type %s!".formatted(value, nbt, type));
         });
@@ -55,7 +57,7 @@ public class TestingConstantsSanityTest {
 
     @Test
     public void matchingListNbtEntriesType() {
-        List<?> entries = (List<?>) CONSTRUCTOR_PARAMETER_VALUE.get(ListNBT.class);
+        List<?> entries = (List<?>) TestConstants.TYPE_EXAMPLES.get(ListNBT.class);
         assertEquals(1, entries.stream().map(Object::getClass).distinct().limit(2).count(), "Distinct classes as list members!");
     }
 }
