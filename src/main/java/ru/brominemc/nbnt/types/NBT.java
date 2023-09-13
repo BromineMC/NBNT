@@ -103,6 +103,30 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     }
 
     /**
+     * Reads the unnamed NBT from the input.
+     *
+     * @param in      Target input
+     * @param limiter Target limiter
+     * @return Read NBT, {@code null} if read the "NBT End" type
+     * @throws IOException              On I/O exception
+     * @throws IllegalArgumentException If the provided NBT type is unknown, read bytes exceeded the maximum {@link NBTLimiter} length or by underlying reader
+     * @throws IllegalStateException    By underlying reader
+     * @throws NullPointerException     By underlying reader
+     * @since 1.1.0
+     */
+    @CheckReturnValue
+    @Nullable
+    static NBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
+        limiter.readUnsigned(Byte.BYTES); // Type
+        byte type = in.readByte();
+        if (type == NULL_NBT_TYPE) return null; // NBT End
+        NBTReader reader = reader(type);
+        NBT nbt = reader.read(in, limiter);
+        Objects.requireNonNull(nbt, "NBT of non-zero type is null");
+        return nbt;
+    }
+
+    /**
      * Writes the named NBT to the output.
      *
      * @param out  Target output
@@ -111,7 +135,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      * @throws IOException On I/O exception
      */
     static void writeNamed(@NotNull DataOutput out, @NotNull String name, @Nullable NBT nbt) throws IOException {
-        out.write(type(nbt));
+        out.writeByte(type(nbt));
         if (nbt == null) return;
         out.writeUTF(name);
         nbt.write(out);
@@ -125,9 +149,23 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      * @throws IOException On I/O exception
      */
     static void writeUnnamed(@NotNull DataOutput out, @Nullable NBT nbt) throws IOException {
-        out.write(type(nbt));
+        out.writeByte(type(nbt));
         if (nbt == null) return;
         out.writeShort(0); // Name (Length)
+        nbt.write(out);
+    }
+
+    /**
+     * Writes the NBT to the output.
+     *
+     * @param out Target output
+     * @param nbt Target NBT, {@code null} for the "NBT End" type
+     * @throws IOException On I/O exception
+     * @since 1.1.0
+     */
+    static void write(@NotNull DataOutput out, @Nullable NBT nbt) throws IOException {
+        out.write(type(nbt));
+        if (nbt == null) return;
         nbt.write(out);
     }
 
