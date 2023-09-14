@@ -118,6 +118,123 @@ public final class ListNBT implements NBT, List<NBT> {
         throw new IllegalArgumentException("Using " + thatType + " in the NBT list of " + thisType);
     }
 
+    /**
+     * Adds the boolean value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code boolean} elements
+     */
+    public void addBoolean(boolean value) {
+        add(new ByteNBT(value));
+    }
+
+    /**
+     * Adds the byte value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code byte} elements
+     */
+    public void addByte(byte value) {
+        add(new ByteNBT(value));
+    }
+
+    /**
+     * Adds the short value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code short} elements
+     */
+    public void addShort(short value) {
+        add(new ShortNBT(value));
+    }
+
+    /**
+     * Adds the int value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code int} elements
+     */
+    public void addInt(int value) {
+        add(new IntNBT(value));
+    }
+
+    /**
+     * Adds the long value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code long} elements
+     */
+    public void addLong(long value) {
+        add(new LongNBT(value));
+    }
+
+    /**
+     * Adds the float value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code float} elements
+     */
+    public void addFloat(float value) {
+        add(new FloatNBT(value));
+    }
+
+    /**
+     * Adds the double value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code double} elements
+     */
+    public void addDouble(float value) {
+        add(new DoubleNBT(value));
+    }
+
+    /**
+     * Adds the byte array value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code byte[]} elements
+     */
+    public void addByteArray(byte @NotNull [] value) {
+        add(new ByteArrayNBT(value));
+    }
+
+    /**
+     * Adds the string value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@link String} elements
+     */
+    public void addString(@NotNull String value) {
+        add(new StringNBT(value));
+    }
+
+    /**
+     * Adds the list value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@link List} elements
+     */
+    public void addList(@NotNull List<NBT> value) {
+        add(new ListNBT(value));
+    }
+
+    /**
+     * Adds the compound value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@link Map} elements
+     */
+    public void addCompound(@NotNull Map<String, NBT> value) {
+        add(new CompoundNBT(value));
+    }
+
+    /**
+     * Adds the int array value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code int[]} elements
+     */
+    public void addIntArray(int @NotNull [] value) {
+        add(new IntArrayNBT(value));
+    }
+
+    /**
+     * Adds the long array value into the list.
+     *
+     * @throws IllegalArgumentException If the list doesn't support {@code long[]} elements
+     */
+    public void addLongArray(long @NotNull [] value) {
+        add(new LongArrayNBT(value));
+    }
+
     // Delegate methods start
 
     @Override
