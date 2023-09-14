@@ -29,11 +29,13 @@ import java.io.IOException;
  * Depth and length NBT limiter for reading.
  *
  * @author VidTu
- * @apiNote NBT limiters (except for {@link #UNLIMITED}) are not reusable! You MUST create a new limiter each time you want to read something.
+ * @apiNote NBT limiters (except for {@link #UNLIMITED}) are neither reusable nor thread-safe!
  */
 public sealed class NBTLimiter {
     /**
      * Limiter without limits.
+     *
+     * @see #unlimited()
      */
     public static final NBTLimiter UNLIMITED = new NBTUnlimiter();
 
@@ -54,6 +56,46 @@ public sealed class NBTLimiter {
     public NBTLimiter(long maxLength, int maxDepth) {
         this.maxLength = maxLength;
         this.maxDepth = maxDepth;
+    }
+
+    /**
+     * Gets the maximum allowed length of this limiter.
+     *
+     * @return Maximum NBT length in bytes
+     */
+    @Contract(pure = true)
+    public long maxLength() {
+        return maxLength;
+    }
+
+    /**
+     * Gets the maximum allowed depth of this limiter.
+     *
+     * @return Maximum NBT depth
+     */
+    @Contract(pure = true)
+    public int maxDepth() {
+        return maxDepth;
+    }
+
+    /**
+     * Gets the length read by this limiter.
+     *
+     * @return Read NBT bytes
+     */
+    @Contract(pure = true)
+    public long length() {
+        return length;
+    }
+
+    /**
+     * Gets the current depth of this limiter.
+     *
+     * @return Current stack position
+     */
+    @Contract(pure = true)
+    public int depth() {
+        return depth;
     }
 
     /**
@@ -202,9 +244,53 @@ public sealed class NBTLimiter {
     private static final class NBTUnlimiter extends NBTLimiter {
         /**
          * Creates a new NBT limiter without limits.
+         *
+         * @see #UNLIMITED
          */
         private NBTUnlimiter() {
             super(Long.MAX_VALUE, Integer.MAX_VALUE);
+        }
+
+        /**
+         * Always returns {@link Long#MAX_VALUE}.
+         *
+         * @return {@link Long#MAX_VALUE}
+         */
+        @Contract(pure = true)
+        @Override
+        public long maxLength() {
+            return Long.MAX_VALUE;
+        }
+
+        /**
+         * Always returns {@link Integer#MAX_VALUE}.
+         *
+         * @return {@link Integer#MAX_VALUE}
+         */
+        @Contract(pure = true)
+        @Override
+        public int maxDepth() {
+            return Integer.MAX_VALUE;
+        }
+
+        /**
+         * Always returns {@code 0}.
+         *
+         * @return Zero
+         */
+        @Override
+        public long length() {
+            return 0L;
+        }
+
+        /**
+         * Always returns {@code 0}.
+         *
+         * @return Zero
+         */
+        @Override
+        public int depth() {
+            return 0;
         }
 
         /**
