@@ -122,6 +122,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the boolean value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code boolean} elements
+     * @since 1.1.0
      */
     public void addBoolean(boolean value) {
         add(new ByteNBT(value));
@@ -131,6 +132,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the byte value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code byte} elements
+     * @since 1.1.0
      */
     public void addByte(byte value) {
         add(new ByteNBT(value));
@@ -140,6 +142,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the short value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code short} elements
+     * @since 1.1.0
      */
     public void addShort(short value) {
         add(new ShortNBT(value));
@@ -149,6 +152,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the int value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code int} elements
+     * @since 1.1.0
      */
     public void addInt(int value) {
         add(new IntNBT(value));
@@ -158,6 +162,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the long value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code long} elements
+     * @since 1.1.0
      */
     public void addLong(long value) {
         add(new LongNBT(value));
@@ -167,6 +172,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the float value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code float} elements
+     * @since 1.1.0
      */
     public void addFloat(float value) {
         add(new FloatNBT(value));
@@ -176,6 +182,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the double value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code double} elements
+     * @since 1.1.0
      */
     public void addDouble(float value) {
         add(new DoubleNBT(value));
@@ -185,6 +192,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the byte array value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code byte[]} elements
+     * @since 1.1.0
      */
     public void addByteArray(byte @NotNull [] value) {
         add(new ByteArrayNBT(value));
@@ -194,6 +202,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the string value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@link String} elements
+     * @since 1.1.0
      */
     public void addString(@NotNull String value) {
         add(new StringNBT(value));
@@ -203,6 +212,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the list value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@link List} elements
+     * @since 1.1.0
      */
     public void addList(@NotNull List<NBT> value) {
         add(new ListNBT(value));
@@ -212,6 +222,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the compound value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@link Map} elements
+     * @since 1.1.0
      */
     public void addCompound(@NotNull Map<String, NBT> value) {
         add(new CompoundNBT(value));
@@ -221,6 +232,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the int array value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code int[]} elements
+     * @since 1.1.0
      */
     public void addIntArray(int @NotNull [] value) {
         add(new IntArrayNBT(value));
@@ -230,6 +242,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Adds the long array value into the list.
      *
      * @throws IllegalArgumentException If the list doesn't support {@code long[]} elements
+     * @since 1.1.0
      */
     public void addLongArray(long @NotNull [] value) {
         add(new LongArrayNBT(value));

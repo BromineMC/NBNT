@@ -82,7 +82,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      * @param limiter Target limiter
      * @return Read NBT, {@code null} if read the "NBT End" type
      * @throws IOException              On I/O exception
-     * @throws IllegalArgumentException If the provided NBT type is unknown, read bytes exceeded the maximum {@link NBTLimiter} length or by underlying reader
+     * @throws IllegalArgumentException If the provided NBT type is unknown, read bytes exceeded the maximum {@link NBTLimiter} length, strict empty names policy violation or by underlying reader
      * @throws IllegalStateException    By underlying reader
      * @throws NullPointerException     By underlying reader
      */
@@ -93,9 +93,12 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
         byte type = in.readByte();
         if (type == NULL_NBT_TYPE) return null; // NBT End
         limiter.readUnsigned(Short.BYTES); // Name (Length)
-        int skip = in.readUnsignedShort();
-        limiter.readUnsigned(skip); // Name
-        in.skipBytes(skip);
+        int length = in.readUnsignedShort();
+        if (limiter.strictEmptyNames() && length != 0) {
+            throw new IllegalArgumentException("Unnamed NBT name is not empty with strict empty names policy enabled: " + length);
+        }
+        limiter.readUnsigned(length); // Name
+        in.skipBytes(length);
         NBTReader reader = reader(type);
         NBT nbt = reader.read(in, limiter);
         Objects.requireNonNull(nbt, "NBT of non-zero type is null");

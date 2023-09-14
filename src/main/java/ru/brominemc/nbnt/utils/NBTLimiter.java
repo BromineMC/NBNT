@@ -19,6 +19,7 @@ package ru.brominemc.nbnt.utils;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import ru.brominemc.nbnt.types.NBT;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -42,6 +43,7 @@ public sealed class NBTLimiter {
     // Maximum amounts
     private final long maxLength;
     private final int maxDepth;
+    private final boolean strictEmptyNames;
 
     // Current amounts
     private long length;
@@ -49,19 +51,36 @@ public sealed class NBTLimiter {
 
     /**
      * Creates a new NBT limiter.
+     * <p>
+     * This is equal to calling {@link #NBTLimiter(long, int, boolean)} with {@code strictEmptyNames} set to {@code false}.
      *
      * @param maxLength Maximum NBT length in bytes
      * @param maxDepth  Maximum NBT depth
+     * @see #NBTLimiter(long, int, boolean)
      */
     public NBTLimiter(long maxLength, int maxDepth) {
+        this(maxLength, maxDepth, false);
+    }
+
+    /**
+     * Creates a new NBT limiter.
+     *
+     * @param maxLength        Maximum NBT length in bytes
+     * @param maxDepth         Maximum NBT depth
+     * @param strictEmptyNames Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty
+     * @since 1.1.0
+     */
+    public NBTLimiter(long maxLength, int maxDepth, boolean strictEmptyNames) {
         this.maxLength = maxLength;
         this.maxDepth = maxDepth;
+        this.strictEmptyNames = strictEmptyNames;
     }
 
     /**
      * Gets the maximum allowed length of this limiter.
      *
      * @return Maximum NBT length in bytes
+     * @since 1.1.0
      */
     @Contract(pure = true)
     public long maxLength() {
@@ -72,6 +91,7 @@ public sealed class NBTLimiter {
      * Gets the maximum allowed depth of this limiter.
      *
      * @return Maximum NBT depth
+     * @since 1.1.0
      */
     @Contract(pure = true)
     public int maxDepth() {
@@ -79,9 +99,21 @@ public sealed class NBTLimiter {
     }
 
     /**
+     * Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty.
+     *
+     * @return Whether the unnamed NBTs are required to have empty names
+     * @since 1.1.0
+     */
+    @Contract(pure = true)
+    public boolean strictEmptyNames() {
+        return strictEmptyNames;
+    }
+
+    /**
      * Gets the length read by this limiter.
      *
      * @return Read NBT bytes
+     * @since 1.1.0
      */
     @Contract(pure = true)
     public long length() {
@@ -92,6 +124,7 @@ public sealed class NBTLimiter {
      * Gets the current depth of this limiter.
      *
      * @return Current stack position
+     * @since 1.1.0
      */
     @Contract(pure = true)
     public int depth() {
@@ -255,6 +288,7 @@ public sealed class NBTLimiter {
          * Always returns {@link Long#MAX_VALUE}.
          *
          * @return {@link Long#MAX_VALUE}
+         * @since 1.1.0
          */
         @Contract(pure = true)
         @Override
@@ -266,6 +300,7 @@ public sealed class NBTLimiter {
          * Always returns {@link Integer#MAX_VALUE}.
          *
          * @return {@link Integer#MAX_VALUE}
+         * @since 1.1.0
          */
         @Contract(pure = true)
         @Override
@@ -277,6 +312,7 @@ public sealed class NBTLimiter {
          * Always returns {@code 0}.
          *
          * @return Zero
+         * @since 1.1.0
          */
         @Override
         public long length() {
@@ -287,6 +323,7 @@ public sealed class NBTLimiter {
          * Always returns {@code 0}.
          *
          * @return Zero
+         * @since 1.1.0
          */
         @Override
         public int depth() {
