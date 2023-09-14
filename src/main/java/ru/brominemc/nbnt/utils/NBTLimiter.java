@@ -331,6 +331,17 @@ public sealed class NBTLimiter {
         }
 
         /**
+         * Always returns {@code false}.
+         *
+         * @return {@code false}
+         * @since 1.1.0
+         */
+        @Override
+        public boolean strictEmptyNames() {
+            return false;
+        }
+
+        /**
          * Does nothing.
          *
          * @param bytes Ignored
