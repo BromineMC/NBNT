@@ -208,7 +208,7 @@ public sealed class NBTLimiter {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj.getClass().equals(NBTLimiter.class)) return false;
+        if (obj == null || !obj.getClass().equals(NBTLimiter.class)) return false;
         NBTLimiter that = (NBTLimiter) obj; // Manual casting due to NBTUnlimiter
         return maxLength == that.maxLength && maxDepth == that.maxDepth &&
                 strictEmptyNames == that.strictEmptyNames &&
