@@ -20,11 +20,13 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.brominemc.nbnt.types.NBT;
+import ru.brominemc.nbnt.types.LongArrayNBT;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Depth and length NBT limiter for reading.
@@ -44,6 +46,7 @@ public sealed class NBTLimiter {
     private final long maxLength;
     private final int maxDepth;
     private final boolean strictEmptyNames;
+    private final boolean longArrays;
 
     // Current amounts
     private long length;
@@ -52,14 +55,14 @@ public sealed class NBTLimiter {
     /**
      * Creates a new NBT limiter.
      * <p>
-     * This is equal to calling {@link #NBTLimiter(long, int, boolean)} with {@code strictEmptyNames} set to {@code false}.
+     * This is equal to calling {@link #NBTLimiter(long, int, boolean, boolean)} with {@code strictEmptyNames} set to {@code false} and {@code longArrays} set to {@code true}.
      *
      * @param maxLength Maximum NBT length in bytes
      * @param maxDepth  Maximum NBT depth
-     * @see #NBTLimiter(long, int, boolean)
+     * @see #NBTLimiter(long, int, boolean, boolean)
      */
     public NBTLimiter(long maxLength, int maxDepth) {
-        this(maxLength, maxDepth, false);
+        this(maxLength, maxDepth, false, true);
     }
 
     /**
@@ -68,12 +71,14 @@ public sealed class NBTLimiter {
      * @param maxLength        Maximum NBT length in bytes
      * @param maxDepth         Maximum NBT depth
      * @param strictEmptyNames Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty
+     * @param longArrays       Whether the {@link LongArrayNBT} should be readable. Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags
      * @since 1.1.0
      */
-    public NBTLimiter(long maxLength, int maxDepth, boolean strictEmptyNames) {
+    public NBTLimiter(long maxLength, int maxDepth, boolean strictEmptyNames, boolean longArrays) {
         this.maxLength = maxLength;
         this.maxDepth = maxDepth;
         this.strictEmptyNames = strictEmptyNames;
+        this.longArrays = longArrays;
     }
 
     /**
@@ -99,7 +104,7 @@ public sealed class NBTLimiter {
     }
 
     /**
-     * Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty.
+     * Gets whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty.
      *
      * @return Whether the unnamed NBTs are required to have empty names
      * @since 1.1.0
@@ -107,6 +112,17 @@ public sealed class NBTLimiter {
     @Contract(pure = true)
     public boolean strictEmptyNames() {
         return strictEmptyNames;
+    }
+
+    /**
+     * Gets whether the {@link LongArrayNBT} should be readable.
+     *
+     * @return Whether the {@link LongArrayNBT} is readable
+     * @apiNote Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags
+     */
+    @Contract(pure = true)
+    public boolean longArrays() {
+        return longArrays;
     }
 
     /**
@@ -187,6 +203,34 @@ public sealed class NBTLimiter {
         if (depth < 0) {
             throw new IllegalStateException("Min depth reached. (" + depth + " < 0)");
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj.getClass().equals(NBTLimiter.class)) return false;
+        NBTLimiter that = (NBTLimiter) obj; // Manual casting due to NBTUnlimiter
+        return maxLength == that.maxLength && maxDepth == that.maxDepth &&
+                strictEmptyNames == that.strictEmptyNames &&
+                longArrays == that.longArrays && length == that.length &&
+                depth == that.depth;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(maxLength, maxDepth, strictEmptyNames, longArrays, length, depth);
+    }
+
+    @Override
+    public String toString() {
+        return "NBTLimiter{" +
+                "maxLength=" + maxLength +
+                ", maxDepth=" + maxDepth +
+                ", strictEmptyNames=" + strictEmptyNames +
+                ", longArrays=" + longArrays +
+                ", length=" + length +
+                ", depth=" + depth +
+                '}';
     }
 
     /**
@@ -375,6 +419,21 @@ public sealed class NBTLimiter {
         @Override
         public void pop() {
             // NO-OP
+        }
+
+        @Override
+        public int hashCode() {
+            return 109810637; // Arbitrary prime
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof NBTUnlimiter;
+        }
+
+        @Override
+        public String toString() {
+            return "NBTUnlimiter{}";
         }
     }
 }

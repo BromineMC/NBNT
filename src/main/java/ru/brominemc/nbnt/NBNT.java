@@ -22,6 +22,11 @@ package ru.brominemc.nbnt;
  * @author VidTu
  */
 public final class NBNT {
+    /**
+     * An instance of this class cannot be created.
+     *
+     * @throws AssertionError Always
+     */
     private NBNT() {
         throw new AssertionError("No instances.");
     }

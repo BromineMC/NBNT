@@ -106,13 +106,16 @@ public final class LongArrayNBT implements NBT {
      * @param limiter Target limiter
      * @return Read NBT
      * @throws IOException              On I/O exception
-     * @throws IllegalArgumentException If the provided length is smaller than zero
+     * @throws IllegalArgumentException If the provided length is smaller than zero or reading long arrays is prohibited by the limiter
      * @throws IllegalStateException    If read bytes has exceeded the maximum {@link NBTLimiter} length
      */
     @Contract("_, _ -> new")
     @CheckReturnValue
     @NotNull
     public static LongArrayNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
+        if (!limiter.longArrays()) {
+            throw new IllegalArgumentException("Tried to read LongArrayNBT by reader that prohibits reading it: " + limiter);
+        }
         limiter.readUnsigned(Integer.BYTES); // Length
         int length = in.readInt();
         limiter.readSigned((long) length * Long.BYTES); // Data
