@@ -417,6 +417,162 @@ public final class ListNBT implements NBT, List<NBT> {
         return remove(new LongArrayNBT(value));
     }
 
+    /**
+     * Checks whether the boolean value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsBoolean(boolean value) {
+        if (!ByteNBT.class.equals(type())) return false;
+        return contains(new ByteNBT(value));
+    }
+
+    /**
+     * Checks whether the byte value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsByte(byte value) {
+        if (!ByteNBT.class.equals(type())) return false;
+        return contains(new ByteNBT(value));
+    }
+
+    /**
+     * Checks whether the short value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsShort(short value) {
+        if (!ShortNBT.class.equals(type())) return false;
+        return contains(new ShortNBT(value));
+    }
+
+    /**
+     * Checks whether the int value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsInt(int value) {
+        if (!IntNBT.class.equals(type())) return false;
+        return contains(new IntNBT(value));
+    }
+
+    /**
+     * Checks whether the long value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsLong(long value) {
+        if (!LongNBT.class.equals(type())) return false;
+        return contains(new LongNBT(value));
+    }
+
+    /**
+     * Checks whether the float value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsFloat(float value) {
+        if (!FloatNBT.class.equals(type())) return false;
+        return contains(new FloatNBT(value));
+    }
+
+    /**
+     * Checks whether the float value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsDouble(double value) {
+        if (!DoubleNBT.class.equals(type())) return false;
+        return contains(new DoubleNBT(value));
+    }
+
+    /**
+     * Checks whether the byte array value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsByteArray(byte @NotNull [] value) {
+        if (!ByteArrayNBT.class.equals(type())) return false;
+        return contains(new ByteArrayNBT(value));
+    }
+
+    /**
+     * Checks whether the string value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsString(@NotNull String value) {
+        if (!StringNBT.class.equals(type())) return false;
+        return contains(new StringNBT(value));
+    }
+
+    /**
+     * Checks whether the list value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsList(@NotNull List<NBT> value) {
+        if (!ListNBT.class.equals(type())) return false;
+        return contains(new ListNBT(value));
+    }
+
+    /**
+     * Checks whether the compound value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsCompound(@NotNull Map<String, NBT> value) {
+        if (!CompoundNBT.class.equals(type())) return false;
+        return contains(new CompoundNBT(value));
+    }
+
+    /**
+     * Checks whether the int array value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsIntArray(int @NotNull [] value) {
+        if (!IntArrayNBT.class.equals(type())) return false;
+        return contains(new IntArrayNBT(value));
+    }
+
+    /**
+     * Checks whether the long array value is present in the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value is present in the list
+     * @since 1.1.0
+     */
+    public boolean containsLongArray(long @NotNull [] value) {
+        if (!LongArrayNBT.class.equals(type())) return false;
+        return contains(new LongArrayNBT(value));
+    }
+
     // Delegate methods start
 
     @Override
