@@ -794,9 +794,9 @@ public final class ListNBT implements NBT, List<NBT> {
         byte type = in.readByte();
         limiter.readUnsigned(Integer.BYTES); // Length
         int length = in.readInt();
-        if (type == 0) {
+        if (type == NBT.NULL_NBT_TYPE) {
             if (length != 0) {
-                throw new IllegalArgumentException("Invalid length (null-type): " + length);
+                throw new IllegalArgumentException("Invalid length for type " + type + ": " + length);
             }
             return new ListNBT();
         }
@@ -804,13 +804,13 @@ public final class ListNBT implements NBT, List<NBT> {
             return new ListNBT();
         }
         if (length < 0) {
-            throw new IllegalArgumentException("Invalid length: " + length);
+            throw new IllegalArgumentException("Invalid length for type " + type + ": " + length);
         }
         NBTReader reader = NBT.reader(type);
         List<NBT> list = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
             NBT nbt = reader.read(in, limiter);
-            Objects.requireNonNull(nbt, "Null NBT at: " + i);
+            Objects.requireNonNull(nbt, "Unexpected null NBT for type " + type + " at " + i + " out of " + length);
             list.add(nbt);
         }
         limiter.pop();
