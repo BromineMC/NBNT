@@ -121,6 +121,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the boolean value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code boolean} elements
      * @since 1.1.0
      */
@@ -131,6 +132,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the byte value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code byte} elements
      * @since 1.1.0
      */
@@ -141,6 +143,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the short value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code short} elements
      * @since 1.1.0
      */
@@ -151,6 +154,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the int value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code int} elements
      * @since 1.1.0
      */
@@ -161,6 +165,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the long value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code long} elements
      * @since 1.1.0
      */
@@ -171,6 +176,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the float value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code float} elements
      * @since 1.1.0
      */
@@ -181,6 +187,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the double value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code double} elements
      * @since 1.1.0
      */
@@ -191,6 +198,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the byte array value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code byte[]} elements
      * @since 1.1.0
      */
@@ -201,6 +209,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the string value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@link String} elements
      * @since 1.1.0
      */
@@ -211,6 +220,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the list value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@link List} elements
      * @since 1.1.0
      */
@@ -221,6 +231,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the compound value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@link Map} elements
      * @since 1.1.0
      */
@@ -231,6 +242,7 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the int array value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code int[]} elements
      * @since 1.1.0
      */
@@ -241,11 +253,168 @@ public final class ListNBT implements NBT, List<NBT> {
     /**
      * Adds the long array value into the list.
      *
+     * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code long[]} elements
      * @since 1.1.0
      */
     public void addLongArray(long @NotNull [] value) {
         add(new LongArrayNBT(value));
+    }
+
+    /**
+     * Removes the boolean value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeBoolean(boolean value) {
+        if (!ByteNBT.class.equals(type())) return false;
+        return remove(new ByteNBT(value));
+    }
+
+    /**
+     * Removes the byte value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeByte(byte value) {
+        if (!ByteNBT.class.equals(type())) return false;
+        return remove(new ByteNBT(value));
+    }
+
+    /**
+     * Removes the short value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeShort(short value) {
+        if (!ShortNBT.class.equals(type())) return false;
+        return remove(new ShortNBT(value));
+    }
+
+    /**
+     * Removes the int value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeInt(int value) {
+        if (!IntNBT.class.equals(type())) return false;
+        return remove(new IntNBT(value));
+    }
+
+    /**
+     * Removes the long value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeLong(long value) {
+        if (!LongNBT.class.equals(type())) return false;
+        return remove(new LongNBT(value));
+    }
+
+    /**
+     * Removes the float value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeFloat(float value) {
+        if (!FloatNBT.class.equals(type())) return false;
+        return remove(new FloatNBT(value));
+    }
+
+    /**
+     * Removes the double value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeDouble(double value) {
+        if (!DoubleNBT.class.equals(type())) return false;
+        return remove(new DoubleNBT(value));
+    }
+
+    /**
+     * Removes the byte array value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeByteArray(byte @NotNull [] value) {
+        if (!ByteArrayNBT.class.equals(type())) return false;
+        return remove(new ByteArrayNBT(value));
+    }
+
+    /**
+     * Removes the string value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeString(@NotNull String value) {
+        if (!StringNBT.class.equals(type())) return false;
+        return remove(new StringNBT(value));
+    }
+
+    /**
+     * Removes the list value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeList(@NotNull List<NBT> value) {
+        if (!ListNBT.class.equals(type())) return false;
+        return remove(new ListNBT(value));
+    }
+
+    /**
+     * Removes the compound value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeCompound(@NotNull Map<String, NBT> value) {
+        if (!CompoundNBT.class.equals(type())) return false;
+        return remove(new CompoundNBT(value));
+    }
+
+    /**
+     * Removes the int array value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeIntArray(int @NotNull [] value) {
+        if (!IntArrayNBT.class.equals(type())) return false;
+        return remove(new IntArrayNBT(value));
+    }
+
+    /**
+     * Removes the int array value from the list.
+     *
+     * @param value Target value
+     * @return Whether the type of list is applicable for this type of value and the value has been removed
+     * @since 1.1.0
+     */
+    public boolean removeLongArray(long @NotNull [] value) {
+        if (!LongArrayNBT.class.equals(type())) return false;
+        return remove(new LongArrayNBT(value));
     }
 
     // Delegate methods start
