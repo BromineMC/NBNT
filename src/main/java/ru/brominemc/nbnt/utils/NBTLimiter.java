@@ -32,9 +32,9 @@ import java.util.Objects;
  * Depth and length NBT limiter for reading.
  *
  * @author VidTu
- * @apiNote NBT limiters (except for {@link #UNLIMITED}) are neither reusable nor thread-safe!
+ * @apiNote NBT limiters are not thread-safe!
  */
-public sealed class NBTLimiter {
+public sealed class NBTLimiter implements AutoCloseable {
     /**
      * Limiter without limits.
      *
@@ -203,6 +203,29 @@ public sealed class NBTLimiter {
         if (depth < 0) {
             throw new IllegalStateException("Min depth reached. (" + depth + " < 0)");
         }
+    }
+
+    /**
+     * Resets the NBT limiter for reusing.
+     *
+     * @see #close()
+     * @apiNote It is not required to call this method like in many {@link AutoCloseable} implementations. This method should be only called if this instance is going to be reused.
+     */
+    public void reset() {
+        length = 0L;
+        depth = 0;
+    }
+
+    /**
+     * Resets the NBT limiter for reusing.
+     *
+     * @see #reset()
+     * @apiNote It is not required to call this method like in many {@link AutoCloseable} implementations. This method should be only called if this instance is going to be reused.
+     */
+    @Override
+    public void close() {
+        length = 0L;
+        depth = 0;
     }
 
     @Override
@@ -429,6 +452,22 @@ public sealed class NBTLimiter {
          */
         @Override
         public void pop() {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         */
+        @Override
+        public void reset() {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         */
+        @Override
+        public void close() {
             // NO-OP
         }
 
