@@ -208,8 +208,9 @@ public sealed class NBTLimiter implements AutoCloseable {
     /**
      * Resets the NBT limiter for reusing.
      *
-     * @see #close()
      * @apiNote It is not required to call this method like in many {@link AutoCloseable} implementations. This method should be only called if this instance is going to be reused.
+     * @see #close()
+     * @since 1.2.0
      */
     public void reset() {
         length = 0L;
@@ -219,8 +220,9 @@ public sealed class NBTLimiter implements AutoCloseable {
     /**
      * Resets the NBT limiter for reusing.
      *
-     * @see #reset()
      * @apiNote It is not required to call this method like in many {@link AutoCloseable} implementations. This method should be only called if this instance is going to be reused.
+     * @see #reset()
+     * @since 1.2.0
      */
     @Override
     public void close() {
@@ -457,6 +459,8 @@ public sealed class NBTLimiter implements AutoCloseable {
 
         /**
          * Does nothing.
+         *
+         * @since 1.2.0
          */
         @Override
         public void reset() {
@@ -465,6 +469,8 @@ public sealed class NBTLimiter implements AutoCloseable {
 
         /**
          * Does nothing.
+         *
+         * @since 1.2.0
          */
         @Override
         public void close() {
