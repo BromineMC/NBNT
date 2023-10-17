@@ -26,7 +26,12 @@ import ru.brominemc.nbnt.utils.NBTLimiter;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Compound (map, dictionary) NBT type.

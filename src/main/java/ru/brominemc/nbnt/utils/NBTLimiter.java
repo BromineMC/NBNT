@@ -19,8 +19,8 @@ package ru.brominemc.nbnt.utils;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import ru.brominemc.nbnt.types.NBT;
 import ru.brominemc.nbnt.types.LongArrayNBT;
+import ru.brominemc.nbnt.types.NBT;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
