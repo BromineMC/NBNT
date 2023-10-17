@@ -39,7 +39,9 @@ public sealed class NBTLimiter implements AutoCloseable {
      * Limiter without limits.
      *
      * @see #unlimited()
+     * @deprecated Use {@link #unlimited()}
      */
+    @Deprecated(since = "1.2.1", forRemoval = true)
     public static final NBTLimiter UNLIMITED = new NBTUnlimiter();
 
     // Maximum amounts
@@ -347,7 +349,7 @@ public sealed class NBTLimiter implements AutoCloseable {
         /**
          * Creates a new NBT limiter without limits.
          *
-         * @see #UNLIMITED
+         * @see #unlimited()
          */
         private NBTUnlimiter() {
             super(Long.MAX_VALUE, Integer.MAX_VALUE);
