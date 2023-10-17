@@ -16,6 +16,8 @@
 
 package ru.brominemc.nbnt;
 
+import org.jetbrains.annotations.Contract;
+
 /**
  * NBNT (Non-Binary Named Tag) is the library for processing Minecraft NBTs. (Named Binary Tags)
  *
@@ -27,6 +29,7 @@ public final class NBNT {
      *
      * @throws AssertionError Always
      */
+    @Contract(value = "-> fail", pure = true)
     private NBNT() {
         throw new AssertionError("No instances.");
     }
