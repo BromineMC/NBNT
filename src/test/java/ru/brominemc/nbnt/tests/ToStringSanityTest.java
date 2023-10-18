@@ -80,18 +80,19 @@ public class ToStringSanityTest {
     private String expectedToStringField(NBT nbt, Field field) {
         try {
             Object value = field.get(nbt);
-            // TODO(VidTu): Java 21 - Pattern matching
-            if (value instanceof boolean[] arr) return Arrays.toString(arr);
-            if (value instanceof byte[] arr) return Arrays.toString(arr);
-            if (value instanceof short[] arr) return Arrays.toString(arr);
-            if (value instanceof char[] arr) return Arrays.toString(arr);
-            if (value instanceof int[] arr) return Arrays.toString(arr);
-            if (value instanceof long[] arr) return Arrays.toString(arr);
-            if (value instanceof float[] arr) return Arrays.toString(arr);
-            if (value instanceof double[] arr) return Arrays.toString(arr);
-            if (value instanceof Object[] arr) return Arrays.toString(arr);
-            if (value instanceof CharSequence) return "'" + value + "'";
-            return value.toString();
+            return switch (value) {
+                case boolean[] arr -> Arrays.toString(arr);
+                case byte[] arr -> Arrays.toString(arr);
+                case short[] arr -> Arrays.toString(arr);
+                case char[] arr -> Arrays.toString(arr);
+                case int[] arr -> Arrays.toString(arr);
+                case long[] arr -> Arrays.toString(arr);
+                case float[] arr -> Arrays.toString(arr);
+                case double[] arr -> Arrays.toString(arr);
+                case Object[] arr -> Arrays.deepToString(arr);
+                case CharSequence seq -> "'" + seq + "'";
+                default -> String.valueOf(value);
+            };
         } catch (Exception e) {
             throw new RuntimeException("Unable to read field " + field + " from (" + nbt.getClass() + "): " + nbt, e);
         }

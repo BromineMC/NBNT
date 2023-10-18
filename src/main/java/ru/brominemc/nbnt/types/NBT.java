@@ -209,20 +209,21 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
      */
     @Contract(pure = true)
     static byte type(@Nullable NBT nbt) {
-        // TODO(VidTu): Java 21 - Pattern matching
-        if (nbt == null) return NULL_NBT_TYPE;
-        if (nbt instanceof ByteNBT) return ByteNBT.BYTE_NBT_TYPE;
-        if (nbt instanceof ShortNBT) return ShortNBT.SHORT_NBT_TYPE;
-        if (nbt instanceof IntNBT) return IntNBT.INT_NBT_TYPE;
-        if (nbt instanceof LongNBT) return LongNBT.LONG_NBT_TYPE;
-        if (nbt instanceof FloatNBT) return FloatNBT.FLOAT_NBT_TYPE;
-        if (nbt instanceof DoubleNBT) return DoubleNBT.DOUBLE_NBT_TYPE;
-        if (nbt instanceof ByteArrayNBT) return ByteArrayNBT.BYTE_ARRAY_NBT_TYPE;
-        if (nbt instanceof StringNBT) return StringNBT.STRING_NBT_TYPE;
-        if (nbt instanceof ListNBT) return ListNBT.LIST_NBT_TYPE;
-        if (nbt instanceof CompoundNBT) return CompoundNBT.COMPOUND_NBT_TYPE;
-        if (nbt instanceof IntArrayNBT) return IntArrayNBT.INT_ARRAY_NBT_TYPE;
-        if (nbt instanceof LongArrayNBT) return LongArrayNBT.LONG_ARRAY_NBT_TYPE;
-        throw new IllegalArgumentException("Unknown NBT type: " + nbt);
+        return switch (nbt) {
+            case null -> NULL_NBT_TYPE;
+            case ByteNBT ignored -> ByteNBT.BYTE_NBT_TYPE;
+            case ShortNBT ignored -> ShortNBT.SHORT_NBT_TYPE;
+            case IntNBT ignored -> IntNBT.INT_NBT_TYPE;
+            case LongNBT ignored -> LongNBT.LONG_NBT_TYPE;
+            case FloatNBT ignored -> FloatNBT.FLOAT_NBT_TYPE;
+            case DoubleNBT ignored -> DoubleNBT.DOUBLE_NBT_TYPE;
+            case ByteArrayNBT ignored -> ByteArrayNBT.BYTE_ARRAY_NBT_TYPE;
+            case StringNBT ignored -> StringNBT.STRING_NBT_TYPE;
+            case ListNBT ignored -> ListNBT.LIST_NBT_TYPE;
+            case CompoundNBT ignored -> CompoundNBT.COMPOUND_NBT_TYPE;
+            case IntArrayNBT ignored -> IntArrayNBT.INT_ARRAY_NBT_TYPE;
+            case LongArrayNBT ignored -> LongArrayNBT.LONG_ARRAY_NBT_TYPE;
+            default -> throw new IllegalArgumentException("Unknown NBT type: " + nbt);
+        };
     }
 }
