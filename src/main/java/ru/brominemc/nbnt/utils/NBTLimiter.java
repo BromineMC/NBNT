@@ -17,6 +17,7 @@
 package ru.brominemc.nbnt.utils;
 
 import com.google.errorprone.annotations.CheckReturnValue;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.brominemc.nbnt.types.LongArrayNBT;
@@ -39,9 +40,10 @@ public sealed class NBTLimiter implements AutoCloseable {
      * Limiter without limits.
      *
      * @see #unlimited()
-     * @deprecated Use {@link #unlimited()}
+     * @deprecated Will be removed in 2.0.0, use {@link #unlimited()}
      */
     @Deprecated(since = "1.2.1", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
     public static final NBTLimiter UNLIMITED = new NBTUnlimiter();
 
     // Maximum amounts
