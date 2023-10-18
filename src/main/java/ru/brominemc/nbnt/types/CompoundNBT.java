@@ -118,6 +118,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     /**
+     * Gets the boolean wrapper by the key.
+     *
+     * @param key Target key
+     * @return Boolean wrapper or {@code null} if no byte tag exists by that key
+     */
+    @Contract(pure = true)
+    @Nullable
+    public Boolean getBooleanStrict(@NotNull String key) {
+        return value.get(key) instanceof ByteNBT nbt ? nbt.asBoolean() : null;
+    }
+
+    /**
      * Gets the boolean value by the key.
      *
      * @param key      Target key
@@ -127,6 +139,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     public boolean getBoolean(@NotNull String key, boolean fallback) {
         return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asBoolean() : fallback;
+    }
+
+    /**
+     * Gets the boolean value by the key.
+     *
+     * @param key      Target key
+     * @param fallback Fallback value
+     * @return Boolean value or fallback value if no byte tag exists by that key
+     */
+    @Contract(pure = true)
+    public boolean getBooleanStrict(@NotNull String key, boolean fallback) {
+        return value.get(key) instanceof ByteNBT nbt ? nbt.asBoolean() : fallback;
     }
 
     /**
@@ -142,6 +166,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     /**
+     * Gets the byte wrapper by the key.
+     *
+     * @param key Target key
+     * @return Byte wrapper or {@code null} if no byte tag exists by that key
+     */
+    @Contract(pure = true)
+    @Nullable
+    public Byte getByteStrict(@NotNull String key) {
+        return value.get(key) instanceof ByteNBT nbt ? nbt.asByte() : null;
+    }
+
+    /**
      * Gets the byte value by the key.
      *
      * @param key      Target key
@@ -151,6 +187,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     public byte getByte(@NotNull String key, byte fallback) {
         return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asByte() : fallback;
+    }
+
+    /**
+     * Gets the byte value by the key.
+     *
+     * @param key      Target key
+     * @param fallback Fallback value
+     * @return Byte value or fallback value if no byte tag exists by that key
+     */
+    @Contract(pure = true)
+    public byte getByteStrict(@NotNull String key, byte fallback) {
+        return value.get(key) instanceof ByteNBT nbt ? nbt.asByte() : fallback;
     }
 
     /**
@@ -166,6 +214,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     /**
+     * Gets the short wrapper by the key.
+     *
+     * @param key Target key
+     * @return Short wrapper or {@code null} if no short tag exists by that key
+     */
+    @Contract(pure = true)
+    @Nullable
+    public Short getShortStrict(@NotNull String key) {
+        return value.get(key) instanceof ShortNBT nbt ? nbt.asShort() : null;
+    }
+
+    /**
      * Gets the short value by the key.
      *
      * @param key      Target key
@@ -175,6 +235,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     public short getShort(@NotNull String key, short fallback) {
         return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asShort() : fallback;
+    }
+
+    /**
+     * Gets the short value by the key.
+     *
+     * @param key      Target key
+     * @param fallback Fallback value
+     * @return Short value or fallback value if no short tag exists by that key
+     */
+    @Contract(pure = true)
+    public short getShortStrict(@NotNull String key, short fallback) {
+        return value.get(key) instanceof ShortNBT nbt ? nbt.asShort() : fallback;
     }
 
     /**
@@ -190,6 +262,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     /**
+     * Gets the int wrapper by the key.
+     *
+     * @param key Target key
+     * @return Int wrapper or {@code null} if no int tag exists by that key
+     */
+    @Contract(pure = true)
+    @Nullable
+    public Integer getIntStrict(@NotNull String key) {
+        return value.get(key) instanceof IntNBT nbt ? nbt.asInt() : null;
+    }
+
+    /**
      * Gets the int value by the key.
      *
      * @param key      Target key
@@ -199,6 +283,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     public int getInt(@NotNull String key, int fallback) {
         return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asInt() : fallback;
+    }
+
+    /**
+     * Gets the int value by the key.
+     *
+     * @param key      Target key
+     * @param fallback Fallback value
+     * @return Int value or fallback value if no int tag exists by that key
+     */
+    @Contract(pure = true)
+    public int getIntStrict(@NotNull String key, int fallback) {
+        return value.get(key) instanceof IntNBT nbt ? nbt.asInt() : fallback;
     }
 
     /**
@@ -214,6 +310,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     /**
+     * Gets the long wrapper by the key.
+     *
+     * @param key Target key
+     * @return Long wrapper or {@code null} if no long tag exists by that key
+     */
+    @Contract(pure = true)
+    @Nullable
+    public Long getLongStrict(@NotNull String key) {
+        return value.get(key) instanceof LongNBT nbt ? nbt.asLong() : null;
+    }
+
+    /**
      * Gets the long value by the key.
      *
      * @param key      Target key
@@ -223,6 +331,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     public long getLong(@NotNull String key, long fallback) {
         return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asLong() : fallback;
+    }
+
+    /**
+     * Gets the long value by the key.
+     *
+     * @param key      Target key
+     * @param fallback Fallback value
+     * @return Long value or fallback value if no long tag exists by that key
+     */
+    @Contract(pure = true)
+    public long getLongStrict(@NotNull String key, long fallback) {
+        return value.get(key) instanceof LongNBT nbt ? nbt.asLong() : fallback;
     }
 
     /**
@@ -238,6 +358,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     /**
+     * Gets the float wrapper by the key.
+     *
+     * @param key Target key
+     * @return Float wrapper or {@code null} if no float tag exists by that key
+     */
+    @Contract(pure = true)
+    @Nullable
+    public Float getFloatStrict(@NotNull String key) {
+        return value.get(key) instanceof FloatNBT nbt ? nbt.asFloat() : null;
+    }
+
+    /**
      * Gets the float value by the key.
      *
      * @param key      Target key
@@ -249,6 +381,17 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
         return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asFloat() : fallback;
     }
 
+    /**
+     * Gets the float value by the key.
+     *
+     * @param key      Target key
+     * @param fallback Fallback value
+     * @return Float value or fallback value if no float tag exists by that key
+     */
+    @Contract(pure = true)
+    public float getFloatStrict(@NotNull String key, float fallback) {
+        return value.get(key) instanceof FloatNBT nbt ? nbt.asFloat() : fallback;
+    }
 
     /**
      * Gets the double wrapper by the key.
@@ -263,6 +406,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     /**
+     * Gets the double wrapper by the key.
+     *
+     * @param key Target key
+     * @return Double wrapper or {@code null} if no double tag exists by that key
+     */
+    @Contract(pure = true)
+    @Nullable
+    public Double getDoubleStrict(@NotNull String key) {
+        return value.get(key) instanceof DoubleNBT nbt ? nbt.asDouble() : null;
+    }
+
+    /**
      * Gets the double value by the key.
      *
      * @param key      Target key
@@ -272,6 +427,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     public double getDouble(@NotNull String key, double fallback) {
         return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asDouble() : fallback;
+    }
+
+    /**
+     * Gets the double value by the key.
+     *
+     * @param key      Target key
+     * @param fallback Fallback value
+     * @return Double value or fallback value if no double tag exists by that key
+     */
+    @Contract(pure = true)
+    public double getDoubleStrict(@NotNull String key, double fallback) {
+        return value.get(key) instanceof DoubleNBT nbt ? nbt.asDouble() : fallback;
     }
 
     /**
