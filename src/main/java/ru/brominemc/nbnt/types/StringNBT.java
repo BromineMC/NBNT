@@ -20,6 +20,7 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.brominemc.nbnt.utils.NBTLimiter;
+import ru.brominemc.nbnt.utils.NBTReader;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -37,6 +38,13 @@ public final class StringNBT implements NBT {
      * @since 1.1.0
      */
     public static final byte STRING_NBT_TYPE = 8;
+
+    /**
+     * Reader that reads {@link StringNBT}.
+     *
+     * @since 1.4.0
+     */
+    public static final NBTReader STRING_NBT_READER = StringNBT::read;
 
     /**
      * Hold NBT value.

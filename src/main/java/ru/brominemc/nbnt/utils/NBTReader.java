@@ -32,7 +32,7 @@ import java.io.IOException;
 @FunctionalInterface
 public interface NBTReader {
     /**
-     * Reader that reads nothing.
+     * Reader that reads {@code null}.
      */
     NBTReader NULL_READER = (in, limiter) -> null;
 

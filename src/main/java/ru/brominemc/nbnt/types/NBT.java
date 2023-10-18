@@ -184,18 +184,18 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     static NBTReader reader(byte type) {
         return switch (type) {
             case NULL_NBT_TYPE -> NBTReader.NULL_READER;
-            case ByteNBT.BYTE_NBT_TYPE -> ByteNBT::read;
-            case ShortNBT.SHORT_NBT_TYPE -> ShortNBT::read;
-            case IntNBT.INT_NBT_TYPE -> IntNBT::read;
-            case LongNBT.LONG_NBT_TYPE -> LongNBT::read;
-            case FloatNBT.FLOAT_NBT_TYPE -> FloatNBT::read;
-            case DoubleNBT.DOUBLE_NBT_TYPE -> DoubleNBT::read;
-            case ByteArrayNBT.BYTE_ARRAY_NBT_TYPE -> ByteArrayNBT::read;
-            case StringNBT.STRING_NBT_TYPE -> StringNBT::read;
-            case ListNBT.LIST_NBT_TYPE -> ListNBT::read;
-            case CompoundNBT.COMPOUND_NBT_TYPE -> CompoundNBT::read;
-            case IntArrayNBT.INT_ARRAY_NBT_TYPE -> IntArrayNBT::read;
-            case LongArrayNBT.LONG_ARRAY_NBT_TYPE -> LongArrayNBT::read;
+            case ByteNBT.BYTE_NBT_TYPE -> ByteNBT.BYTE_NBT_READER;
+            case ShortNBT.SHORT_NBT_TYPE -> ShortNBT.SHORT_NBT_READER;
+            case IntNBT.INT_NBT_TYPE -> IntNBT.INT_NBT_READER;
+            case LongNBT.LONG_NBT_TYPE -> LongNBT.LONG_NBT_READER;
+            case FloatNBT.FLOAT_NBT_TYPE -> FloatNBT.FLOAT_NBT_READER;
+            case DoubleNBT.DOUBLE_NBT_TYPE -> DoubleNBT.DOUBLE_NBT_READER;
+            case ByteArrayNBT.BYTE_ARRAY_NBT_TYPE -> ByteArrayNBT.BYTE_ARRAY_NBT_READER;
+            case StringNBT.STRING_NBT_TYPE -> StringNBT.STRING_NBT_READER;
+            case ListNBT.LIST_NBT_TYPE -> ListNBT.LIST_NBT_READER;
+            case CompoundNBT.COMPOUND_NBT_TYPE -> CompoundNBT.COMPOUND_NBT_READER;
+            case IntArrayNBT.INT_ARRAY_NBT_TYPE -> IntArrayNBT.INT_ARRAY_NBT_READER;
+            case LongArrayNBT.LONG_ARRAY_NBT_TYPE -> LongArrayNBT.LONG_ARRAY_NBT_READER;
             default -> throw new IllegalArgumentException("Unknown NBT: " + type);
         };
     }

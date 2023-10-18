@@ -49,6 +49,13 @@ public final class ListNBT implements NBT, List<NBT> {
     public static final byte LIST_NBT_TYPE = 9;
 
     /**
+     * Reader that reads {@link ListNBT}.
+     *
+     * @since 1.4.0
+     */
+    public static final NBTReader LIST_NBT_READER = ListNBT::read;
+
+    /**
      * Hold NBT value.
      */
     private List<NBT> value;

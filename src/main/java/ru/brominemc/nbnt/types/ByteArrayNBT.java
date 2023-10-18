@@ -20,6 +20,7 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.brominemc.nbnt.utils.NBTLimiter;
+import ru.brominemc.nbnt.utils.NBTReader;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -38,6 +39,13 @@ public final class ByteArrayNBT implements NBT {
      * @since 1.1.0
      */
     public static final byte BYTE_ARRAY_NBT_TYPE = 7;
+
+    /**
+     * Reader that reads {@link ByteArrayNBT}.
+     *
+     * @since 1.4.0
+     */
+    public static final NBTReader BYTE_ARRAY_NBT_READER = ByteArrayNBT::read;
 
     /**
      * Hold NBT value.

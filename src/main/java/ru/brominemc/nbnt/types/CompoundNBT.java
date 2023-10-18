@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
+import ru.brominemc.nbnt.utils.NBTReader;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -45,6 +46,13 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * @since 1.1.0
      */
     public static final byte COMPOUND_NBT_TYPE = 10;
+
+    /**
+     * Reader that reads {@link CompoundNBT}.
+     *
+     * @since 1.4.0
+     */
+    public static final NBTReader COMPOUND_NBT_READER = CompoundNBT::read;
 
     /**
      * Hold NBT value.
