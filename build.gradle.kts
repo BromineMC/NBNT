@@ -11,8 +11,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jetbrains:annotations:24.1.0")
-    compileOnly("com.google.errorprone:error_prone_annotations:2.23.0")
+    compileOnlyApi("org.jetbrains:annotations:24.1.0")
+    compileOnlyApi("com.google.errorprone:error_prone_annotations:2.23.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
