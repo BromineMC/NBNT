@@ -99,7 +99,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
         limiter.readUnsigned(Short.BYTES); // Name (Length)
         int length = in.readUnsignedShort();
         if (limiter.strictEmptyNames() && length != 0) {
-            throw limiter.quickExceptions() ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(type, length);
+            throw limiter.quickExceptions() ? InvalidNBTLengthException.quick() : new InvalidNBTLengthException(type, length);
         }
         limiter.readUnsigned(length); // Name
         in.skipBytes(length);
@@ -221,9 +221,9 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
             case IntArrayNBT.INT_ARRAY_NBT_TYPE -> IntArrayNBT.INT_ARRAY_NBT_READER;
             case LongArrayNBT.LONG_ARRAY_NBT_TYPE -> {
                 if (limiter.longArrays()) yield LongArrayNBT.LONG_ARRAY_NBT_READER;
-                throw limiter.quickExceptions() ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(type);
+                throw limiter.quickExceptions() ? UnknownNBTException.quick() : new UnknownNBTException(type);
             }
-            default -> throw limiter.quickExceptions() ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(type);
+            default -> throw limiter.quickExceptions() ? UnknownNBTException.quick() : new UnknownNBTException(type);
         };
     }
 

@@ -73,15 +73,26 @@ public sealed class NBTUnderflowException extends NBTLimitException {
     }
 
     /**
+     * Returns a quick shared stackless version of this exception.
+     *
+     * @return Quick variant of this exception
+     */
+    @Contract(pure = true)
+    @NotNull
+    public static NBTUnderflowException quick() {
+        return QuickNBTUnderflowException.INSTANCE;
+    }
+
+    /**
      * A quick variant of {@link NBTUnderflowException}.
      *
      * @author threefusii
      */
-    public static final class QuickNBTUnderflowException extends NBTUnderflowException {
+    private static final class QuickNBTUnderflowException extends NBTUnderflowException {
         /**
          * Shared exception instance.
          */
-        public static final QuickNBTUnderflowException INSTANCE = new QuickNBTUnderflowException();
+        private static final QuickNBTUnderflowException INSTANCE = new QuickNBTUnderflowException();
 
         /**
          * Empty {@link StackTraceElement} array.
@@ -93,7 +104,7 @@ public sealed class NBTUnderflowException extends NBTLimitException {
          *
          * @see #INSTANCE
          */
-        public QuickNBTUnderflowException() {
+        private QuickNBTUnderflowException() {
             // Empty
         }
 

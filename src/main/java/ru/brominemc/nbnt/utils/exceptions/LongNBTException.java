@@ -74,15 +74,26 @@ public sealed class LongNBTException extends NBTLimitException {
     }
 
     /**
+     * Returns a quick shared stackless version of this exception.
+     *
+     * @return Quick variant of this exception
+     */
+    @Contract(pure = true)
+    @NotNull
+    public static LongNBTException quick() {
+        return QuickLongNBTException.INSTANCE;
+    }
+
+    /**
      * A quick variant of {@link LongNBTException}.
      *
      * @author threefusii
      */
-    public static final class QuickLongNBTException extends LongNBTException {
+    private static final class QuickLongNBTException extends LongNBTException {
         /**
          * Shared exception instance.
          */
-        public static final QuickLongNBTException INSTANCE = new QuickLongNBTException();
+        private static final QuickLongNBTException INSTANCE = new QuickLongNBTException();
 
         /**
          * Empty {@link StackTraceElement} array.
@@ -94,7 +105,7 @@ public sealed class LongNBTException extends NBTLimitException {
          *
          * @see #INSTANCE
          */
-        public QuickLongNBTException() {
+        private QuickLongNBTException() {
             // Empty
         }
 

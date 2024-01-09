@@ -83,15 +83,26 @@ public sealed class InvalidNBTLengthException extends IllegalArgumentException {
     }
 
     /**
+     * Returns a quick shared stackless version of this exception.
+     *
+     * @return Quick variant of this exception
+     */
+    @Contract(pure = true)
+    @NotNull
+    public static InvalidNBTLengthException quick() {
+        return QuickInvalidNBTLengthException.INSTANCE;
+    }
+
+    /**
      * A quick variant of {@link InvalidNBTLengthException}.
      *
      * @author threefusii
      */
-    public static final class QuickInvalidNBTLengthException extends InvalidNBTLengthException {
+    private static final class QuickInvalidNBTLengthException extends InvalidNBTLengthException {
         /**
          * Shared exception instance.
          */
-        public static final QuickInvalidNBTLengthException INSTANCE = new QuickInvalidNBTLengthException();
+        private static final QuickInvalidNBTLengthException INSTANCE = new QuickInvalidNBTLengthException();
 
         /**
          * Empty {@link StackTraceElement} array.
@@ -103,7 +114,7 @@ public sealed class InvalidNBTLengthException extends IllegalArgumentException {
          *
          * @see #INSTANCE
          */
-        public QuickInvalidNBTLengthException() {
+        private QuickInvalidNBTLengthException() {
             // Empty
         }
 

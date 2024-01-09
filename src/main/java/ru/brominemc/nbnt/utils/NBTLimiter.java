@@ -231,11 +231,11 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     public void readSigned(long bytes) {
         if (bytes < 0) {
-            throw this.quickExceptions ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(bytes);
+            throw this.quickExceptions ? InvalidNBTLengthException.quick() : new InvalidNBTLengthException(bytes);
         }
         bytes = Math.addExact(this.length, bytes);
         if (bytes > this.maxLength) {
-            throw this.quickExceptions ? LongNBTException.QuickLongNBTException.INSTANCE : new LongNBTException(bytes, this.maxLength);
+            throw this.quickExceptions ? LongNBTException.quick() : new LongNBTException(bytes, this.maxLength);
         }
         this.length = bytes;
     }
@@ -252,7 +252,7 @@ public sealed class NBTLimiter implements AutoCloseable {
     public void readUnsigned(long bytes) {
         bytes = Math.addExact(this.length, bytes);
         if (bytes > this.maxLength) {
-            throw this.quickExceptions ? LongNBTException.QuickLongNBTException.INSTANCE : new LongNBTException(bytes, this.maxLength);
+            throw this.quickExceptions ? LongNBTException.quick() : new LongNBTException(bytes, this.maxLength);
         }
         this.length = bytes;
     }
@@ -264,7 +264,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     public void push() {
         if (this.depth >= this.maxDepth) {
-            throw this.quickExceptions ? NBTOverflowException.QuickNBTOverflowException.INSTANCE : new NBTOverflowException(this.depth);
+            throw this.quickExceptions ? NBTOverflowException.quick() : new NBTOverflowException(this.depth);
         }
         this.depth++;
     }
@@ -276,7 +276,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     public void pop(){
         if (this.depth <= 0) {
-            throw this.quickExceptions ? NBTUnderflowException.QuickNBTUnderflowException.INSTANCE : new NBTUnderflowException(this.depth);
+            throw this.quickExceptions ? NBTUnderflowException.quick() : new NBTUnderflowException(this.depth);
         }
         this.depth--;
     }

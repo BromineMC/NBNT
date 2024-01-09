@@ -72,15 +72,26 @@ public sealed class UnknownNBTException extends IllegalArgumentException {
     }
 
     /**
+     * Returns a quick shared stackless version of this exception.
+     *
+     * @return Quick variant of this exception
+     */
+    @Contract(pure = true)
+    @NotNull
+    public static UnknownNBTException quick() {
+        return QuickUnknownNBTException.INSTANCE;
+    }
+
+    /**
      * A quick variant of {@link UnknownNBTException}.
      *
      * @author threefusii
      */
-    public static final class QuickUnknownNBTException extends UnknownNBTException {
+    private static final class QuickUnknownNBTException extends UnknownNBTException {
         /**
          * Shared exception instance.
          */
-        public static final QuickUnknownNBTException INSTANCE = new QuickUnknownNBTException();
+        private static final QuickUnknownNBTException INSTANCE = new QuickUnknownNBTException();
 
         /**
          * Empty {@link StackTraceElement} array.
@@ -92,7 +103,7 @@ public sealed class UnknownNBTException extends IllegalArgumentException {
          *
          * @see #INSTANCE
          */
-        public QuickUnknownNBTException() {
+        private QuickUnknownNBTException() {
             // Empty
         }
 

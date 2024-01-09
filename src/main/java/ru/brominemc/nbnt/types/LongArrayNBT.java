@@ -129,8 +129,9 @@ public final class LongArrayNBT implements NBT {
     @NotNull
     public static LongArrayNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
         // Check for long arrays.
+        // TODO(threefusii): Remove in 2.0.0. Moved to NBT#reader(byte, NBTLimiter).
         if (!limiter.longArrays()) {
-            throw limiter.quickExceptions() ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(LONG_ARRAY_NBT_TYPE);
+            throw limiter.quickExceptions() ? UnknownNBTException.quick() : new UnknownNBTException(LONG_ARRAY_NBT_TYPE);
         }
 
         // Push length.

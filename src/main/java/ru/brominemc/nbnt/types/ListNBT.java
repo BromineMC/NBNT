@@ -823,7 +823,7 @@ public final class ListNBT implements NBT, List<NBT> {
         if (type == NBT.NULL_NBT_TYPE) {
             // Check for length.
             if (length != 0) {
-                throw limiter.quickExceptions() ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(NBT.NULL_NBT_TYPE, length);
+                throw limiter.quickExceptions() ? InvalidNBTLengthException.quick() : new InvalidNBTLengthException(NBT.NULL_NBT_TYPE, length);
             }
 
             // Return a new empty list.
@@ -837,11 +837,11 @@ public final class ListNBT implements NBT, List<NBT> {
 
         // Check for negative length.
         if (length < 0) {
-            throw limiter.quickExceptions() ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(NBT.NULL_NBT_TYPE, length);
+            throw limiter.quickExceptions() ? InvalidNBTLengthException.quick() : new InvalidNBTLengthException(NBT.NULL_NBT_TYPE, length);
         }
 
         // Load reader.
-        NBTReader reader = NBT.reader(type);
+        NBTReader reader = NBT.reader(type, limiter);
 
         // Load full list.
         List<NBT> list = new ArrayList<>(length);
