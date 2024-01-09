@@ -23,10 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.types.LongArrayNBT;
 import ru.brominemc.nbnt.types.NBT;
+import ru.brominemc.nbnt.utils.exceptions.InvalidNBTLengthException;
 import ru.brominemc.nbnt.utils.exceptions.LongNBTException;
 import ru.brominemc.nbnt.utils.exceptions.NBTOverflowException;
 import ru.brominemc.nbnt.utils.exceptions.NBTUnderflowException;
-import ru.brominemc.nbnt.utils.exceptions.NegativeNBTLengthException;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -220,13 +220,13 @@ public sealed class NBTLimiter implements AutoCloseable {
      * This method checks for negative amount of bytes. If checking is not required, use {@link #readUnsigned(long)}.
      *
      * @param bytes Read bytes
-     * @throws NegativeNBTLengthException If the amount of read bytes is smaller than zero
+     * @throws InvalidNBTLengthException If the amount of read bytes is smaller than zero
      * @throws LongNBTException           If read bytes has exceeded the maximum length
      * @throws ArithmeticException        If amount of read bytes reached {@link Long#MAX_VALUE}
      */
     public void readSigned(long bytes) {
         if (bytes < 0) {
-            throw this.quickExceptions ? NegativeNBTLengthException.QuickNegativeNBTLengthException.INSTANCE : new NegativeNBTLengthException(bytes);
+            throw this.quickExceptions ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(bytes);
         }
         bytes = Math.addExact(this.length, bytes);
         if (bytes > this.maxLength) {

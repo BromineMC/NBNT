@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
 import ru.brominemc.nbnt.utils.NBTReader;
+import ru.brominemc.nbnt.utils.exceptions.InvalidNBTLengthException;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -822,7 +823,7 @@ public final class ListNBT implements NBT, List<NBT> {
         if (type == NBT.NULL_NBT_TYPE) {
             // Check for length.
             if (length != 0) {
-                throw new IllegalArgumentException("Invalid length for type " + NBT.NULL_NBT_TYPE + ": " + length);
+                throw limiter.quickExceptions() ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(NBT.NULL_NBT_TYPE, length);
             }
 
             // Return a new empty list.
@@ -836,7 +837,7 @@ public final class ListNBT implements NBT, List<NBT> {
 
         // Check for negative length.
         if (length < 0) {
-            throw new IllegalArgumentException("Invalid length for type " + type + ": " + length);
+            throw limiter.quickExceptions() ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(NBT.NULL_NBT_TYPE, length);
         }
 
         // Load reader.

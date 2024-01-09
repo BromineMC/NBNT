@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.brominemc.nbnt.utils.NBTLimiter;
 import ru.brominemc.nbnt.utils.NBTReader;
+import ru.brominemc.nbnt.utils.exceptions.UnknownNBTException;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -31,6 +32,7 @@ import java.util.Arrays;
  * Long array NBT type.
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class LongArrayNBT implements NBT {
     /**
@@ -128,7 +130,7 @@ public final class LongArrayNBT implements NBT {
     public static LongArrayNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
         // Check for long arrays.
         if (!limiter.longArrays()) {
-            throw new IllegalArgumentException("Tried to read LongArrayNBT by reader that prohibits reading it: " + limiter);
+            throw limiter.quickExceptions() ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(LONG_ARRAY_NBT_TYPE);
         }
 
         // Push length.

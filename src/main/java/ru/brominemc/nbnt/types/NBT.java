@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
 import ru.brominemc.nbnt.utils.NBTReader;
+import ru.brominemc.nbnt.utils.exceptions.InvalidNBTLengthException;
+import ru.brominemc.nbnt.utils.exceptions.UnknownNBTException;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -33,6 +35,7 @@ import java.util.Objects;
  * Parent interface for all NBT data types.
  *
  * @author VidTu
+ * @author threefusii
  * @see <a href="https://wiki.vg/NBT">NBT on wiki.vg</a>
  */
 public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListNBT, CompoundNBT, IntArrayNBT, LongArrayNBT {
@@ -95,7 +98,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
         limiter.readUnsigned(Short.BYTES); // Name (Length)
         int length = in.readUnsignedShort();
         if (limiter.strictEmptyNames() && length != 0) {
-            throw new IllegalArgumentException("Unnamed NBT name is not empty with strict empty names policy enabled: " + length);
+            throw limiter.quickExceptions() ? InvalidNBTLengthException.QuickInvalidNBTLengthException.INSTANCE : new InvalidNBTLengthException(type, length);
         }
         limiter.readUnsigned(length); // Name
         in.skipBytes(length);
@@ -174,14 +177,31 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
 
     /**
      * Gets the reader for the NBT type.
+     * <p>
+     * This is equal to calling {@link #reader(byte, boolean)} with {@code quick} set to {@code false}
      *
      * @param type NBT type
      * @return Reader for the NBT type
-     * @throws IllegalArgumentException If the NBT type is unknown
+     * @throws UnknownNBTException If the NBT type is unknown
      */
     @Contract(pure = true)
     @NotNull
     static NBTReader reader(byte type) {
+        return reader(type, false);
+    }
+
+    /**
+     * Gets the reader for the NBT type.
+     *
+     * @param type  NBT type
+     * @param quick Whether the thrown exception would be {@link UnknownNBTException.QuickUnknownNBTException}
+     * @return Reader for the NBT type
+     * @throws UnknownNBTException If the NBT type is unknown
+     * @since 1.5.0
+     */
+    @Contract(pure = true)
+    @NotNull
+    static NBTReader reader(byte type, boolean quick) {
         return switch (type) {
             case NULL_NBT_TYPE -> NBTReader.NULL_READER;
             case ByteNBT.BYTE_NBT_TYPE -> ByteNBT.BYTE_NBT_READER;
@@ -196,7 +216,7 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
             case CompoundNBT.COMPOUND_NBT_TYPE -> CompoundNBT.COMPOUND_NBT_READER;
             case IntArrayNBT.INT_ARRAY_NBT_TYPE -> IntArrayNBT.INT_ARRAY_NBT_READER;
             case LongArrayNBT.LONG_ARRAY_NBT_TYPE -> LongArrayNBT.LONG_ARRAY_NBT_READER;
-            default -> throw new IllegalArgumentException("Unknown NBT: " + type);
+            default -> throw quick ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(type);
         };
     }
 

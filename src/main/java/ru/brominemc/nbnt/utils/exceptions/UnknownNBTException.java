@@ -19,7 +19,6 @@ package ru.brominemc.nbnt.utils.exceptions;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.brominemc.nbnt.utils.NBTLimiter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,25 +26,25 @@ import java.io.ObjectOutputStream;
 import java.io.Serial;
 
 /**
- * An exception thrown by {@link NBTLimiter#readSigned(long)} when accepted a negative length argument.
+ * An exception indicating the unknown NBT type.
  *
  * @author threefusii
  */
-public sealed class NegativeNBTLengthException extends IllegalArgumentException {
+public sealed class UnknownNBTException extends IllegalArgumentException {
     /**
      * Creates a new exception.
      */
-    NegativeNBTLengthException() {
-        super("Negative NBT bytes read. (Quick)");
+    UnknownNBTException() {
+        super("Unknown NBT type. (Quick)");
     }
 
     /**
      * Creates a new exception.
      *
-     * @param length Provided length
+     * @param type Provided type
      */
-    public NegativeNBTLengthException(long length) {
-        super("Negative NBT bytes read. (" + length + ")");
+    public UnknownNBTException(byte type) {
+        super("Unknown NBT type. (" + type + ")");
     }
 
     /**
@@ -73,15 +72,15 @@ public sealed class NegativeNBTLengthException extends IllegalArgumentException 
     }
 
     /**
-     * A quick variant of {@link NegativeNBTLengthException}.
+     * A quick variant of {@link UnknownNBTException}.
      *
      * @author threefusii
      */
-    public static final class QuickNegativeNBTLengthException extends NegativeNBTLengthException {
+    public static final class QuickUnknownNBTException extends UnknownNBTException {
         /**
          * Shared exception instance.
          */
-        public static final QuickNegativeNBTLengthException INSTANCE = new QuickNegativeNBTLengthException();
+        public static final QuickUnknownNBTException INSTANCE = new QuickUnknownNBTException();
 
         /**
          * Empty {@link StackTraceElement} array.
@@ -93,7 +92,7 @@ public sealed class NegativeNBTLengthException extends IllegalArgumentException 
          *
          * @see #INSTANCE
          */
-        public QuickNegativeNBTLengthException() {
+        public QuickUnknownNBTException() {
             // Empty
         }
 
@@ -101,14 +100,14 @@ public sealed class NegativeNBTLengthException extends IllegalArgumentException 
         @Override
         @NotNull
         public String getMessage() {
-            return "Negative NBT bytes read. (Quick)";
+            return "Unknown NBT type. (Quick)";
         }
 
         @Contract(pure = true)
         @Override
         @NotNull
         public String getLocalizedMessage() {
-            return "Negative NBT bytes read. (Quick)";
+            return "Unknown NBT type. (Quick)";
         }
 
         /**
@@ -147,7 +146,7 @@ public sealed class NegativeNBTLengthException extends IllegalArgumentException 
         @Override
         @NotNull
         public String toString() {
-            return this.getClass().getName() + ": Negative NBT bytes read. (Quick)";
+            return this.getClass().getName() + ": Unknown NBT type. (Quick)";
         }
 
         /**
