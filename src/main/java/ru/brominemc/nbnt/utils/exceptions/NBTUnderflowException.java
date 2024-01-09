@@ -16,18 +16,198 @@
 
 package ru.brominemc.nbnt.utils.exceptions;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
 
 /**
  * An exception thrown by {@link NBTLimiter#pop()} indicating a minimum (zero) stack depth has been reached.
  *
  * @author threefusii
  */
-public final class NBTUnderflowException extends NBTLimitException {
+public sealed class NBTUnderflowException extends NBTLimitException {
     /**
      * Creates a new exception.
      */
-    public NBTUnderflowException() {
-        super("Min depth reached. (0)");
+    NBTUnderflowException() {
+        super("Min NBT depth reached. (Quick)");
+    }
+
+    /**
+     * Creates a new exception.
+     *
+     * @param depth Current depth
+     */
+    public NBTUnderflowException(int depth) {
+        super("Min NBT depth reached. (" + depth + ")");
+    }
+
+    /**
+     * Does nothing.
+     *
+     * @param ignored Ignored
+     * @throws IOException Never thrown
+     */
+    @Contract(pure = true)
+    @Serial
+    private void readObject(@Nullable ObjectInputStream ignored) throws IOException {
+        // NO-OP
+    }
+
+    /**
+     * Does nothing.
+     *
+     * @param ignored Ignored
+     * @throws IOException Never thrown
+     */
+    @Contract(pure = true)
+    @Serial
+    private void writeObject(@Nullable ObjectOutputStream ignored) throws IOException {
+        // NO-OP
+    }
+
+    /**
+     * A quick variant of {@link NBTUnderflowException}.
+     *
+     * @author threefusii
+     */
+    public static final class QuickNBTUnderflowException extends NBTUnderflowException {
+        /**
+         * Shared exception instance.
+         */
+        public static final QuickNBTUnderflowException INSTANCE = new QuickNBTUnderflowException();
+
+        /**
+         * Empty {@link StackTraceElement} array.
+         */
+        private static final StackTraceElement[] EMPTY_STACK = {};
+
+        /**
+         * Creates a new quick exception.
+         *
+         * @see #INSTANCE
+         */
+        public QuickNBTUnderflowException() {
+            // Empty
+        }
+
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String getMessage() {
+            return "Min NBT depth reached. (Quick)";
+        }
+
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String getLocalizedMessage() {
+            return "Min NBT depth reached. (Quick)";
+        }
+
+        /**
+         * Always returns null.
+         *
+         * @return null
+         */
+        @Contract(value = "-> null", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @Nullable
+        public Throwable getCause() {
+            return null;
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param cause Ignored
+         * @return this
+         */
+        @Contract(value = "_ -> this", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @NotNull
+        public Throwable initCause(@Nullable Throwable cause) {
+            return this;
+        }
+
+        /**
+         * Always returns a constant string representation for this.
+         *
+         * @return A constant string
+         */
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String toString() {
+            return this.getClass().getName() + ": Min NBT depth reached. (Quick)";
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @return this
+         */
+        @Contract(value = "-> this", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @NotNull
+        public Throwable fillInStackTrace() {
+            return this;
+        }
+
+        /**
+         * Always returns empty array.
+         *
+         * @return Empty array
+         */
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public StackTraceElement @NotNull [] getStackTrace() {
+            return EMPTY_STACK;
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param stackTrace Ignored
+         */
+        @Contract(pure = true)
+        @Override
+        public void setStackTrace(@Nullable StackTraceElement @Nullable [] stackTrace) {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param ignored Ignored
+         * @throws IOException Never thrown
+         */
+        @Contract(pure = true)
+        @Serial
+        private void readObject(@Nullable ObjectInputStream ignored) throws IOException {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param ignored Ignored
+         * @throws IOException Never thrown
+         */
+        @Contract(pure = true)
+        @Serial
+        private void writeObject(@Nullable ObjectOutputStream ignored) throws IOException {
+            // NO-OP
+        }
     }
 }

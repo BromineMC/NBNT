@@ -16,14 +16,29 @@
 
 package ru.brominemc.nbnt.utils.exceptions;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
 
 /**
  * An exception thrown by {@link NBTLimiter#readSigned(long)} or {@link NBTLimiter#readUnsigned(long)} indicating a maximum NBT length has been reached.
  *
  * @author threefusii
  */
-public final class LongNBTException extends NBTLimitException {
+public sealed class LongNBTException extends NBTLimitException {
+    /**
+     * Creates a new exception.
+     */
+    LongNBTException() {
+        super("Max NBT length reached. (Quick)");
+    }
+
     /**
      * Creates a new exception.
      *
@@ -31,6 +46,169 @@ public final class LongNBTException extends NBTLimitException {
      * @param maxLength Maximum length
      */
     public LongNBTException(long length, long maxLength) {
-        super("Max length reached. (" + length + " > " + maxLength + ")");
+        super("Max NBT length reached. (" + length + " > " + maxLength + ")");
+    }
+
+    /**
+     * Does nothing.
+     *
+     * @param ignored Ignored
+     * @throws IOException Never thrown
+     */
+    @Contract(pure = true)
+    @Serial
+    private void readObject(@Nullable ObjectInputStream ignored) throws IOException {
+        // NO-OP
+    }
+
+    /**
+     * Does nothing.
+     *
+     * @param ignored Ignored
+     * @throws IOException Never thrown
+     */
+    @Contract(pure = true)
+    @Serial
+    private void writeObject(@Nullable ObjectOutputStream ignored) throws IOException {
+        // NO-OP
+    }
+
+    /**
+     * A quick variant of {@link LongNBTException}.
+     *
+     * @author threefusii
+     */
+    public static final class QuickLongNBTException extends LongNBTException {
+        /**
+         * Shared exception instance.
+         */
+        public static final QuickLongNBTException INSTANCE = new QuickLongNBTException();
+
+        /**
+         * Empty {@link StackTraceElement} array.
+         */
+        private static final StackTraceElement[] EMPTY_STACK = {};
+
+        /**
+         * Creates a new quick exception.
+         *
+         * @see #INSTANCE
+         */
+        public QuickLongNBTException() {
+            // Empty
+        }
+
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String getMessage() {
+            return "Max NBT length reached. (Quick)";
+        }
+
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String getLocalizedMessage() {
+            return "Max NBT length reached. (Quick)";
+        }
+
+        /**
+         * Always returns null.
+         *
+         * @return null
+         */
+        @Contract(value = "-> null", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @Nullable
+        public Throwable getCause() {
+            return null;
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param cause Ignored
+         * @return this
+         */
+        @Contract(value = "_ -> this", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @NotNull
+        public Throwable initCause(@Nullable Throwable cause) {
+            return this;
+        }
+
+        /**
+         * Always returns a constant string representation for this.
+         *
+         * @return A constant string
+         */
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String toString() {
+            return this.getClass().getName() + ": Max NBT length reached. (Quick)";
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @return this
+         */
+        @Contract(value = "-> this", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @NotNull
+        public Throwable fillInStackTrace() {
+            return this;
+        }
+
+        /**
+         * Always returns empty array.
+         *
+         * @return Empty array
+         */
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public StackTraceElement @NotNull [] getStackTrace() {
+            return EMPTY_STACK;
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param stackTrace Ignored
+         */
+        @Contract(pure = true)
+        @Override
+        public void setStackTrace(@Nullable StackTraceElement @Nullable [] stackTrace) {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param ignored Ignored
+         * @throws IOException Never thrown
+         */
+        @Contract(pure = true)
+        @Serial
+        private void readObject(@Nullable ObjectInputStream ignored) throws IOException {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param ignored Ignored
+         * @throws IOException Never thrown
+         */
+        @Contract(pure = true)
+        @Serial
+        private void writeObject(@Nullable ObjectOutputStream ignored) throws IOException {
+            // NO-OP
+        }
     }
 }

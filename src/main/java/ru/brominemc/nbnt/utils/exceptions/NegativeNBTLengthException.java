@@ -16,20 +16,198 @@
 
 package ru.brominemc.nbnt.utils.exceptions;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
 
 /**
  * An exception thrown by {@link NBTLimiter#readSigned(long)} when accepted a negative length argument.
  *
  * @author threefusii
  */
-public final class NegativeNBTLengthException extends IllegalArgumentException {
+public sealed class NegativeNBTLengthException extends IllegalArgumentException {
+    /**
+     * Creates a new exception.
+     */
+    NegativeNBTLengthException() {
+        super("Negative NBT bytes read. (Quick)");
+    }
+
     /**
      * Creates a new exception.
      *
      * @param length Provided length
      */
     public NegativeNBTLengthException(long length) {
-        super("Negative bytes read. (" + length + ")");
+        super("Negative NBT bytes read. (" + length + ")");
+    }
+
+    /**
+     * Does nothing.
+     *
+     * @param ignored Ignored
+     * @throws IOException Never thrown
+     */
+    @Contract(pure = true)
+    @Serial
+    private void readObject(@Nullable ObjectInputStream ignored) throws IOException {
+        // NO-OP
+    }
+
+    /**
+     * Does nothing.
+     *
+     * @param ignored Ignored
+     * @throws IOException Never thrown
+     */
+    @Contract(pure = true)
+    @Serial
+    private void writeObject(@Nullable ObjectOutputStream ignored) throws IOException {
+        // NO-OP
+    }
+
+    /**
+     * A quick variant of {@link NegativeNBTLengthException}.
+     *
+     * @author threefusii
+     */
+    public static final class QuickNegativeNBTLengthException extends NegativeNBTLengthException {
+        /**
+         * Shared exception instance.
+         */
+        public static final QuickNegativeNBTLengthException INSTANCE = new QuickNegativeNBTLengthException();
+
+        /**
+         * Empty {@link StackTraceElement} array.
+         */
+        private static final StackTraceElement[] EMPTY_STACK = {};
+
+        /**
+         * Creates a new quick exception.
+         *
+         * @see #INSTANCE
+         */
+        public QuickNegativeNBTLengthException() {
+            // Empty
+        }
+
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String getMessage() {
+            return "Negative NBT bytes read. (Quick)";
+        }
+
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String getLocalizedMessage() {
+            return "Negative NBT bytes read. (Quick)";
+        }
+
+        /**
+         * Always returns null.
+         *
+         * @return null
+         */
+        @Contract(value = "-> null", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @Nullable
+        public Throwable getCause() {
+            return null;
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param cause Ignored
+         * @return this
+         */
+        @Contract(value = "_ -> this", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @NotNull
+        public Throwable initCause(@Nullable Throwable cause) {
+            return this;
+        }
+
+        /**
+         * Always returns a constant string representation for this.
+         *
+         * @return A constant string
+         */
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public String toString() {
+            return this.getClass().getName() + ": Negative NBT bytes read. (Quick)";
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @return this
+         */
+        @Contract(value = "-> this", pure = true)
+        @SuppressWarnings("NonSynchronizedMethodOverridesSynchronizedMethod")
+        @Override
+        @NotNull
+        public Throwable fillInStackTrace() {
+            return this;
+        }
+
+        /**
+         * Always returns empty array.
+         *
+         * @return Empty array
+         */
+        @Contract(pure = true)
+        @Override
+        @NotNull
+        public StackTraceElement @NotNull [] getStackTrace() {
+            return EMPTY_STACK;
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param stackTrace Ignored
+         */
+        @Contract(pure = true)
+        @Override
+        public void setStackTrace(@Nullable StackTraceElement @Nullable [] stackTrace) {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param ignored Ignored
+         * @throws IOException Never thrown
+         */
+        @Contract(pure = true)
+        @Serial
+        private void readObject(@Nullable ObjectInputStream ignored) throws IOException {
+            // NO-OP
+        }
+
+        /**
+         * Does nothing.
+         *
+         * @param ignored Ignored
+         * @throws IOException Never thrown
+         */
+        @Contract(pure = true)
+        @Serial
+        private void writeObject(@Nullable ObjectOutputStream ignored) throws IOException {
+            // NO-OP
+        }
     }
 }

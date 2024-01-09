@@ -20,6 +20,7 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.types.LongArrayNBT;
 import ru.brominemc.nbnt.types.NBT;
 import ru.brominemc.nbnt.utils.exceptions.LongNBTException;
@@ -52,6 +53,11 @@ public sealed class NBTLimiter implements AutoCloseable {
     public static final NBTLimiter UNLIMITED = new NBTUnlimiter();
 
     /**
+     * Simple empty string.
+     */
+    private static final String EMPTY_STRING = "";
+
+    /**
      * Maximum NBT length in bytes.
      */
     private final long maxLength;
@@ -70,6 +76,11 @@ public sealed class NBTLimiter implements AutoCloseable {
      * Whether the {@link LongArrayNBT} should be readable. Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags.
      */
     private final boolean longArrays;
+
+    /**
+     * Whether the exceptions thrown by this limiter should be shared and stackless.
+     */
+    private final boolean quickExceptions;
 
     /**
      * Read NBT bytes.
@@ -96,6 +107,8 @@ public sealed class NBTLimiter implements AutoCloseable {
 
     /**
      * Creates a new NBT limiter.
+     * <p>
+     * This is equal to calling {@link #NBTLimiter(long, int, boolean, boolean, boolean)} with {@code quickExceptions} set to {@code false}
      *
      * @param maxLength        Maximum NBT length in bytes
      * @param maxDepth         Maximum NBT depth
@@ -104,10 +117,25 @@ public sealed class NBTLimiter implements AutoCloseable {
      * @since 1.1.0
      */
     public NBTLimiter(long maxLength, int maxDepth, boolean strictEmptyNames, boolean longArrays) {
+        this(maxLength, maxDepth, strictEmptyNames, longArrays, false);
+    }
+
+    /**
+     * Creates a new NBT limiter.
+     *
+     * @param maxLength        Maximum NBT length in bytes
+     * @param maxDepth         Maximum NBT depth
+     * @param strictEmptyNames Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty
+     * @param longArrays       Whether the {@link LongArrayNBT} should be readable. Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags
+     * @param quickExceptions  Whether the exceptions thrown by this limiter should be shared and stackless
+     * @since 1.5.0
+     */
+    public NBTLimiter(long maxLength, int maxDepth, boolean strictEmptyNames, boolean longArrays, boolean quickExceptions) {
         this.maxLength = maxLength;
         this.maxDepth = maxDepth;
         this.strictEmptyNames = strictEmptyNames;
         this.longArrays = longArrays;
+        this.quickExceptions = quickExceptions;
     }
 
     /**
@@ -155,6 +183,16 @@ public sealed class NBTLimiter implements AutoCloseable {
     }
 
     /**
+     * Whether the exceptions thrown by this limiter should be shared and stackless
+     *
+     * @return Whether the exceptions thrown by this limiter are shared and stackless
+     */
+    @Contract(pure = true)
+    public boolean quickExceptions() {
+        return this.quickExceptions;
+    }
+
+    /**
      * Gets the length read by this limiter.
      *
      * @return Read NBT bytes
@@ -188,11 +226,11 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     public void readSigned(long bytes) {
         if (bytes < 0) {
-            throw new NegativeNBTLengthException(bytes);
+            throw this.quickExceptions ? NegativeNBTLengthException.QuickNegativeNBTLengthException.INSTANCE : new NegativeNBTLengthException(bytes);
         }
         bytes = Math.addExact(this.length, bytes);
         if (bytes > this.maxLength) {
-            throw new LongNBTException(bytes, this.maxLength);
+            throw this.quickExceptions ? LongNBTException.QuickLongNBTException.INSTANCE : new LongNBTException(bytes, this.maxLength);
         }
         this.length = bytes;
     }
@@ -209,7 +247,7 @@ public sealed class NBTLimiter implements AutoCloseable {
     public void readUnsigned(long bytes) {
         bytes = Math.addExact(this.length, bytes);
         if (bytes > this.maxLength) {
-            throw new LongNBTException(bytes, this.maxLength);
+            throw this.quickExceptions ? LongNBTException.QuickLongNBTException.INSTANCE : new LongNBTException(bytes, this.maxLength);
         }
         this.length = bytes;
     }
@@ -221,7 +259,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     public void push() {
         if (this.depth >= this.maxDepth) {
-            throw new NBTOverflowException(this.depth);
+            throw this.quickExceptions ? NBTOverflowException.QuickNBTOverflowException.INSTANCE : new NBTOverflowException(this.depth);
         }
         this.depth++;
     }
@@ -233,7 +271,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     public void pop(){
         if (this.depth <= 0) {
-            throw new NBTUnderflowException();
+            throw this.quickExceptions ? NBTUnderflowException.QuickNBTUnderflowException.INSTANCE : new NBTUnderflowException(this.depth);
         }
         this.depth--;
     }
@@ -263,29 +301,35 @@ public sealed class NBTLimiter implements AutoCloseable {
         this.depth = 0;
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (obj == null || !obj.getClass().equals(NBTLimiter.class)) return false;
         NBTLimiter that = (NBTLimiter) obj; // Manual casting due to NBTUnlimiter
         return this.maxLength == that.maxLength && this.maxDepth == that.maxDepth &&
-                this.strictEmptyNames == that.strictEmptyNames &&
-                this.longArrays == that.longArrays && this.length == that.length &&
+                this.strictEmptyNames == that.strictEmptyNames && this.longArrays == that.longArrays &&
+                this.quickExceptions == that.quickExceptions && this.length == that.length &&
                 this.depth == that.depth;
     }
 
+    @Contract(pure = true)
     @Override
     public int hashCode() {
-        return Objects.hash(this.maxLength, this.maxDepth, this.strictEmptyNames, this.longArrays, this.length, this.depth);
+        return Objects.hash(this.maxLength, this.maxDepth, this.strictEmptyNames,
+                this.longArrays, this.quickExceptions, this.length, this.depth);
     }
 
+    @Contract(pure = true)
     @Override
+    @NotNull
     public String toString() {
         return "NBTLimiter{" +
                 "maxLength=" + this.maxLength +
                 ", maxDepth=" + this.maxDepth +
                 ", strictEmptyNames=" + this.strictEmptyNames +
                 ", longArrays=" + this.longArrays +
+                ", quickExceptions=" + this.quickExceptions +
                 ", length=" + this.length +
                 ", depth=" + this.depth +
                 '}';
@@ -312,9 +356,7 @@ public sealed class NBTLimiter implements AutoCloseable {
         int length = in.readUnsignedShort();
 
         // Empty shortcut.
-        if (length == 0) {
-            return "";
-        }
+        if (length == 0) return EMPTY_STRING;
 
         // Push data.
         limiter.readUnsigned(length);
@@ -392,7 +434,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          * @see #unlimited()
          */
         private NBTUnlimiter() {
-            super(Long.MAX_VALUE, Integer.MAX_VALUE);
+            super(Long.MAX_VALUE, Integer.MAX_VALUE, false, true, false);
         }
 
         /**
@@ -425,6 +467,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          * @return Zero
          * @since 1.1.0
          */
+        @Contract(pure = true)
         @Override
         public long length() {
             return 0L;
@@ -436,6 +479,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          * @return Zero
          * @since 1.1.0
          */
+        @Contract(pure = true)
         @Override
         public int depth() {
             return 0;
@@ -447,6 +491,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          * @return {@code false}
          * @since 1.1.0
          */
+        @Contract(value = "-> false", pure = true)
         @Override
         public boolean strictEmptyNames() {
             return false;
@@ -458,9 +503,22 @@ public sealed class NBTLimiter implements AutoCloseable {
          * @return {@code true}
          * @since 1.1.0
          */
+        @Contract(value = "-> true", pure = true)
         @Override
         public boolean longArrays() {
             return true;
+        }
+
+        /**
+         * Always returns {@code false}.
+         *
+         * @return {@code false}
+         * @since 1.1.0
+         */
+        @Contract(value = "-> false", pure = true)
+        @Override
+        public boolean quickExceptions() {
+            return false;
         }
 
         /**
@@ -468,6 +526,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          *
          * @param bytes Ignored
          */
+        @Contract(pure = true)
         @Override
         public void readSigned(long bytes) {
             // NO-OP
@@ -478,6 +537,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          *
          * @param bytes Ignored
          */
+        @Contract(pure = true)
         @Override
         public void readUnsigned(long bytes) {
             // NO-OP
@@ -486,6 +546,7 @@ public sealed class NBTLimiter implements AutoCloseable {
         /**
          * Does nothing.
          */
+        @Contract(pure = true)
         @Override
         public void push() {
             // NO-OP
@@ -494,6 +555,7 @@ public sealed class NBTLimiter implements AutoCloseable {
         /**
          * Does nothing.
          */
+        @Contract(pure = true)
         @Override
         public void pop() {
             // NO-OP
@@ -504,6 +566,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          *
          * @since 1.2.0
          */
+        @Contract(pure = true)
         @Override
         public void reset() {
             // NO-OP
@@ -514,22 +577,27 @@ public sealed class NBTLimiter implements AutoCloseable {
          *
          * @since 1.2.0
          */
+        @Contract(pure = true)
         @Override
         public void close() {
             // NO-OP
         }
 
+        @Contract(value = "null -> false", pure = true)
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            return obj instanceof NBTUnlimiter;
+        }
+
+        @Contract(pure = true)
         @Override
         public int hashCode() {
             return 109810637; // Arbitrary prime
         }
 
+        @Contract(pure = true)
         @Override
-        public boolean equals(Object obj) {
-            return obj instanceof NBTUnlimiter;
-        }
-
-        @Override
+        @NotNull
         public String toString() {
             return "NBTUnlimiter{}";
         }
