@@ -30,6 +30,7 @@ import java.io.Serial;
  * An exception thrown by {@link NBTLimiter#readSigned(long)} or {@link NBTLimiter#readUnsigned(long)} indicating a maximum NBT length has been reached.
  *
  * @author threefusii
+ * @since 1.5.0
  */
 public sealed class LongNBTException extends NBTLimitException {
     /**
@@ -88,6 +89,7 @@ public sealed class LongNBTException extends NBTLimitException {
      * A quick variant of {@link LongNBTException}.
      *
      * @author threefusii
+     * @since 1.5.0
      */
     private static final class QuickLongNBTException extends LongNBTException {
         /**

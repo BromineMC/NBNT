@@ -23,6 +23,7 @@ import ru.brominemc.nbnt.utils.NBTLimiter;
  * An exception thrown by {@link NBTLimiter} indicating that a certain limit has been reached.
  *
  * @author threefusii
+ * @since 1.5.0
  */
 public abstract sealed class NBTLimitException extends IllegalStateException permits NBTOverflowException, NBTUnderflowException, LongNBTException {
     /**

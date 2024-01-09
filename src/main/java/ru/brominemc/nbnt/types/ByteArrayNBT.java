@@ -19,6 +19,7 @@ package ru.brominemc.nbnt.types;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
 import ru.brominemc.nbnt.utils.NBTReader;
 
@@ -26,6 +27,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Byte array NBT type.
@@ -50,6 +52,8 @@ public final class ByteArrayNBT implements NBT {
 
     /**
      * Empty byte array.
+     *
+     * @since 1.5.0
      */
     private static final byte[] EMPTY_BYTE_ARRAY = {};
 
@@ -64,6 +68,7 @@ public final class ByteArrayNBT implements NBT {
      * @param value NBT value
      */
     public ByteArrayNBT(byte @NotNull [] value) {
+        Objects.requireNonNull(value, "Array is null");
         this.value = value;
     }
 
@@ -83,6 +88,7 @@ public final class ByteArrayNBT implements NBT {
      * @param value New NBT value
      */
     public void value(byte @NotNull [] value) {
+        Objects.requireNonNull(value, "Array is null");
         this.value = value;
     }
 
@@ -92,19 +98,23 @@ public final class ByteArrayNBT implements NBT {
         out.write(this.value);
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ByteArrayNBT that)) return false;
         return Arrays.equals(this.value, that.value);
     }
 
+    @Contract(pure = true)
     @Override
     public int hashCode() {
         return Arrays.hashCode(this.value);
     }
 
+    @Contract(pure = true)
     @Override
+    @NotNull
     public String toString() {
         return "ByteArrayNBT{" +
                 "value=" + Arrays.toString(this.value) +

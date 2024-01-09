@@ -30,6 +30,7 @@ import java.io.Serial;
  * An exception thrown by {@link NBTLimiter#push()} indicating a maximum stack depth has been reached.
  *
  * @author threefusii
+ * @since 1.5.0
  */
 public sealed class NBTOverflowException extends NBTLimitException {
     /**
@@ -87,6 +88,7 @@ public sealed class NBTOverflowException extends NBTLimitException {
      * A quick variant of {@link NBTOverflowException}.
      *
      * @author threefusii
+     * @since 1.5.0
      */
     private static final class QuickNBTOverflowException extends NBTOverflowException {
         /**

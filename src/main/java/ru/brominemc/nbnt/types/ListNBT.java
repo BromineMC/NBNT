@@ -40,6 +40,7 @@ import java.util.Spliterator;
  * List NBT type.
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class ListNBT implements NBT, List<NBT> {
     /**
@@ -74,8 +75,23 @@ public final class ListNBT implements NBT, List<NBT> {
      * @param value NBT value
      * @apiNote This will unwrap any list NBT, i.e. this list NBT won't be backed by another list NBT
      */
+    public ListNBT(@NotNull Collection<NBT> value) {
+        this.value = switch (value) {
+            case ListNBT nbt -> nbt.value;
+            case List<NBT> nbt -> nbt;
+            case null -> throw new NullPointerException("Collection is null");
+            default -> new ArrayList<>(value);
+        };
+    }
+
+    /**
+     * Creates a new list NBT.
+     *
+     * @param value NBT value
+     * @apiNote This will unwrap any list NBT, i.e. this list NBT won't be backed by another list NBT
+     */
     public ListNBT(@NotNull List<NBT> value) {
-        this.value = value instanceof ListNBT nbt ? nbt.value : value;
+        this.value = value instanceof ListNBT nbt ? nbt.value : Objects.requireNonNull(value, "List is null");
     }
 
     /**
@@ -96,12 +112,12 @@ public final class ListNBT implements NBT, List<NBT> {
      * @apiNote This will unwrap any list NBT, i.e. this list NBT won't be backed by another list NBT
      */
     public void value(@NotNull List<NBT> value) {
-        this.value = value instanceof ListNBT nbt ? nbt.value : value;
+        this.value = value instanceof ListNBT nbt ? nbt.value : Objects.requireNonNull(value, "List is null");
     }
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeByte(this.value.isEmpty() ? 0 : NBT.type(this.value.getFirst()));
+        out.writeByte(this.value.isEmpty() ? NBT.NULL_NBT_TYPE : NBT.type(this.value.getFirst()));
         out.writeInt(this.value.size());
         for (NBT nbt : this.value) {
             nbt.write(out);
@@ -138,8 +154,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code boolean} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addBoolean(boolean value) {
         this.add(new ByteNBT(value));
@@ -150,8 +166,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code byte} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addByte(byte value) {
         this.add(new ByteNBT(value));
@@ -162,8 +178,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code short} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addShort(short value) {
         this.add(new ShortNBT(value));
@@ -174,8 +190,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code int} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addInt(int value) {
         this.add(new IntNBT(value));
@@ -186,8 +202,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code long} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addLong(long value) {
         this.add(new LongNBT(value));
@@ -198,8 +214,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code float} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addFloat(float value) {
         this.add(new FloatNBT(value));
@@ -210,8 +226,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code double} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addDouble(float value) {
         this.add(new DoubleNBT(value));
@@ -222,8 +238,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code byte[]} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addByteArray(byte @NotNull [] value) {
         this.add(new ByteArrayNBT(value));
@@ -234,8 +250,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@link String} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addString(@NotNull String value) {
         this.add(new StringNBT(value));
@@ -246,8 +262,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@link List} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addList(@NotNull List<NBT> value) {
         this.add(new ListNBT(value));
@@ -258,8 +274,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@link Map} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addCompound(@NotNull Map<String, NBT> value) {
         this.add(new CompoundNBT(value));
@@ -270,8 +286,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code int[]} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addIntArray(int @NotNull [] value) {
         this.add(new IntArrayNBT(value));
@@ -282,8 +298,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @throws IllegalArgumentException If the list doesn't support {@code long[]} elements
-     * @since 1.1.0
      * @see #add(NBT)
+     * @since 1.1.0
      */
     public void addLongArray(long @NotNull [] value) {
         this.add(new LongArrayNBT(value));
@@ -294,8 +310,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeBoolean(boolean value) {
         if (!ByteNBT.class.equals(this.type())) return false;
@@ -307,8 +323,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeByte(byte value) {
         if (!ByteNBT.class.equals(this.type())) return false;
@@ -320,8 +336,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeShort(short value) {
         if (!ShortNBT.class.equals(this.type())) return false;
@@ -333,8 +349,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeInt(int value) {
         if (!IntNBT.class.equals(this.type())) return false;
@@ -346,8 +362,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeLong(long value) {
         if (!LongNBT.class.equals(this.type())) return false;
@@ -359,8 +375,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeFloat(float value) {
         if (!FloatNBT.class.equals(this.type())) return false;
@@ -372,8 +388,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeDouble(double value) {
         if (!DoubleNBT.class.equals(this.type())) return false;
@@ -385,8 +401,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeByteArray(byte @NotNull [] value) {
         if (!ByteArrayNBT.class.equals(this.type())) return false;
@@ -398,8 +414,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeString(@NotNull String value) {
         if (!StringNBT.class.equals(this.type())) return false;
@@ -411,8 +427,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeList(@NotNull List<NBT> value) {
         if (!ListNBT.class.equals(this.type())) return false;
@@ -424,8 +440,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeCompound(@NotNull Map<String, NBT> value) {
         if (!CompoundNBT.class.equals(this.type())) return false;
@@ -437,8 +453,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeIntArray(int @NotNull [] value) {
         if (!IntArrayNBT.class.equals(this.type())) return false;
@@ -450,8 +466,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value has been removed
-     * @since 1.1.0
      * @see #remove(Object)
+     * @since 1.1.0
      */
     public boolean removeLongArray(long @NotNull [] value) {
         if (!LongArrayNBT.class.equals(this.type())) return false;
@@ -463,8 +479,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsBoolean(boolean value) {
         if (!ByteNBT.class.equals(this.type())) return false;
@@ -476,8 +492,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsByte(byte value) {
         if (!ByteNBT.class.equals(this.type())) return false;
@@ -489,8 +505,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsShort(short value) {
         if (!ShortNBT.class.equals(this.type())) return false;
@@ -502,8 +518,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsInt(int value) {
         if (!IntNBT.class.equals(this.type())) return false;
@@ -515,8 +531,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsLong(long value) {
         if (!LongNBT.class.equals(this.type())) return false;
@@ -528,8 +544,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsFloat(float value) {
         if (!FloatNBT.class.equals(this.type())) return false;
@@ -541,8 +557,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsDouble(double value) {
         if (!DoubleNBT.class.equals(this.type())) return false;
@@ -554,8 +570,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsByteArray(byte @NotNull [] value) {
         if (!ByteArrayNBT.class.equals(this.type())) return false;
@@ -567,8 +583,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsString(@NotNull String value) {
         if (!StringNBT.class.equals(this.type())) return false;
@@ -580,8 +596,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsList(@NotNull List<NBT> value) {
         if (!ListNBT.class.equals(this.type())) return false;
@@ -593,8 +609,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsCompound(@NotNull Map<String, NBT> value) {
         if (!CompoundNBT.class.equals(this.type())) return false;
@@ -606,8 +622,8 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsIntArray(int @NotNull [] value) {
         if (!IntArrayNBT.class.equals(this.type())) return false;
@@ -619,12 +635,254 @@ public final class ListNBT implements NBT, List<NBT> {
      *
      * @param value Target value
      * @return Whether the type of list is applicable for this type of value and the value is present in the list
-     * @since 1.1.0
      * @see #contains(Object)
+     * @since 1.1.0
      */
     public boolean containsLongArray(long @NotNull [] value) {
         if (!LongArrayNBT.class.equals(this.type())) return false;
         return this.contains(new LongArrayNBT(value));
+    }
+
+    // Chained methods
+
+    /**
+     * Adds the NBT value into the list.
+     *
+     * @param value Target NBT
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support this element
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT and(@NotNull NBT value) {
+        this.add(value);
+        return this;
+    }
+
+    /**
+     * Adds the NBT values into the list.
+     *
+     * @param value Target NBTs
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support these elements
+     * @see #addAll(Collection)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andAll(@NotNull Collection<? extends NBT> value) {
+        this.addAll(value);
+        return this;
+    }
+
+    /**
+     * Adds the boolean value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code boolean} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andBoolean(boolean value) {
+        this.add(new ByteNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the byte value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code byte} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andByte(byte value) {
+        this.add(new ByteNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the short value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code short} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andShort(short value) {
+        this.add(new ShortNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the int value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code int} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andInt(int value) {
+        this.add(new IntNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the long value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code long} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andLong(long value) {
+        this.add(new LongNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the float value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code float} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andFloat(float value) {
+        this.add(new FloatNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the double value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code double} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andDouble(float value) {
+        this.add(new DoubleNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the byte array value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code byte[]} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andByteArray(byte @NotNull [] value) {
+        this.add(new ByteArrayNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the string value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@link String} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andString(@NotNull String value) {
+        this.add(new StringNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the list value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@link List} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andList(@NotNull List<NBT> value) {
+        this.add(new ListNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the compound value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@link Map} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andCompound(@NotNull Map<String, NBT> value) {
+        this.add(new CompoundNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the int array value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code int[]} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andIntArray(int @NotNull [] value) {
+        this.add(new IntArrayNBT(value));
+        return this;
+    }
+
+    /**
+     * Adds the long array value into the list.
+     *
+     * @param value Target value
+     * @return Always {@code this}
+     * @throws IllegalArgumentException If the list doesn't support {@code long[]} elements
+     * @see #add(NBT)
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @NotNull
+    public ListNBT andLongArray(long @NotNull [] value) {
+        this.add(new LongArrayNBT(value));
+        return this;
     }
 
     // Delegate methods start
@@ -640,25 +898,24 @@ public final class ListNBT implements NBT, List<NBT> {
     }
 
     @Override
-    public boolean contains(@NotNull Object o) {
-        Objects.requireNonNull(o, "Entry is null");
+    public boolean contains(Object o) {
         return this.value.contains(o);
     }
 
-    @NotNull
     @Override
+    @NotNull
     public Iterator<NBT> iterator() {
         return this.value.iterator();
     }
 
-    @NotNull
     @Override
+    @NotNull
     public Object @NotNull [] toArray() {
         return this.value.toArray();
     }
 
-    @NotNull
     @Override
+    @NotNull
     public <T> T @NotNull [] toArray(@NotNull T @NotNull [] a) {
         return this.value.toArray(a);
     }
@@ -729,60 +986,64 @@ public final class ListNBT implements NBT, List<NBT> {
     }
 
     @Override
+    @Nullable
     public NBT remove(int index) {
         return this.value.remove(index);
     }
 
     @Override
-    public int indexOf(@NotNull Object o) {
-        Objects.requireNonNull(o, "Entry is null");
+    public int indexOf(Object o) {
         return this.value.indexOf(o);
     }
 
     @Override
-    public int lastIndexOf(@NotNull Object o) {
-        Objects.requireNonNull(o, "Entry is null");
+    public int lastIndexOf(Object o) {
         return this.value.lastIndexOf(o);
     }
 
-    @NotNull
     @Override
+    @NotNull
     public ListIterator<NBT> listIterator() {
         return this.value.listIterator();
     }
 
-    @NotNull
     @Override
+    @NotNull
     public ListIterator<NBT> listIterator(int index) {
         return this.value.listIterator(index);
     }
 
-    @NotNull
     @Override
+    @NotNull
     public List<NBT> subList(int fromIndex, int toIndex) {
         return this.value.subList(fromIndex, toIndex);
     }
 
     @Override
+    @NotNull
     public Spliterator<NBT> spliterator() {
         return this.value.spliterator();
     }
 
     // Delegate methods end
 
+    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ListNBT that)) return false;
         return Objects.equals(this.value, that.value);
     }
 
+    @Contract(pure = true)
     @Override
     public int hashCode() {
         return Objects.hashCode(this.value);
     }
 
+    @Contract(pure = true)
     @Override
+    @NotNull
     public String toString() {
         return "ListNBT{" +
                 "value=" + this.value +

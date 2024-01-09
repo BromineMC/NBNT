@@ -30,6 +30,7 @@ import java.io.Serial;
  * An exception thrown by {@link NBTLimiter#readSigned(long)} when accepted a negative length argument.
  *
  * @author threefusii
+ * @since 1.5.0
  */
 public sealed class InvalidNBTLengthException extends IllegalArgumentException {
     /**
@@ -97,6 +98,7 @@ public sealed class InvalidNBTLengthException extends IllegalArgumentException {
      * A quick variant of {@link InvalidNBTLengthException}.
      *
      * @author threefusii
+     * @since 1.5.0
      */
     private static final class QuickInvalidNBTLengthException extends InvalidNBTLengthException {
         /**

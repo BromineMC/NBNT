@@ -19,6 +19,7 @@ package ru.brominemc.nbnt.types;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
 import ru.brominemc.nbnt.utils.NBTReader;
 
@@ -30,6 +31,7 @@ import java.io.IOException;
  * Byte NBT type.
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class ByteNBT implements PrimitiveNBT {
     /**
@@ -128,19 +130,23 @@ public final class ByteNBT implements PrimitiveNBT {
         return this.value;
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ByteNBT that)) return false;
         return this.value == that.value;
     }
 
+    @Contract(pure = true)
     @Override
     public int hashCode() {
         return Byte.hashCode(this.value);
     }
 
+    @Contract(pure = true)
     @Override
+    @NotNull
     public String toString() {
         return "ByteNBT{" +
                 "value=" + this.value +

@@ -38,6 +38,7 @@ import java.util.Set;
  * Compound (map, dictionary) NBT type.
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class CompoundNBT implements NBT, Map<String, NBT> {
     /**
@@ -73,7 +74,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * @apiNote This will unwrap any compound NBT, i.e. this compound NBT won't be backed by another compound NBT
      */
     public CompoundNBT(@NotNull Map<String, NBT> value) {
-        this.value = value instanceof CompoundNBT nbt ? nbt.value : value;
+        this.value = value instanceof CompoundNBT nbt ? nbt.value : Objects.requireNonNull(value, "Map is null");
     }
 
     /**
@@ -94,7 +95,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * @apiNote This will unwrap any compound NBT, i.e. this compound NBT won't be backed by another compound NBT
      */
     public void value(@NotNull Map<String, NBT> value) {
-        this.value = value instanceof CompoundNBT nbt ? nbt.value : value;
+        this.value = value instanceof CompoundNBT nbt ? nbt.value : Objects.requireNonNull(value, "Map is null");
     }
 
     @Override
@@ -535,6 +536,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putBoolean(@NotNull String key, boolean value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new ByteNBT(value));
     }
 
@@ -548,6 +550,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putByte(@NotNull String key, byte value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new ByteNBT(value));
     }
 
@@ -561,6 +564,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putShort(@NotNull String key, short value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new ShortNBT(value));
     }
 
@@ -574,6 +578,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putInt(@NotNull String key, int value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new IntNBT(value));
     }
 
@@ -587,6 +592,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putLong(@NotNull String key, long value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new LongNBT(value));
     }
 
@@ -600,6 +606,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putFloat(@NotNull String key, float value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new FloatNBT(value));
     }
 
@@ -613,6 +620,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putDouble(@NotNull String key, double value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new DoubleNBT(value));
     }
 
@@ -626,6 +634,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putByteArray(@NotNull String key, byte @NotNull [] value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new ByteArrayNBT(value));
     }
 
@@ -639,6 +648,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putString(@NotNull String key, @NotNull String value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new StringNBT(value));
     }
 
@@ -652,6 +662,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putList(@NotNull String key, @NotNull List<NBT> value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, value instanceof ListNBT nbt ? nbt : new ListNBT(value));
     }
 
@@ -665,6 +676,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putCompound(@NotNull String key, @NotNull Map<String, NBT> value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, value instanceof CompoundNBT nbt ? nbt : new CompoundNBT(value));
     }
 
@@ -678,6 +690,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putIntArray(@NotNull String key, int @NotNull [] value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new IntArrayNBT(value));
     }
 
@@ -691,7 +704,268 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CanIgnoreReturnValue
     @Nullable
     public NBT putLongArray(@NotNull String key, long @NotNull [] value) {
+        Objects.requireNonNull(key, "Key is null");
         return this.value.put(key, new LongArrayNBT(value));
+    }
+
+    // Chained methods
+
+    /**
+     * Puts the NBT into the compound.
+     *
+     * @param key   Target key
+     * @param value Target NBT
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT and(@NotNull String key, @NotNull NBT value) {
+        Objects.requireNonNull(key, "Key is null");
+        Objects.requireNonNull(value, "Value is null");
+        this.value.put(key, value);
+        return this;
+    }
+
+    /**
+     * Puts all NBTs into the compound.
+     *
+     * @param map Target compound of NBTs
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andAll(@NotNull Map<? extends String, ? extends NBT> map) {
+        for (Entry<? extends String, ? extends NBT> entry : map.entrySet()) {
+            Objects.requireNonNull(entry.getKey(), "Key is null");
+            Objects.requireNonNull(entry.getValue(), "Value is null");
+        }
+        this.value.putAll(map);
+        return this;
+    }
+
+    /**
+     * Puts the boolean value into the compound.
+     *
+     * @param key   Target key
+     * @param value Target value
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andBoolean(@NotNull String key, boolean value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new ByteNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the byte value into the compound.
+     *
+     * @param key   Target key
+     * @param value Target value
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andByte(@NotNull String key, byte value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new ByteNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the short value into the compound.
+     *
+     * @param key   Target key
+     * @param value Target value
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andShort(@NotNull String key, short value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new ShortNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the boolean value into the compound.
+     *
+     * @param key   Target key
+     * @param value Target value
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andInt(@NotNull String key, int value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new IntNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the long value into the compound.
+     *
+     * @param key   Target key
+     * @param value Target value
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andLong(@NotNull String key, long value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new LongNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the float value into the compound.
+     *
+     * @param key   Target key
+     * @param value Target value
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andFloat(@NotNull String key, float value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new FloatNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the double value into the compound.
+     *
+     * @param key   Target key
+     * @param value Target value
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andDouble(@NotNull String key, double value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new DoubleNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the byte array into the compound.
+     *
+     * @param key   Target key
+     * @param value Target array
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andByteArray(@NotNull String key, byte @NotNull [] value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new ByteArrayNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the string into the compound.
+     *
+     * @param key   Target key
+     * @param value Target string
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andString(@NotNull String key, @NotNull String value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new StringNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the list into the compound.
+     *
+     * @param key   Target key
+     * @param value Target list
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andList(@NotNull String key, @NotNull List<NBT> value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, value instanceof ListNBT nbt ? nbt : new ListNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the compound into the compound.
+     *
+     * @param key   Target key
+     * @param value Target compound
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andCompound(@NotNull String key, @NotNull Map<String, NBT> value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, value instanceof CompoundNBT nbt ? nbt : new CompoundNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the int array into the compound.
+     *
+     * @param key   Target key
+     * @param value Target array
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andIntArray(@NotNull String key, int @NotNull [] value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new IntArrayNBT(value));
+        return this;
+    }
+
+    /**
+     * Puts the long array into the compound.
+     *
+     * @param key   Target key
+     * @param value Target array
+     * @return Always {@code this}
+     * @since 1.5.0
+     */
+    @Contract("_, _ -> this")
+    @CanIgnoreReturnValue
+    @NotNull
+    public CompoundNBT andLongArray(@NotNull String key, long @NotNull [] value) {
+        Objects.requireNonNull(key, "Key is null");
+        this.value.put(key, new LongArrayNBT(value));
+        return this;
     }
 
     // Delegate methods start
@@ -707,25 +981,23 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     @Override
-    public boolean containsKey(@NotNull Object key) {
-        Objects.requireNonNull(key, "Key is null");
+    public boolean containsKey(Object key) {
         return this.value.containsKey(key);
     }
 
     @Override
-    public boolean containsValue(@NotNull Object value) {
-        Objects.requireNonNull(value, "Value is null");
+    public boolean containsValue(Object value) {
         return this.value.containsValue(value);
     }
 
     @Override
-    public NBT get(@NotNull Object key) {
-        Objects.requireNonNull(key, "Key is null");
+    @Nullable
+    public NBT get(Object key) {
         return this.value.get(key);
     }
 
-    @Nullable
     @Override
+    @Nullable
     public NBT put(@NotNull String key, @NotNull NBT value) {
         Objects.requireNonNull(key, "Key is null");
         Objects.requireNonNull(value, "Value is null");
@@ -733,13 +1005,17 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     }
 
     @Override
-    public NBT remove(@NotNull Object key) {
-        Objects.requireNonNull(key, "Key is null");
+    @Nullable
+    public NBT remove(Object key) {
         return this.value.remove(key);
     }
 
     @Override
     public void putAll(@NotNull Map<? extends String, ? extends NBT> m) {
+        for (Entry<? extends String, ? extends NBT> entry : m.entrySet()) {
+            Objects.requireNonNull(entry.getKey(), "Key is null");
+            Objects.requireNonNull(entry.getValue(), "Value is null");
+        }
         this.value.putAll(m);
     }
 
@@ -748,39 +1024,43 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
         this.value.clear();
     }
 
-    @NotNull
     @Override
+    @NotNull
     public Set<String> keySet() {
         return this.value.keySet();
     }
 
-    @NotNull
     @Override
+    @NotNull
     public Collection<NBT> values() {
         return this.value.values();
     }
 
-    @NotNull
     @Override
+    @NotNull
     public Set<Entry<String, NBT>> entrySet() {
         return this.value.entrySet();
     }
 
     // Delegate methods end
 
+    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof CompoundNBT that)) return false;
         return Objects.equals(this.value, that.value);
     }
 
+    @Contract(pure = true)
     @Override
     public int hashCode() {
         return Objects.hashCode(this.value);
     }
 
+    @Contract(pure = true)
     @Override
+    @NotNull
     public String toString() {
         return "CompoundNBT{" +
                 "value=" + this.value +

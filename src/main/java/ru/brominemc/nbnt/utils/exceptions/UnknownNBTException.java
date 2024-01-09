@@ -29,6 +29,7 @@ import java.io.Serial;
  * An exception indicating the unknown NBT type.
  *
  * @author threefusii
+ * @since 1.5.0
  */
 public sealed class UnknownNBTException extends IllegalArgumentException {
     /**
@@ -86,6 +87,7 @@ public sealed class UnknownNBTException extends IllegalArgumentException {
      * A quick variant of {@link UnknownNBTException}.
      *
      * @author threefusii
+     * @since 1.5.0
      */
     private static final class QuickUnknownNBTException extends UnknownNBTException {
         /**

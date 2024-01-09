@@ -19,6 +19,7 @@ package ru.brominemc.nbnt.types;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
 import ru.brominemc.nbnt.utils.NBTReader;
 
@@ -30,6 +31,7 @@ import java.io.IOException;
  * Double NBT type.
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class DoubleNBT implements PrimitiveNBT {
     /**
@@ -84,19 +86,23 @@ public final class DoubleNBT implements PrimitiveNBT {
         out.writeDouble(this.value);
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof DoubleNBT that)) return false;
         return Double.compare(this.value, that.value) == 0;
     }
 
+    @Contract(pure = true)
     @Override
     public int hashCode() {
         return Double.hashCode(this.value);
     }
 
+    @Contract(pure = true)
     @Override
+    @NotNull
     public String toString() {
         return "DoubleNBT{" +
                 "value=" + this.value +

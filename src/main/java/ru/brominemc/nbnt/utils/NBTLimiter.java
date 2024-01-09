@@ -54,6 +54,8 @@ public sealed class NBTLimiter implements AutoCloseable {
 
     /**
      * Simple empty string.
+     *
+     * @since 1.5.0
      */
     private static final String EMPTY_STRING = "";
 
@@ -69,16 +71,22 @@ public sealed class NBTLimiter implements AutoCloseable {
 
     /**
      * Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty.
+     *
+     * @since 1.1.0
      */
     private final boolean strictEmptyNames;
 
     /**
      * Whether the {@link LongArrayNBT} should be readable. Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags.
+     *
+     * @since 1.1.0
      */
     private final boolean longArrays;
 
     /**
      * Whether the exceptions thrown by this limiter should be shared and stackless.
+     *
+     * @since 1.5.0
      */
     private final boolean quickExceptions;
 
@@ -181,6 +189,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      *
      * @return Whether the {@link LongArrayNBT} is readable
      * @apiNote Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags
+     * @since 1.1.0
      */
     @Contract(pure = true)
     public boolean longArrays() {
@@ -191,6 +200,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      * Whether the exceptions thrown by this limiter should be shared and stackless
      *
      * @return Whether the exceptions thrown by this limiter are shared and stackless
+     * @since 1.5.0
      */
     @Contract(pure = true)
     public boolean quickExceptions() {
@@ -518,7 +528,7 @@ public sealed class NBTLimiter implements AutoCloseable {
          * Always returns {@code false}.
          *
          * @return {@code false}
-         * @since 1.1.0
+         * @since 1.5.0
          */
         @Contract(value = "-> false", pure = true)
         @Override

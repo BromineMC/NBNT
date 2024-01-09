@@ -31,6 +31,7 @@ import java.util.function.UnaryOperator;
  * NBNT (Non-Binary Named Tag) is the library for processing Minecraft NBTs. (Named Binary Tags)
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class NBNT {
     /**
@@ -51,6 +52,7 @@ public final class NBNT {
      *
      * @param nbt      Target NBT
      * @return Provided NBT
+     * @since 1.5.0
      */
     @Contract("_ -> param1")
     public static NBT internStrings(@Nullable NBT nbt) {
@@ -65,6 +67,7 @@ public final class NBNT {
      * @param nbt      Target NBT
      * @param interner Intern function
      * @return Provided NBT
+     * @since 1.5.0
      */
     @Contract("_, _ -> param1")
     public static NBT internStrings(@Nullable NBT nbt, @NotNull UnaryOperator<String> interner) {

@@ -19,6 +19,7 @@ package ru.brominemc.nbnt.types;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.brominemc.nbnt.utils.NBTLimiter;
 import ru.brominemc.nbnt.utils.NBTReader;
 
@@ -31,6 +32,7 @@ import java.util.Objects;
  * String NBT type.
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class StringNBT implements NBT {
     /**
@@ -58,6 +60,7 @@ public final class StringNBT implements NBT {
      * @param value NBT value
      */
     public StringNBT(@NotNull String value) {
+        Objects.requireNonNull(value, "String is null");
         this.value = value;
     }
 
@@ -78,6 +81,7 @@ public final class StringNBT implements NBT {
      * @param value New NBT value
      */
     public void value(@NotNull String value) {
+        Objects.requireNonNull(value, "String is null");
         this.value = value;
     }
 
@@ -86,19 +90,23 @@ public final class StringNBT implements NBT {
         out.writeUTF(this.value);
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof StringNBT that)) return false;
         return Objects.equals(this.value, that.value);
     }
 
+    @Contract(pure = true)
     @Override
     public int hashCode() {
         return Objects.hashCode(this.value);
     }
 
+    @Contract(pure = true)
     @Override
+    @NotNull
     public String toString() {
         return "StringNBT{" +
                 "value='" + this.value + '\'' +

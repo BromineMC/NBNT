@@ -30,6 +30,7 @@ import java.io.Serial;
  * An exception thrown by {@link NBTLimiter#pop()} indicating a minimum (zero) stack depth has been reached.
  *
  * @author threefusii
+ * @since 1.5.0
  */
 public sealed class NBTUnderflowException extends NBTLimitException {
     /**
@@ -87,6 +88,7 @@ public sealed class NBTUnderflowException extends NBTLimitException {
      * A quick variant of {@link NBTUnderflowException}.
      *
      * @author threefusii
+     * @since 1.5.0
      */
     private static final class QuickNBTUnderflowException extends NBTUnderflowException {
         /**
