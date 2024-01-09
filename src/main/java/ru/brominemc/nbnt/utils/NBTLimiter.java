@@ -99,8 +99,10 @@ public sealed class NBTLimiter implements AutoCloseable {
      *
      * @param maxLength Maximum NBT length in bytes
      * @param maxDepth  Maximum NBT depth
-     * @see #NBTLimiter(long, int, boolean, boolean)
+     * @deprecated Will be removed in 2.0.0, use {@link #NBTLimiter(long, int, boolean, boolean, boolean)}
      */
+    @Deprecated(since = "1.5.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
     public NBTLimiter(long maxLength, int maxDepth) {
         this(maxLength, maxDepth, false, true);
     }
@@ -115,7 +117,10 @@ public sealed class NBTLimiter implements AutoCloseable {
      * @param strictEmptyNames Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty
      * @param longArrays       Whether the {@link LongArrayNBT} should be readable. Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags
      * @since 1.1.0
+     * @deprecated Will be removed in 2.0.0, use {@link #NBTLimiter(long, int, boolean, boolean, boolean)}
      */
+    @Deprecated(since = "1.5.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
     public NBTLimiter(long maxLength, int maxDepth, boolean strictEmptyNames, boolean longArrays) {
         this(maxLength, maxDepth, strictEmptyNames, longArrays, false);
     }

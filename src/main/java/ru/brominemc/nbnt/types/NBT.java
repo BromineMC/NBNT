@@ -17,6 +17,7 @@
 package ru.brominemc.nbnt.types;
 
 import com.google.errorprone.annotations.CheckReturnValue;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -178,30 +179,33 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
     /**
      * Gets the reader for the NBT type.
      * <p>
-     * This is equal to calling {@link #reader(byte, boolean)} with {@code quick} set to {@code false}
+     * This is equal to calling {@link #reader(byte, NBTLimiter)} with {@link NBTLimiter#unlimited()}
      *
      * @param type NBT type
      * @return Reader for the NBT type
      * @throws UnknownNBTException If the NBT type is unknown
+     * @deprecated Will be removed in 2.0.0, use {@link #reader(byte, NBTLimiter)}
      */
+    @Deprecated(since = "1.5.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
     @Contract(pure = true)
     @NotNull
     static NBTReader reader(byte type) {
-        return reader(type, false);
+        return reader(type, NBTLimiter.unlimited());
     }
 
     /**
      * Gets the reader for the NBT type.
      *
-     * @param type  NBT type
-     * @param quick Whether the thrown exception would be {@link UnknownNBTException.QuickUnknownNBTException}
+     * @param type    NBT type
+     * @param limiter Target limiter
      * @return Reader for the NBT type
      * @throws UnknownNBTException If the NBT type is unknown
      * @since 1.5.0
      */
     @Contract(pure = true)
     @NotNull
-    static NBTReader reader(byte type, boolean quick) {
+    static NBTReader reader(byte type, @NotNull NBTLimiter limiter) {
         return switch (type) {
             case NULL_NBT_TYPE -> NBTReader.NULL_READER;
             case ByteNBT.BYTE_NBT_TYPE -> ByteNBT.BYTE_NBT_READER;
@@ -215,8 +219,11 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
             case ListNBT.LIST_NBT_TYPE -> ListNBT.LIST_NBT_READER;
             case CompoundNBT.COMPOUND_NBT_TYPE -> CompoundNBT.COMPOUND_NBT_READER;
             case IntArrayNBT.INT_ARRAY_NBT_TYPE -> IntArrayNBT.INT_ARRAY_NBT_READER;
-            case LongArrayNBT.LONG_ARRAY_NBT_TYPE -> LongArrayNBT.LONG_ARRAY_NBT_READER;
-            default -> throw quick ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(type);
+            case LongArrayNBT.LONG_ARRAY_NBT_TYPE -> {
+                if (limiter.longArrays()) yield LongArrayNBT.LONG_ARRAY_NBT_READER;
+                throw limiter.quickExceptions() ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(type);
+            }
+            default -> throw limiter.quickExceptions() ? UnknownNBTException.QuickUnknownNBTException.INSTANCE : new UnknownNBTException(type);
         };
     }
 
