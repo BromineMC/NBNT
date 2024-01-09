@@ -17,6 +17,15 @@
 package ru.brominemc.nbnt;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.brominemc.nbnt.types.CompoundNBT;
+import ru.brominemc.nbnt.types.ListNBT;
+import ru.brominemc.nbnt.types.NBT;
+import ru.brominemc.nbnt.types.StringNBT;
+
+import java.util.Map;
+import java.util.function.UnaryOperator;
 
 /**
  * NBNT (Non-Binary Named Tag) is the library for processing Minecraft NBTs. (Named Binary Tags)
@@ -32,5 +41,67 @@ public final class NBNT {
     @Contract(value = "-> fail", pure = true)
     private NBNT() {
         throw new AssertionError("No instances.");
+    }
+
+    /**
+     * Interns the strings in the NBT and children recursively.
+     * Note that the strings are the only things that can be interned, since every
+     * other data type is either primitive or mutable.
+     * This method uses {@link String#intern()} as interner in {@link #internStrings(NBT, UnaryOperator)}.
+     *
+     * @param nbt      Target NBT
+     * @return Provided NBT
+     */
+    @Contract("_ -> param1")
+    public static NBT internStrings(@Nullable NBT nbt) {
+        return internStrings(nbt, String::intern);
+    }
+
+    /**
+     * Interns the strings in the NBT and children recursively.
+     * Note that the strings are the only things that can be interned, since every
+     * other data type is either primitive or mutable.
+     *
+     * @param nbt      Target NBT
+     * @param interner Intern function
+     * @return Provided NBT
+     */
+    @Contract("_, _ -> param1")
+    public static NBT internStrings(@Nullable NBT nbt, @NotNull UnaryOperator<String> interner) {
+        switch (nbt) {
+            // Optimize string value.
+            case StringNBT str -> str.value(interner.apply(str.value()));
+
+            // Optimize keys and continue into values.
+            case CompoundNBT map -> {
+                // Iterate over entries.
+                for (Map.Entry<String, NBT> entry : map.entrySet()) {
+                    // Extract data.
+                    String key = entry.getKey();
+                    NBT value = entry.getValue();
+
+                    // Optimize.
+                    key = interner.apply(key);
+                    internStrings(value, interner);
+
+                    // Put back in.
+                    map.put(key, value);
+                }
+            }
+
+            // Optimize entries.
+            case ListNBT list -> {
+                // Iterate over entries.
+                for (NBT entry : list) {
+                    internStrings(entry, interner);
+                }
+            }
+
+            // Do nothing for other types.
+            case null, default -> {}
+        }
+
+        // Return NBT.
+        return nbt;
     }
 }
