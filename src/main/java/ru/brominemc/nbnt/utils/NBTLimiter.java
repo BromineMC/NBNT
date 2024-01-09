@@ -93,7 +93,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     @Contract(pure = true)
     public long maxLength() {
-        return maxLength;
+        return this.maxLength;
     }
 
     /**
@@ -104,7 +104,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     @Contract(pure = true)
     public int maxDepth() {
-        return maxDepth;
+        return this.maxDepth;
     }
 
     /**
@@ -115,7 +115,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     @Contract(pure = true)
     public boolean strictEmptyNames() {
-        return strictEmptyNames;
+        return this.strictEmptyNames;
     }
 
     /**
@@ -126,7 +126,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     @Contract(pure = true)
     public boolean longArrays() {
-        return longArrays;
+        return this.longArrays;
     }
 
     /**
@@ -137,7 +137,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     @Contract(pure = true)
     public long length() {
-        return length;
+        return this.length;
     }
 
     /**
@@ -148,7 +148,7 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     @Contract(pure = true)
     public int depth() {
-        return depth;
+        return this.depth;
     }
 
     /**
@@ -164,9 +164,9 @@ public sealed class NBTLimiter implements AutoCloseable {
         if (bytes < 0) {
             throw new IllegalArgumentException("Negative bytes read: " + bytes);
         }
-        length += bytes;
-        if (length > maxLength) {
-            throw new IllegalStateException("Max length reached. (" + length + " > " + maxLength + ")");
+        this.length += bytes;
+        if (this.length > this.maxLength) {
+            throw new IllegalStateException("Max length reached. (" + this.length + " > " + this.maxLength + ")");
         }
     }
 
@@ -179,9 +179,9 @@ public sealed class NBTLimiter implements AutoCloseable {
      * @throws IllegalStateException If read bytes exceeded the maximum length
      */
     public void readUnsigned(long bytes) {
-        length += bytes;
-        if (length > maxLength) {
-            throw new IllegalStateException("Max length reached. (" + length + " > " + maxLength + ")");
+        this.length += bytes;
+        if (this.length > this.maxLength) {
+            throw new IllegalStateException("Max length reached. (" + this.length + " > " + this.maxLength + ")");
         }
     }
 
@@ -191,9 +191,9 @@ public sealed class NBTLimiter implements AutoCloseable {
      * @throws IllegalStateException If the current depth exceeds the maximum depth
      */
     public void push() {
-        depth++;
-        if (depth > maxDepth) {
-            throw new IllegalStateException("Max depth reached. (" + depth + " > " + maxDepth + ")");
+        this.depth++;
+        if (this.depth > this.maxDepth) {
+            throw new IllegalStateException("Max depth reached. (" + this.depth + " > " + this.maxDepth + ")");
         }
     }
 
@@ -203,9 +203,9 @@ public sealed class NBTLimiter implements AutoCloseable {
      * @throws IllegalStateException If the current depth is smaller than zero
      */
     public void pop(){
-        depth--;
-        if (depth < 0) {
-            throw new IllegalStateException("Min depth reached. (" + depth + " < 0)");
+        this.depth--;
+        if (this.depth < 0) {
+            throw new IllegalStateException("Min depth reached. (" + this.depth + " < 0)");
         }
     }
 
@@ -217,8 +217,8 @@ public sealed class NBTLimiter implements AutoCloseable {
      * @since 1.2.0
      */
     public void reset() {
-        length = 0L;
-        depth = 0;
+        this.length = 0L;
+        this.depth = 0;
     }
 
     /**
@@ -230,8 +230,8 @@ public sealed class NBTLimiter implements AutoCloseable {
      */
     @Override
     public void close() {
-        length = 0L;
-        depth = 0;
+        this.length = 0L;
+        this.depth = 0;
     }
 
     @Override
@@ -239,26 +239,26 @@ public sealed class NBTLimiter implements AutoCloseable {
         if (this == obj) return true;
         if (obj == null || !obj.getClass().equals(NBTLimiter.class)) return false;
         NBTLimiter that = (NBTLimiter) obj; // Manual casting due to NBTUnlimiter
-        return maxLength == that.maxLength && maxDepth == that.maxDepth &&
-                strictEmptyNames == that.strictEmptyNames &&
-                longArrays == that.longArrays && length == that.length &&
-                depth == that.depth;
+        return this.maxLength == that.maxLength && this.maxDepth == that.maxDepth &&
+                this.strictEmptyNames == that.strictEmptyNames &&
+                this.longArrays == that.longArrays && this.length == that.length &&
+                this.depth == that.depth;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(maxLength, maxDepth, strictEmptyNames, longArrays, length, depth);
+        return Objects.hash(this.maxLength, this.maxDepth, this.strictEmptyNames, this.longArrays, this.length, this.depth);
     }
 
     @Override
     public String toString() {
         return "NBTLimiter{" +
-                "maxLength=" + maxLength +
-                ", maxDepth=" + maxDepth +
-                ", strictEmptyNames=" + strictEmptyNames +
-                ", longArrays=" + longArrays +
-                ", length=" + length +
-                ", depth=" + depth +
+                "maxLength=" + this.maxLength +
+                ", maxDepth=" + this.maxDepth +
+                ", strictEmptyNames=" + this.strictEmptyNames +
+                ", longArrays=" + this.longArrays +
+                ", length=" + this.length +
+                ", depth=" + this.depth +
                 '}';
     }
 
@@ -269,10 +269,10 @@ public sealed class NBTLimiter implements AutoCloseable {
      * @param limiter Target limiter
      * @return Read string
      * @throws IOException           On I/O exception
-     * @throws IllegalStateException If read bytes has exceeded the maximum {@link NBTLimiter} length
+     * @throws IllegalStateException If read bytes has exceeded the {@link #maxLength()}
      * @see DataInputStream#readUTF(DataInput)
      */
-    @Contract(value = "_, _ -> new")
+    @Contract("_, _ -> new")
     @CheckReturnValue
     @NotNull
     public static String readLimitedUTF(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {

@@ -223,7 +223,6 @@ public sealed interface NBT permits PrimitiveNBT, ByteArrayNBT, StringNBT, ListN
             case CompoundNBT ignored -> CompoundNBT.COMPOUND_NBT_TYPE;
             case IntArrayNBT ignored -> IntArrayNBT.INT_ARRAY_NBT_TYPE;
             case LongArrayNBT ignored -> LongArrayNBT.LONG_ARRAY_NBT_TYPE;
-            default -> throw new IllegalArgumentException("Unknown NBT type: " + nbt);
         };
     }
 }

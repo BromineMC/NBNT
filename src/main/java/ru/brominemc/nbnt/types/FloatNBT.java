@@ -67,7 +67,7 @@ public final class FloatNBT implements PrimitiveNBT {
      */
     @Contract(pure = true)
     public float value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -81,61 +81,61 @@ public final class FloatNBT implements PrimitiveNBT {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeFloat(value);
+        out.writeFloat(this.value);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof FloatNBT that)) return false;
-        return Float.compare(value, that.value) == 0;
+        return Float.compare(this.value, that.value) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Float.hashCode(value);
+        return Float.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "FloatNBT{" +
-                "value=" + value +
+                "value=" + this.value +
                 '}';
     }
 
     @Override
     public boolean asBoolean() {
-        return value != 0;
+        return this.value != 0;
     }
 
     @Override
     public byte asByte() {
-        return (byte) value;
+        return (byte) this.value;
     }
 
     @Override
     public short asShort() {
-        return (short) value;
+        return (short) this.value;
     }
 
     @Override
     public int asInt() {
-        return (int) value;
+        return (int) this.value;
     }
 
     @Override
     public long asLong() {
-        return (long) value;
+        return (long) this.value;
     }
 
     @Override
     public float asFloat() {
-        return value;
+        return this.value;
     }
 
     @Override
     public double asDouble() {
-        return value;
+        return this.value;
     }
 
     /**

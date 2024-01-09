@@ -76,7 +76,7 @@ public final class ByteNBT implements PrimitiveNBT {
      */
     @Contract(pure = true)
     public byte value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -90,60 +90,60 @@ public final class ByteNBT implements PrimitiveNBT {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeByte(value);
+        out.writeByte(this.value);
     }
 
     @Override
     public boolean asBoolean() {
-        return value != 0;
+        return this.value != 0;
     }
 
     @Override
     public byte asByte() {
-        return value;
+        return this.value;
     }
 
     @Override
     public short asShort() {
-        return value;
+        return this.value;
     }
 
     @Override
     public int asInt() {
-        return value;
+        return this.value;
     }
 
     @Override
     public long asLong() {
-        return value;
+        return this.value;
     }
 
     @Override
     public float asFloat() {
-        return value;
+        return this.value;
     }
 
     @Override
     public double asDouble() {
-        return value;
+        return this.value;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ByteNBT that)) return false;
-        return value == that.value;
+        return this.value == that.value;
     }
 
     @Override
     public int hashCode() {
-        return Byte.hashCode(value);
+        return Byte.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "ByteNBT{" +
-                "value=" + value +
+                "value=" + this.value +
                 '}';
     }
 

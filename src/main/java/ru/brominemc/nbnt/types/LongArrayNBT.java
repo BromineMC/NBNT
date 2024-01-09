@@ -68,7 +68,7 @@ public final class LongArrayNBT implements NBT {
      */
     @Contract(pure = true)
     public long @NotNull [] value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -82,8 +82,8 @@ public final class LongArrayNBT implements NBT {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeInt(value.length);
-        for (long l : value) {
+        out.writeInt(this.value.length);
+        for (long l : this.value) {
             out.writeLong(l);
         }
     }
@@ -92,18 +92,18 @@ public final class LongArrayNBT implements NBT {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof LongArrayNBT that)) return false;
-        return Arrays.equals(value, that.value);
+        return Arrays.equals(this.value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(value);
+        return Arrays.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "LongArrayNBT{" +
-                "value=" + Arrays.toString(value) +
+                "value=" + Arrays.toString(this.value) +
                 '}';
     }
 

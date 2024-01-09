@@ -25,6 +25,7 @@ import ru.brominemc.nbnt.utils.NBTReader;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * String NBT type.
@@ -68,7 +69,7 @@ public final class StringNBT implements NBT {
     @Contract(pure = true)
     @NotNull
     public String value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -82,25 +83,25 @@ public final class StringNBT implements NBT {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeUTF(value);
+        out.writeUTF(this.value);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof StringNBT that)) return false;
-        return value.equals(that.value);
+        return Objects.equals(this.value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return Objects.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "StringNBT{" +
-                "value='" + value + '\'' +
+                "value='" + this.value + '\'' +
                 '}';
     }
 

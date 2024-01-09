@@ -68,7 +68,7 @@ public final class ByteArrayNBT implements NBT {
      */
     @Contract(pure = true)
     public byte @NotNull [] value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -82,26 +82,26 @@ public final class ByteArrayNBT implements NBT {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeInt(value.length);
-        out.write(value);
+        out.writeInt(this.value.length);
+        out.write(this.value);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ByteArrayNBT that)) return false;
-        return Arrays.equals(value, that.value);
+        return Arrays.equals(this.value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(value);
+        return Arrays.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "ByteArrayNBT{" +
-                "value=" + Arrays.toString(value) +
+                "value=" + Arrays.toString(this.value) +
                 '}';
     }
 

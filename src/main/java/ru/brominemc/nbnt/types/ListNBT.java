@@ -64,7 +64,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * Creates a new empty list NBT backed by {@link ArrayList#ArrayList()}.
      */
     public ListNBT() {
-        this.value = new ArrayList<>();
+        this.value = new ArrayList<>(16);
     }
 
     /**
@@ -85,7 +85,7 @@ public final class ListNBT implements NBT, List<NBT> {
     @Contract(pure = true)
     @NotNull
     public List<NBT> value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -100,9 +100,9 @@ public final class ListNBT implements NBT, List<NBT> {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeByte(value.isEmpty() ? 0 : NBT.type(value.get(0)));
-        out.writeInt(value.size());
-        for (NBT nbt : value) {
+        out.writeByte(this.value.isEmpty() ? 0 : NBT.type(this.value.getFirst()));
+        out.writeInt(this.value.size());
+        for (NBT nbt : this.value) {
             nbt.write(out);
         }
     }
@@ -115,7 +115,7 @@ public final class ListNBT implements NBT, List<NBT> {
     @Contract(pure = true)
     @Nullable
     public Class<? extends NBT> type() {
-        return value.isEmpty() ? null : value.get(0).getClass();
+        return this.value.isEmpty() ? null : this.value.getFirst().getClass();
     }
 
     /**
@@ -125,7 +125,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @throws IllegalArgumentException If the NBT type is not applicable for this list
      */
     public void validateType(@NotNull NBT nbt) {
-        Class<? extends NBT> thisType = type();
+        Class<? extends NBT> thisType = this.type();
         if (thisType == null) return;
         Class<? extends NBT> thatType = nbt.getClass();
         if (thisType.equals(thatType)) return;
@@ -141,7 +141,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addBoolean(boolean value) {
-        add(new ByteNBT(value));
+        this.add(new ByteNBT(value));
     }
 
     /**
@@ -153,7 +153,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addByte(byte value) {
-        add(new ByteNBT(value));
+        this.add(new ByteNBT(value));
     }
 
     /**
@@ -165,7 +165,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addShort(short value) {
-        add(new ShortNBT(value));
+        this.add(new ShortNBT(value));
     }
 
     /**
@@ -177,7 +177,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addInt(int value) {
-        add(new IntNBT(value));
+        this.add(new IntNBT(value));
     }
 
     /**
@@ -189,7 +189,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addLong(long value) {
-        add(new LongNBT(value));
+        this.add(new LongNBT(value));
     }
 
     /**
@@ -201,7 +201,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addFloat(float value) {
-        add(new FloatNBT(value));
+        this.add(new FloatNBT(value));
     }
 
     /**
@@ -213,7 +213,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addDouble(float value) {
-        add(new DoubleNBT(value));
+        this.add(new DoubleNBT(value));
     }
 
     /**
@@ -225,7 +225,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addByteArray(byte @NotNull [] value) {
-        add(new ByteArrayNBT(value));
+        this.add(new ByteArrayNBT(value));
     }
 
     /**
@@ -237,7 +237,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addString(@NotNull String value) {
-        add(new StringNBT(value));
+        this.add(new StringNBT(value));
     }
 
     /**
@@ -249,7 +249,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addList(@NotNull List<NBT> value) {
-        add(new ListNBT(value));
+        this.add(new ListNBT(value));
     }
 
     /**
@@ -261,7 +261,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addCompound(@NotNull Map<String, NBT> value) {
-        add(new CompoundNBT(value));
+        this.add(new CompoundNBT(value));
     }
 
     /**
@@ -273,7 +273,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addIntArray(int @NotNull [] value) {
-        add(new IntArrayNBT(value));
+        this.add(new IntArrayNBT(value));
     }
 
     /**
@@ -285,7 +285,7 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #add(NBT)
      */
     public void addLongArray(long @NotNull [] value) {
-        add(new LongArrayNBT(value));
+        this.add(new LongArrayNBT(value));
     }
 
     /**
@@ -297,8 +297,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeBoolean(boolean value) {
-        if (!ByteNBT.class.equals(type())) return false;
-        return remove(new ByteNBT(value));
+        if (!ByteNBT.class.equals(this.type())) return false;
+        return this.remove(new ByteNBT(value));
     }
 
     /**
@@ -310,8 +310,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeByte(byte value) {
-        if (!ByteNBT.class.equals(type())) return false;
-        return remove(new ByteNBT(value));
+        if (!ByteNBT.class.equals(this.type())) return false;
+        return this.remove(new ByteNBT(value));
     }
 
     /**
@@ -323,8 +323,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeShort(short value) {
-        if (!ShortNBT.class.equals(type())) return false;
-        return remove(new ShortNBT(value));
+        if (!ShortNBT.class.equals(this.type())) return false;
+        return this.remove(new ShortNBT(value));
     }
 
     /**
@@ -336,8 +336,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeInt(int value) {
-        if (!IntNBT.class.equals(type())) return false;
-        return remove(new IntNBT(value));
+        if (!IntNBT.class.equals(this.type())) return false;
+        return this.remove(new IntNBT(value));
     }
 
     /**
@@ -349,8 +349,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeLong(long value) {
-        if (!LongNBT.class.equals(type())) return false;
-        return remove(new LongNBT(value));
+        if (!LongNBT.class.equals(this.type())) return false;
+        return this.remove(new LongNBT(value));
     }
 
     /**
@@ -362,8 +362,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeFloat(float value) {
-        if (!FloatNBT.class.equals(type())) return false;
-        return remove(new FloatNBT(value));
+        if (!FloatNBT.class.equals(this.type())) return false;
+        return this.remove(new FloatNBT(value));
     }
 
     /**
@@ -375,8 +375,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeDouble(double value) {
-        if (!DoubleNBT.class.equals(type())) return false;
-        return remove(new DoubleNBT(value));
+        if (!DoubleNBT.class.equals(this.type())) return false;
+        return this.remove(new DoubleNBT(value));
     }
 
     /**
@@ -388,8 +388,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeByteArray(byte @NotNull [] value) {
-        if (!ByteArrayNBT.class.equals(type())) return false;
-        return remove(new ByteArrayNBT(value));
+        if (!ByteArrayNBT.class.equals(this.type())) return false;
+        return this.remove(new ByteArrayNBT(value));
     }
 
     /**
@@ -401,8 +401,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeString(@NotNull String value) {
-        if (!StringNBT.class.equals(type())) return false;
-        return remove(new StringNBT(value));
+        if (!StringNBT.class.equals(this.type())) return false;
+        return this.remove(new StringNBT(value));
     }
 
     /**
@@ -414,8 +414,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeList(@NotNull List<NBT> value) {
-        if (!ListNBT.class.equals(type())) return false;
-        return remove(new ListNBT(value));
+        if (!ListNBT.class.equals(this.type())) return false;
+        return this.remove(new ListNBT(value));
     }
 
     /**
@@ -427,8 +427,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeCompound(@NotNull Map<String, NBT> value) {
-        if (!CompoundNBT.class.equals(type())) return false;
-        return remove(new CompoundNBT(value));
+        if (!CompoundNBT.class.equals(this.type())) return false;
+        return this.remove(new CompoundNBT(value));
     }
 
     /**
@@ -440,8 +440,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeIntArray(int @NotNull [] value) {
-        if (!IntArrayNBT.class.equals(type())) return false;
-        return remove(new IntArrayNBT(value));
+        if (!IntArrayNBT.class.equals(this.type())) return false;
+        return this.remove(new IntArrayNBT(value));
     }
 
     /**
@@ -453,8 +453,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #remove(Object)
      */
     public boolean removeLongArray(long @NotNull [] value) {
-        if (!LongArrayNBT.class.equals(type())) return false;
-        return remove(new LongArrayNBT(value));
+        if (!LongArrayNBT.class.equals(this.type())) return false;
+        return this.remove(new LongArrayNBT(value));
     }
 
     /**
@@ -466,8 +466,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsBoolean(boolean value) {
-        if (!ByteNBT.class.equals(type())) return false;
-        return contains(new ByteNBT(value));
+        if (!ByteNBT.class.equals(this.type())) return false;
+        return this.contains(new ByteNBT(value));
     }
 
     /**
@@ -479,8 +479,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsByte(byte value) {
-        if (!ByteNBT.class.equals(type())) return false;
-        return contains(new ByteNBT(value));
+        if (!ByteNBT.class.equals(this.type())) return false;
+        return this.contains(new ByteNBT(value));
     }
 
     /**
@@ -492,8 +492,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsShort(short value) {
-        if (!ShortNBT.class.equals(type())) return false;
-        return contains(new ShortNBT(value));
+        if (!ShortNBT.class.equals(this.type())) return false;
+        return this.contains(new ShortNBT(value));
     }
 
     /**
@@ -505,8 +505,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsInt(int value) {
-        if (!IntNBT.class.equals(type())) return false;
-        return contains(new IntNBT(value));
+        if (!IntNBT.class.equals(this.type())) return false;
+        return this.contains(new IntNBT(value));
     }
 
     /**
@@ -518,8 +518,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsLong(long value) {
-        if (!LongNBT.class.equals(type())) return false;
-        return contains(new LongNBT(value));
+        if (!LongNBT.class.equals(this.type())) return false;
+        return this.contains(new LongNBT(value));
     }
 
     /**
@@ -531,8 +531,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsFloat(float value) {
-        if (!FloatNBT.class.equals(type())) return false;
-        return contains(new FloatNBT(value));
+        if (!FloatNBT.class.equals(this.type())) return false;
+        return this.contains(new FloatNBT(value));
     }
 
     /**
@@ -544,8 +544,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsDouble(double value) {
-        if (!DoubleNBT.class.equals(type())) return false;
-        return contains(new DoubleNBT(value));
+        if (!DoubleNBT.class.equals(this.type())) return false;
+        return this.contains(new DoubleNBT(value));
     }
 
     /**
@@ -557,8 +557,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsByteArray(byte @NotNull [] value) {
-        if (!ByteArrayNBT.class.equals(type())) return false;
-        return contains(new ByteArrayNBT(value));
+        if (!ByteArrayNBT.class.equals(this.type())) return false;
+        return this.contains(new ByteArrayNBT(value));
     }
 
     /**
@@ -570,8 +570,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsString(@NotNull String value) {
-        if (!StringNBT.class.equals(type())) return false;
-        return contains(new StringNBT(value));
+        if (!StringNBT.class.equals(this.type())) return false;
+        return this.contains(new StringNBT(value));
     }
 
     /**
@@ -583,8 +583,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsList(@NotNull List<NBT> value) {
-        if (!ListNBT.class.equals(type())) return false;
-        return contains(new ListNBT(value));
+        if (!ListNBT.class.equals(this.type())) return false;
+        return this.contains(new ListNBT(value));
     }
 
     /**
@@ -596,8 +596,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsCompound(@NotNull Map<String, NBT> value) {
-        if (!CompoundNBT.class.equals(type())) return false;
-        return contains(new CompoundNBT(value));
+        if (!CompoundNBT.class.equals(this.type())) return false;
+        return this.contains(new CompoundNBT(value));
     }
 
     /**
@@ -609,8 +609,8 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsIntArray(int @NotNull [] value) {
-        if (!IntArrayNBT.class.equals(type())) return false;
-        return contains(new IntArrayNBT(value));
+        if (!IntArrayNBT.class.equals(this.type())) return false;
+        return this.contains(new IntArrayNBT(value));
     }
 
     /**
@@ -622,149 +622,149 @@ public final class ListNBT implements NBT, List<NBT> {
      * @see #contains(Object)
      */
     public boolean containsLongArray(long @NotNull [] value) {
-        if (!LongArrayNBT.class.equals(type())) return false;
-        return contains(new LongArrayNBT(value));
+        if (!LongArrayNBT.class.equals(this.type())) return false;
+        return this.contains(new LongArrayNBT(value));
     }
 
     // Delegate methods start
 
     @Override
     public int size() {
-        return value.size();
+        return this.value.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return value.isEmpty();
+        return this.value.isEmpty();
     }
 
     @Override
     public boolean contains(@NotNull Object o) {
         Objects.requireNonNull(o, "Entry is null");
-        return value.contains(o);
+        return this.value.contains(o);
     }
 
     @NotNull
     @Override
     public Iterator<NBT> iterator() {
-        return value.iterator();
+        return this.value.iterator();
     }
 
     @NotNull
     @Override
     public Object @NotNull [] toArray() {
-        return value.toArray();
+        return this.value.toArray();
     }
 
     @NotNull
     @Override
     public <T> T @NotNull [] toArray(@NotNull T @NotNull [] a) {
-        return value.toArray(a);
+        return this.value.toArray(a);
     }
 
     @Override
     public boolean add(@NotNull NBT nbt) {
         Objects.requireNonNull(nbt, "Entry is null");
-        validateType(nbt);
-        return value.add(nbt);
+        this.validateType(nbt);
+        return this.value.add(nbt);
     }
 
     @Override
     public boolean remove(@NotNull Object o) {
         Objects.requireNonNull(o, "Entry is null");
-        return value.remove(o);
+        return this.value.remove(o);
     }
 
     @SuppressWarnings("SlowListContainsAll")
     @Override
     public boolean containsAll(@NotNull Collection<?> c) {
-        return value.containsAll(c);
+        return this.value.containsAll(c);
     }
 
     @Override
     public boolean addAll(@NotNull Collection<? extends NBT> c) {
         c.forEach(this::validateType);
-        return value.addAll(c);
+        return this.value.addAll(c);
     }
 
     @Override
     public boolean addAll(int index, @NotNull Collection<? extends NBT> c) {
         c.forEach(this::validateType);
-        return value.addAll(index, c);
+        return this.value.addAll(index, c);
     }
 
     @Override
     public boolean removeAll(@NotNull Collection<?> c) {
-        return value.removeAll(c);
+        return this.value.removeAll(c);
     }
 
     @Override
     public boolean retainAll(@NotNull Collection<?> c) {
-        return value.retainAll(c);
+        return this.value.retainAll(c);
     }
 
     @Override
     public void clear() {
-        value.clear();
+        this.value.clear();
     }
 
     @Override
     public NBT get(int index) {
-        return value.get(index);
+        return this.value.get(index);
     }
 
     @Override
     public NBT set(int index, @NotNull NBT element) {
         Objects.requireNonNull(element, "Entry is null");
-        validateType(element);
-        return value.set(index, element);
+        this.validateType(element);
+        return this.value.set(index, element);
     }
 
     @Override
     public void add(int index, @NotNull NBT element) {
         Objects.requireNonNull(element, "Entry is null");
-        validateType(element);
-        value.add(index, element);
+        this.validateType(element);
+        this.value.add(index, element);
     }
 
     @Override
     public NBT remove(int index) {
-        return value.remove(index);
+        return this.value.remove(index);
     }
 
     @Override
     public int indexOf(@NotNull Object o) {
         Objects.requireNonNull(o, "Entry is null");
-        return value.indexOf(o);
+        return this.value.indexOf(o);
     }
 
     @Override
     public int lastIndexOf(@NotNull Object o) {
         Objects.requireNonNull(o, "Entry is null");
-        return value.lastIndexOf(o);
+        return this.value.lastIndexOf(o);
     }
 
     @NotNull
     @Override
     public ListIterator<NBT> listIterator() {
-        return value.listIterator();
+        return this.value.listIterator();
     }
 
     @NotNull
     @Override
     public ListIterator<NBT> listIterator(int index) {
-        return value.listIterator(index);
+        return this.value.listIterator(index);
     }
 
     @NotNull
     @Override
     public List<NBT> subList(int fromIndex, int toIndex) {
-        return value.subList(fromIndex, toIndex);
+        return this.value.subList(fromIndex, toIndex);
     }
 
     @Override
     public Spliterator<NBT> spliterator() {
-        return value.spliterator();
+        return this.value.spliterator();
     }
 
     // Delegate methods end
@@ -773,18 +773,18 @@ public final class ListNBT implements NBT, List<NBT> {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ListNBT that)) return false;
-        return value.equals(that.value);
+        return Objects.equals(this.value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return Objects.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "ListNBT{" +
-                "value=" + value +
+                "value=" + this.value +
                 '}';
     }
 
@@ -810,7 +810,7 @@ public final class ListNBT implements NBT, List<NBT> {
         int length = in.readInt();
         if (type == NBT.NULL_NBT_TYPE) {
             if (length != 0) {
-                throw new IllegalArgumentException("Invalid length for type " + type + ": " + length);
+                throw new IllegalArgumentException("Invalid length for type " + NBT.NULL_NBT_TYPE + ": " + length);
             }
             return new ListNBT();
         }

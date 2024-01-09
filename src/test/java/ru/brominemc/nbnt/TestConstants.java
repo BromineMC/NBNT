@@ -16,12 +16,29 @@
 
 package ru.brominemc.nbnt;
 
-import ru.brominemc.nbnt.types.*;
+import ru.brominemc.nbnt.types.ByteArrayNBT;
+import ru.brominemc.nbnt.types.ByteNBT;
+import ru.brominemc.nbnt.types.CompoundNBT;
+import ru.brominemc.nbnt.types.DoubleNBT;
+import ru.brominemc.nbnt.types.FloatNBT;
+import ru.brominemc.nbnt.types.IntArrayNBT;
+import ru.brominemc.nbnt.types.IntNBT;
+import ru.brominemc.nbnt.types.ListNBT;
+import ru.brominemc.nbnt.types.LongArrayNBT;
+import ru.brominemc.nbnt.types.LongNBT;
+import ru.brominemc.nbnt.types.NBT;
+import ru.brominemc.nbnt.types.ShortNBT;
+import ru.brominemc.nbnt.types.StringNBT;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
 import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
 
 /**
  * Constants for the reflection-based tests, such as which values to use in constructors of various NBT.
@@ -60,7 +77,7 @@ public final class TestConstants {
     /**
      * Map of NBT type to its constructor parameter types.
      */
-    public static final Map<Class<? extends NBT>, Class<?>> TYPE_VALUES = Map.ofEntries(
+    public static final Map<Class<? extends NBT>, Class<?>> TYPE_VALUES = ofEntries(
             entry(ByteArrayNBT.class, byte[].class),
             entry(ByteNBT.class, byte.class),
             entry(CompoundNBT.class, Map.class),
@@ -78,41 +95,50 @@ public final class TestConstants {
     /**
      * Map of NBT type to its constructor parameter values.
      */
-    public static final Map<Class<? extends NBT>, Object> TYPE_EXAMPLES = Map.ofEntries(
+    public static final Map<Class<? extends NBT>, Object> TYPE_EXAMPLES = ofEntries(
             entry(ByteArrayNBT.class, randomByteArray()),
             entry(ByteNBT.class, (byte) RANDOM.nextInt()),
-            entry(CompoundNBT.class, Map.ofEntries(
-                    Map.entry("key", new StringNBT(randomString())),
-                    Map.entry("another_key", new StringNBT(randomString())),
-                    Map.entry("final_key", new ByteNBT((byte) RANDOM.nextInt())),
-                    Map.entry("nested_list_key", new ListNBT(List.of(
+            entry(CompoundNBT.class, ofEntries(
+                    entry("key", new StringNBT(randomString())),
+                    entry("another_key", new StringNBT(randomString())),
+                    entry("final_key", new ByteNBT((byte) RANDOM.nextInt())),
+                    entry("nested_list_key", new ListNBT(List.of(
                             new ByteArrayNBT(randomByteArray()),
                             new ByteArrayNBT(randomByteArray()),
                             new ByteArrayNBT(randomByteArray()),
                             new ByteArrayNBT(randomByteArray())
                     ))),
-                    Map.entry("nested_compound_key", new CompoundNBT(Map.ofEntries(
+                    entry("nested_compound_key", new CompoundNBT(ofEntries(
                             entry("example_nested_key1", new ByteNBT((byte) RANDOM.nextInt())),
                             entry("example_nested_key2", new LongNBT(RANDOM.nextLong())),
                             entry("example_nested_key3", new IntArrayNBT(RANDOM.ints(RANDOM_LENGTH).toArray()))
                     )))
             )),
-            Map.entry(DoubleNBT.class, RANDOM.nextDouble()),
-            Map.entry(FloatNBT.class, RANDOM.nextFloat()),
-            Map.entry(IntArrayNBT.class, RANDOM.ints(RANDOM_LENGTH).toArray()),
-            Map.entry(IntNBT.class, RANDOM.nextInt()),
-            Map.entry(ListNBT.class, List.of(
+            entry(DoubleNBT.class, RANDOM.nextDouble()),
+            entry(FloatNBT.class, RANDOM.nextFloat()),
+            entry(IntArrayNBT.class, RANDOM.ints(RANDOM_LENGTH).toArray()),
+            entry(IntNBT.class, RANDOM.nextInt()),
+            entry(ListNBT.class, List.of(
                     new StringNBT(randomString()),
                     new StringNBT(randomString()),
                     new StringNBT(randomString())
             )),
-            Map.entry(LongArrayNBT.class, RANDOM.longs(RANDOM_LENGTH).toArray()),
-            Map.entry(LongNBT.class, RANDOM.nextLong()),
-            Map.entry(ShortNBT.class, (short) RANDOM.nextInt()),
-            Map.entry(StringNBT.class, randomString())
+            entry(LongArrayNBT.class, RANDOM.longs(RANDOM_LENGTH).toArray()),
+            entry(LongNBT.class, RANDOM.nextLong()),
+            entry(ShortNBT.class, (short) RANDOM.nextInt()),
+            entry(StringNBT.class, randomString())
     );
 
     private static List<NBT> nbtObjects;
+
+    /**
+     * An instance of this class cannot be created.
+     *
+     * @throws AssertionError Always
+     */
+    private TestConstants() {
+        throw new AssertionError("No instances.");
+    }
 
     /**
      * Returns a random byte array.

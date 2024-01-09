@@ -63,7 +63,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * Creates a new empty compound NBT backed by {@link HashMap#HashMap()}.
      */
     public CompoundNBT() {
-        this.value = new HashMap<>();
+        this.value = new HashMap<>(16);
     }
 
     /**
@@ -84,7 +84,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @NotNull
     public Map<String, NBT> value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -99,7 +99,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        for (Entry<String, NBT> en : value.entrySet()) {
+        for (Entry<String, NBT> en : this.value.entrySet()) {
             NBT.writeNamed(out, en.getKey(), en.getValue());
         }
         out.writeByte(0);
@@ -114,7 +114,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Boolean getBoolean(@NotNull String key) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asBoolean() : null;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asBoolean() : null;
     }
 
     /**
@@ -126,7 +126,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Boolean getBooleanStrict(@NotNull String key) {
-        return value.get(key) instanceof ByteNBT nbt ? nbt.asBoolean() : null;
+        return this.value.get(key) instanceof ByteNBT nbt ? nbt.asBoolean() : null;
     }
 
     /**
@@ -138,7 +138,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public boolean getBoolean(@NotNull String key, boolean fallback) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asBoolean() : fallback;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asBoolean() : fallback;
     }
 
     /**
@@ -150,7 +150,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public boolean getBooleanStrict(@NotNull String key, boolean fallback) {
-        return value.get(key) instanceof ByteNBT nbt ? nbt.asBoolean() : fallback;
+        return this.value.get(key) instanceof ByteNBT nbt ? nbt.asBoolean() : fallback;
     }
 
     /**
@@ -162,7 +162,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Byte getByte(@NotNull String key) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asByte() : null;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asByte() : null;
     }
 
     /**
@@ -174,7 +174,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Byte getByteStrict(@NotNull String key) {
-        return value.get(key) instanceof ByteNBT nbt ? nbt.asByte() : null;
+        return this.value.get(key) instanceof ByteNBT nbt ? nbt.asByte() : null;
     }
 
     /**
@@ -186,7 +186,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public byte getByte(@NotNull String key, byte fallback) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asByte() : fallback;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asByte() : fallback;
     }
 
     /**
@@ -198,7 +198,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public byte getByteStrict(@NotNull String key, byte fallback) {
-        return value.get(key) instanceof ByteNBT nbt ? nbt.asByte() : fallback;
+        return this.value.get(key) instanceof ByteNBT nbt ? nbt.asByte() : fallback;
     }
 
     /**
@@ -210,7 +210,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Short getShort(@NotNull String key) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asShort() : null;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asShort() : null;
     }
 
     /**
@@ -222,7 +222,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Short getShortStrict(@NotNull String key) {
-        return value.get(key) instanceof ShortNBT nbt ? nbt.asShort() : null;
+        return this.value.get(key) instanceof ShortNBT nbt ? nbt.asShort() : null;
     }
 
     /**
@@ -234,7 +234,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public short getShort(@NotNull String key, short fallback) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asShort() : fallback;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asShort() : fallback;
     }
 
     /**
@@ -246,7 +246,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public short getShortStrict(@NotNull String key, short fallback) {
-        return value.get(key) instanceof ShortNBT nbt ? nbt.asShort() : fallback;
+        return this.value.get(key) instanceof ShortNBT nbt ? nbt.asShort() : fallback;
     }
 
     /**
@@ -258,7 +258,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Integer getInt(@NotNull String key) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asInt() : null;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asInt() : null;
     }
 
     /**
@@ -270,7 +270,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Integer getIntStrict(@NotNull String key) {
-        return value.get(key) instanceof IntNBT nbt ? nbt.asInt() : null;
+        return this.value.get(key) instanceof IntNBT nbt ? nbt.asInt() : null;
     }
 
     /**
@@ -282,7 +282,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public int getInt(@NotNull String key, int fallback) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asInt() : fallback;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asInt() : fallback;
     }
 
     /**
@@ -294,7 +294,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public int getIntStrict(@NotNull String key, int fallback) {
-        return value.get(key) instanceof IntNBT nbt ? nbt.asInt() : fallback;
+        return this.value.get(key) instanceof IntNBT nbt ? nbt.asInt() : fallback;
     }
 
     /**
@@ -306,7 +306,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Long getLong(@NotNull String key) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asLong() : null;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asLong() : null;
     }
 
     /**
@@ -318,7 +318,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Long getLongStrict(@NotNull String key) {
-        return value.get(key) instanceof LongNBT nbt ? nbt.asLong() : null;
+        return this.value.get(key) instanceof LongNBT nbt ? nbt.asLong() : null;
     }
 
     /**
@@ -330,7 +330,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public long getLong(@NotNull String key, long fallback) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asLong() : fallback;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asLong() : fallback;
     }
 
     /**
@@ -342,7 +342,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public long getLongStrict(@NotNull String key, long fallback) {
-        return value.get(key) instanceof LongNBT nbt ? nbt.asLong() : fallback;
+        return this.value.get(key) instanceof LongNBT nbt ? nbt.asLong() : fallback;
     }
 
     /**
@@ -354,7 +354,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Float getFloat(@NotNull String key) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asFloat() : null;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asFloat() : null;
     }
 
     /**
@@ -366,7 +366,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Float getFloatStrict(@NotNull String key) {
-        return value.get(key) instanceof FloatNBT nbt ? nbt.asFloat() : null;
+        return this.value.get(key) instanceof FloatNBT nbt ? nbt.asFloat() : null;
     }
 
     /**
@@ -378,7 +378,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public float getFloat(@NotNull String key, float fallback) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asFloat() : fallback;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asFloat() : fallback;
     }
 
     /**
@@ -390,7 +390,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public float getFloatStrict(@NotNull String key, float fallback) {
-        return value.get(key) instanceof FloatNBT nbt ? nbt.asFloat() : fallback;
+        return this.value.get(key) instanceof FloatNBT nbt ? nbt.asFloat() : fallback;
     }
 
     /**
@@ -402,7 +402,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Double getDouble(@NotNull String key) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asDouble() : null;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asDouble() : null;
     }
 
     /**
@@ -414,7 +414,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public Double getDoubleStrict(@NotNull String key) {
-        return value.get(key) instanceof DoubleNBT nbt ? nbt.asDouble() : null;
+        return this.value.get(key) instanceof DoubleNBT nbt ? nbt.asDouble() : null;
     }
 
     /**
@@ -426,7 +426,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public double getDouble(@NotNull String key, double fallback) {
-        return value.get(key) instanceof PrimitiveNBT nbt ? nbt.asDouble() : fallback;
+        return this.value.get(key) instanceof PrimitiveNBT nbt ? nbt.asDouble() : fallback;
     }
 
     /**
@@ -438,7 +438,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public double getDoubleStrict(@NotNull String key, double fallback) {
-        return value.get(key) instanceof DoubleNBT nbt ? nbt.asDouble() : fallback;
+        return this.value.get(key) instanceof DoubleNBT nbt ? nbt.asDouble() : fallback;
     }
 
     /**
@@ -448,7 +448,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      * @return Byte array or {@code null} if no byte array tag exists by that key
      */
     public byte @Nullable [] getByteArray(@NotNull String key) {
-        return value.get(key) instanceof ByteArrayNBT nbt ? nbt.value() : null;
+        return this.value.get(key) instanceof ByteArrayNBT nbt ? nbt.value() : null;
     }
 
     /**
@@ -459,7 +459,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Nullable
     public String getString(@NotNull String key) {
-        return value.get(key) instanceof StringNBT nbt ? nbt.value() : null;
+        return this.value.get(key) instanceof StringNBT nbt ? nbt.value() : null;
     }
 
     /**
@@ -471,7 +471,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public ListNBT getList(@NotNull String key) {
-        return value.get(key) instanceof ListNBT nbt ? nbt : null;
+        return this.value.get(key) instanceof ListNBT nbt ? nbt : null;
     }
 
     /**
@@ -485,7 +485,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public ListNBT getList(@NotNull String key, @NotNull Class<? extends NBT> type, boolean emptyAsNull) {
-        if (!(value.get(key) instanceof ListNBT nbt)) return null;
+        if (!(this.value.get(key) instanceof ListNBT nbt)) return null;
         Class<? extends NBT> thatType = nbt.type();
         if (thatType == null) return emptyAsNull ? null : nbt;
         return thatType.equals(type) ? nbt : null;
@@ -500,7 +500,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Contract(pure = true)
     @Nullable
     public CompoundNBT getCompound(@NotNull String key) {
-        return value.get(key) instanceof CompoundNBT nbt ? nbt : null;
+        return this.value.get(key) instanceof CompoundNBT nbt ? nbt : null;
     }
 
     /**
@@ -511,7 +511,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public int @Nullable [] getIntArray(@NotNull String key) {
-        return value.get(key) instanceof IntArrayNBT nbt ? nbt.value() : null;
+        return this.value.get(key) instanceof IntArrayNBT nbt ? nbt.value() : null;
     }
 
     /**
@@ -522,7 +522,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
      */
     @Contract(pure = true)
     public long @Nullable [] getLongArray(@NotNull String key) {
-        return value.get(key) instanceof LongArrayNBT nbt ? nbt.value() : null;
+        return this.value.get(key) instanceof LongArrayNBT nbt ? nbt.value() : null;
     }
 
     /**
@@ -698,18 +698,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
 
     @Override
     public int size() {
-        return value.size();
+        return this.value.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return value.isEmpty();
+        return this.value.isEmpty();
     }
 
     @Override
     public boolean containsKey(@NotNull Object key) {
         Objects.requireNonNull(key, "Key is null");
-        return value.containsKey(key);
+        return this.value.containsKey(key);
     }
 
     @Override
@@ -721,7 +721,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Override
     public NBT get(@NotNull Object key) {
         Objects.requireNonNull(key, "Key is null");
-        return value.get(key);
+        return this.value.get(key);
     }
 
     @Nullable
@@ -735,35 +735,35 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @Override
     public NBT remove(@NotNull Object key) {
         Objects.requireNonNull(key, "Key is null");
-        return value.remove(key);
+        return this.value.remove(key);
     }
 
     @Override
     public void putAll(@NotNull Map<? extends String, ? extends NBT> m) {
-        value.putAll(m);
+        this.value.putAll(m);
     }
 
     @Override
     public void clear() {
-        value.clear();
+        this.value.clear();
     }
 
     @NotNull
     @Override
     public Set<String> keySet() {
-        return value.keySet();
+        return this.value.keySet();
     }
 
     @NotNull
     @Override
     public Collection<NBT> values() {
-        return value.values();
+        return this.value.values();
     }
 
     @NotNull
     @Override
     public Set<Entry<String, NBT>> entrySet() {
-        return value.entrySet();
+        return this.value.entrySet();
     }
 
     // Delegate methods end
@@ -772,18 +772,18 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof CompoundNBT that)) return false;
-        return value.equals(that.value);
+        return Objects.equals(this.value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return Objects.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "CompoundNBT{" +
-                "value=" + value +
+                "value=" + this.value +
                 '}';
     }
 
@@ -803,7 +803,7 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @NotNull
     public static CompoundNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
         limiter.push();
-        Map<String, NBT> map = new HashMap<>();
+        Map<String, NBT> map = new HashMap<>(16);
         while (true) {
             Map.Entry<String, NBT> pair = NBT.readNamed(in, limiter);
             if (pair == null) break;

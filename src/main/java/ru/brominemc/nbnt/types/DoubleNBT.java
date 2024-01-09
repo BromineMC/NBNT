@@ -67,7 +67,7 @@ public final class DoubleNBT implements PrimitiveNBT {
      */
     @Contract(pure = true)
     public double value() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -81,61 +81,61 @@ public final class DoubleNBT implements PrimitiveNBT {
 
     @Override
     public void write(@NotNull DataOutput out) throws IOException {
-        out.writeDouble(value);
+        out.writeDouble(this.value);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof DoubleNBT that)) return false;
-        return Double.compare(value, that.value) == 0;
+        return Double.compare(this.value, that.value) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(value);
+        return Double.hashCode(this.value);
     }
 
     @Override
     public String toString() {
         return "DoubleNBT{" +
-                "value=" + value +
+                "value=" + this.value +
                 '}';
     }
 
     @Override
     public boolean asBoolean() {
-        return value != 0;
+        return this.value != 0;
     }
 
     @Override
     public byte asByte() {
-        return (byte) value;
+        return (byte) this.value;
     }
 
     @Override
     public short asShort() {
-        return (short) value;
+        return (short) this.value;
     }
 
     @Override
     public int asInt() {
-        return (int) value;
+        return (int) this.value;
     }
 
     @Override
     public long asLong() {
-        return (long) value;
+        return (long) this.value;
     }
 
     @Override
     public float asFloat() {
-        return (float) value;
+        return (float) this.value;
     }
 
     @Override
     public double asDouble() {
-        return value;
+        return this.value;
     }
 
     /**

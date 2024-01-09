@@ -46,9 +46,9 @@ public class ToStringSanityTest {
      * @param nbt An instance of {@link NBT}
      * @return The expected {@link #toString()} method result
      */
-    private String expectedToString(NBT nbt) {
+    private static String expectedToString(NBT nbt) {
         try {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder(32);
             builder.append(nbt.getClass().getSimpleName());
             builder.append('{');
             boolean comma = false;
@@ -77,7 +77,7 @@ public class ToStringSanityTest {
      * @param field Target field
      * @return A value of the string as expected in {@link #toString()} method
      */
-    private String expectedToStringField(NBT nbt, Field field) {
+    private static String expectedToStringField(NBT nbt, Field field) {
         try {
             Object value = field.get(nbt);
             return switch (value) {
