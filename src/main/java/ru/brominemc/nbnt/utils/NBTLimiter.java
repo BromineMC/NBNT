@@ -22,6 +22,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.brominemc.nbnt.types.LongArrayNBT;
 import ru.brominemc.nbnt.types.NBT;
+import ru.brominemc.nbnt.utils.exceptions.LongNBTException;
+import ru.brominemc.nbnt.utils.exceptions.NBTOverflowException;
+import ru.brominemc.nbnt.utils.exceptions.NBTUnderflowException;
+import ru.brominemc.nbnt.utils.exceptions.NegativeNBTLengthException;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -33,6 +37,7 @@ import java.util.Objects;
  * Depth and length NBT limiter for reading.
  *
  * @author VidTu
+ * @author threefusii
  * @apiNote NBT limiters are not thread-safe!
  */
 public sealed class NBTLimiter implements AutoCloseable {
@@ -46,14 +51,34 @@ public sealed class NBTLimiter implements AutoCloseable {
     @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
     public static final NBTLimiter UNLIMITED = new NBTUnlimiter();
 
-    // Maximum amounts
+    /**
+     * Maximum NBT length in bytes.
+     */
     private final long maxLength;
+
+    /**
+     * Maximum NBT depth.
+     */
     private final int maxDepth;
+
+    /**
+     * Whether the {@link NBT#readUnnamed(DataInput, NBTLimiter)} should require names to be empty.
+     */
     private final boolean strictEmptyNames;
+
+    /**
+     * Whether the {@link LongArrayNBT} should be readable. Minecraft versions prior to {@code 1.12} (i.e. {@code 1.11.2} and below) don't support long array NBT tags.
+     */
     private final boolean longArrays;
 
-    // Current amounts
+    /**
+     * Read NBT bytes.
+     */
     private long length;
+
+    /**
+     * Current stack position.
+     */
     private int depth;
 
     /**
@@ -153,60 +178,64 @@ public sealed class NBTLimiter implements AutoCloseable {
 
     /**
      * Adds the read bytes to the total read length.
-     *
-     * <p>This method checks for negative amount of bytes. If checking is not required, use {@link #readUnsigned(long)}.
+     * <p>
+     * This method checks for negative amount of bytes. If checking is not required, use {@link #readUnsigned(long)}.
      *
      * @param bytes Read bytes
-     * @throws IllegalArgumentException If the amount of read bytes is smaller than zero
-     * @throws IllegalStateException    If read bytes has exceeded the maximum length
+     * @throws NegativeNBTLengthException If the amount of read bytes is smaller than zero
+     * @throws LongNBTException           If read bytes has exceeded the maximum length
+     * @throws ArithmeticException        If amount of read bytes reached {@link Long#MAX_VALUE}
      */
     public void readSigned(long bytes) {
         if (bytes < 0) {
-            throw new IllegalArgumentException("Negative bytes read: " + bytes);
+            throw new NegativeNBTLengthException(bytes);
         }
-        this.length += bytes;
-        if (this.length > this.maxLength) {
-            throw new IllegalStateException("Max length reached. (" + this.length + " > " + this.maxLength + ")");
+        bytes = Math.addExact(this.length, bytes);
+        if (bytes > this.maxLength) {
+            throw new LongNBTException(bytes, this.maxLength);
         }
+        this.length = bytes;
     }
 
     /**
      * Adds the read bytes to the total read length.
-     *
-     * <p>This method does <b>NOT</b> check for negative amount of bytes. If checking is required, use {@link #readSigned(long)}.
+     * <p>
+     * This method does <b>NOT</b> check for negative amount of bytes. If checking is required, use {@link #readSigned(long)}.
      *
      * @param bytes Read bytes
-     * @throws IllegalStateException If read bytes exceeded the maximum length
+     * @throws LongNBTException    If read bytes exceeded the maximum length
+     * @throws ArithmeticException If amount of read bytes reached {@link Long#MAX_VALUE}
      */
     public void readUnsigned(long bytes) {
-        this.length += bytes;
-        if (this.length > this.maxLength) {
-            throw new IllegalStateException("Max length reached. (" + this.length + " > " + this.maxLength + ")");
+        bytes = Math.addExact(this.length, bytes);
+        if (bytes > this.maxLength) {
+            throw new LongNBTException(bytes, this.maxLength);
         }
+        this.length = bytes;
     }
 
     /**
      * Pushes the depth stack. (Increases the depth by one)
      *
-     * @throws IllegalStateException If the current depth exceeds the maximum depth
+     * @throws NBTOverflowException If the current depth exceeds the maximum depth
      */
     public void push() {
-        this.depth++;
-        if (this.depth > this.maxDepth) {
-            throw new IllegalStateException("Max depth reached. (" + this.depth + " > " + this.maxDepth + ")");
+        if (this.depth >= this.maxDepth) {
+            throw new NBTOverflowException(this.depth);
         }
+        this.depth++;
     }
 
     /**
      * Pops the depth stack. (Decreases the depth by one)
      *
-     * @throws IllegalStateException If the current depth is smaller than zero
+     * @throws NBTUnderflowException If the current depth is smaller than zero
      */
     public void pop(){
-        this.depth--;
-        if (this.depth < 0) {
-            throw new IllegalStateException("Min depth reached. (" + this.depth + " < 0)");
+        if (this.depth <= 0) {
+            throw new NBTUnderflowException();
         }
+        this.depth--;
     }
 
     /**
@@ -276,12 +305,21 @@ public sealed class NBTLimiter implements AutoCloseable {
     @CheckReturnValue
     @NotNull
     public static String readLimitedUTF(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(Short.BYTES); // Length
+        // Push length.
+        limiter.readUnsigned(Short.BYTES);
+
+        // Read length.
         int length = in.readUnsignedShort();
+
+        // Empty shortcut.
         if (length == 0) {
             return "";
         }
-        limiter.readUnsigned(length); // Data
+
+        // Push data.
+        limiter.readUnsigned(length);
+
+        // Read data.
         byte[] data = new byte[length + 2];
         data[0] = (byte) (0xff & (length >> 8));
         data[1] = (byte) (0xff & length);
