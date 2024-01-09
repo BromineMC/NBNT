@@ -803,31 +803,62 @@ public final class ListNBT implements NBT, List<NBT> {
     @CheckReturnValue
     @NotNull
     public static ListNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
+        // Push stack.
         limiter.push();
-        limiter.readUnsigned(Byte.BYTES); // Type
+
+        // Push type.
+        limiter.readUnsigned(Byte.BYTES);
+
+        // Read type.
         byte type = in.readByte();
-        limiter.readUnsigned(Integer.BYTES); // Length
+
+        // Push length.
+        limiter.readUnsigned(Integer.BYTES);
+
+        // Read length.
         int length = in.readInt();
+
+        // Type is END.
         if (type == NBT.NULL_NBT_TYPE) {
+            // Check for length.
             if (length != 0) {
                 throw new IllegalArgumentException("Invalid length for type " + NBT.NULL_NBT_TYPE + ": " + length);
             }
-            return new ListNBT();
+
+            // Return a new empty list.
+            return new ListNBT(new ArrayList<>(0));
         }
+
+        // Return a new empty list.
         if (length == 0) {
-            return new ListNBT();
+            return new ListNBT(new ArrayList<>(0));
         }
+
+        // Check for negative length.
         if (length < 0) {
             throw new IllegalArgumentException("Invalid length for type " + type + ": " + length);
         }
+
+        // Load reader.
         NBTReader reader = NBT.reader(type);
+
+        // Load full list.
         List<NBT> list = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
+            // Read every tag.
             NBT nbt = reader.read(in, limiter);
+
+            // Verify it's not END. (shouldn't happen)
             Objects.requireNonNull(nbt, "Unexpected null NBT for type " + type + " at " + i + " out of " + length);
+
+            // Add to list.
             list.add(nbt);
         }
+
+        // Pop stack.
         limiter.pop();
+
+        // Return list.
         return new ListNBT(list);
     }
 }

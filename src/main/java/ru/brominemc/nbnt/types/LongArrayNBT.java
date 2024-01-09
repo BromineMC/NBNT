@@ -48,6 +48,11 @@ public final class LongArrayNBT implements NBT {
     public static final NBTReader LONG_ARRAY_NBT_READER = LongArrayNBT::read;
 
     /**
+     * Empty long array.
+     */
+    private static final long[] EMPTY_LONG_ARRAY = {};
+
+    /**
      * Hold NBT value.
      */
     private long[] value;
@@ -121,12 +126,24 @@ public final class LongArrayNBT implements NBT {
     @CheckReturnValue
     @NotNull
     public static LongArrayNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
+        // Check for long arrays.
         if (!limiter.longArrays()) {
             throw new IllegalArgumentException("Tried to read LongArrayNBT by reader that prohibits reading it: " + limiter);
         }
-        limiter.readUnsigned(Integer.BYTES); // Length
+
+        // Push length.
+        limiter.readUnsigned(Integer.BYTES);
+
+        // Read length.
         int length = in.readInt();
-        limiter.readSigned((long) length * Long.BYTES); // Data
+
+        // Empty shortcut.
+        if (length == 0) return new LongArrayNBT(EMPTY_LONG_ARRAY);
+
+        // Push data.
+        limiter.readSigned((long) length * Long.BYTES);
+
+        // Read data.
         long[] data = new long[length];
         for (int i = 0; i < length; i++) {
             data[i] = in.readLong();

@@ -31,6 +31,7 @@ import java.util.Arrays;
  * Int array NBT type.
  *
  * @author VidTu
+ * @author threefusii
  */
 public final class IntArrayNBT implements NBT {
     /**
@@ -46,6 +47,11 @@ public final class IntArrayNBT implements NBT {
      * @since 1.4.0
      */
     public static final NBTReader INT_ARRAY_NBT_READER = IntArrayNBT::read;
+
+    /**
+     * Empty int array.
+     */
+    private static final int[] EMPTY_INT_ARRAY = {};
 
     /**
      * Hold NBT value.
@@ -121,9 +127,19 @@ public final class IntArrayNBT implements NBT {
     @CheckReturnValue
     @NotNull
     public static IntArrayNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
-        limiter.readUnsigned(Integer.BYTES); // Length
+        // Push length.
+        limiter.readUnsigned(Integer.BYTES);
+
+        // Read length.
         int length = in.readInt();
-        limiter.readSigned((long) length * Integer.BYTES); // Data
+
+        // Empty shortcut.
+        if (length == 0) return new IntArrayNBT(EMPTY_INT_ARRAY);
+
+        // Push data.
+        limiter.readSigned((long) length * Integer.BYTES);
+
+        // Read data.
         int[] data = new int[length];
         for (int i = 0; i < length; i++) {
             data[i] = in.readInt();

@@ -802,14 +802,26 @@ public final class CompoundNBT implements NBT, Map<String, NBT> {
     @CheckReturnValue
     @NotNull
     public static CompoundNBT read(@NotNull DataInput in, @NotNull NBTLimiter limiter) throws IOException {
+        // Push stack.
         limiter.push();
+
+        // Create map and start reading.
         Map<String, NBT> map = new HashMap<>(16);
         while (true) {
+            // Read entry.
             Map.Entry<String, NBT> pair = NBT.readNamed(in, limiter);
+
+            // NBT end - end of compound, stop.
             if (pair == null) break;
+
+            // Put the entry.
             map.put(pair.getKey(), pair.getValue());
         }
+
+        // Pop stack.
         limiter.pop();
+
+        // Return compound.
         return new CompoundNBT(map);
     }
 }
